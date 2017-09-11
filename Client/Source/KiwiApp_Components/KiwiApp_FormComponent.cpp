@@ -69,8 +69,8 @@ namespace kiwi
         g.fillRoundedRectangle(getLocalBounds().reduced(1).toFloat(), 0.f);
         
         g.setFont(16.f);
-        g.setColour(bgcolor.contrasting(0.9));
-        g.drawText(m_message, getLocalBounds().reduced(10), juce::Justification::verticallyCentred);
+        g.setColour(bgcolor.contrasting(0.7));
+        g.drawFittedText(m_message, getLocalBounds().reduced(10), juce::Justification::verticallyCentred, 3);
     }
     
     void AlertBox::resized()
@@ -86,16 +86,9 @@ namespace kiwi
     
     void AlertBox::buttonClicked(juce::Button* b)
     {
-        if(b == m_close_btn.get())
+        if(b == m_close_btn.get() && m_close_fn)
         {
-            if(m_close_fn)
-            {
-                m_close_fn();
-            }
-            else
-            {
-                // close alert box
-            }
+            m_close_fn();
         }
     }
     
@@ -103,14 +96,27 @@ namespace kiwi
     //                                     SPINNER                                      //
     // ================================================================================ //
     
-    struct Spinner : public juce::Component, private juce::Timer
+    struct Spinner
+    : public juce::Component
+    , private juce::Timer
     {
-        Spinner()                       { startTimer(1000 / 50); }
-        void timerCallback() override   { repaint(); }
+        Spinner()
+        {
+            startTimer(1000 / 50);
+        }
+        
+        ~Spinner() = default;
+        
+        void timerCallback() override
+        {
+            repaint();
+        }
         
         void paint(juce::Graphics& g) override
         {
-            getLookAndFeel().drawSpinningWaitAnimation(g, juce::Colours::whitesmoke, 0, 0, getWidth(), getHeight());
+            getLookAndFeel()
+            .drawSpinningWaitAnimation(g, juce::Colours::whitesmoke,
+                                       0, 0, getWidth(), getHeight());
         }
     };
     
