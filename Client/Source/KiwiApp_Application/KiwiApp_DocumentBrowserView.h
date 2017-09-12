@@ -72,10 +72,11 @@ namespace kiwi
     // ================================================================================ //
     
     //! @brief Listen to document browser changes.
-    class DocumentBrowserView::DriveView :
-    public juce::ListBox,
-    public juce::ListBoxModel,
-    public DocumentBrowser::Drive::Listener
+    class DocumentBrowserView::DriveView
+    : public juce::Component
+    , public juce::ListBoxModel
+    , public juce::DragAndDropContainer
+    , public DocumentBrowser::Drive::Listener
     {
     public:
         
@@ -85,8 +86,8 @@ namespace kiwi
         //! @brief Destructor.
         ~DriveView();
         
-        //! @brief Returns the session host name.
-        std::string getHostName() const;
+        //! @brief Called when resized.
+        void resized() override;
         
         //! @brief Called by the DocumentBrowser::Drive changed.
         //! @details Called when one or more document has been changed / removed or added.
@@ -122,14 +123,52 @@ namespace kiwi
         //! @brief Make an API call to rename the remote document
         void renameDocumentForRow(int row, std::string const& new_name);
         
+        //! @brief Returns the document pointer corresponding to the row.
+        DocumentBrowser::Drive::DocumentSession* getDocumentForRow(int row);
+        
+    private: // methods
+        
+        //! @brief Allows rows from the list to be dragged-and-dropped.
+        //! @see juce::ListBoxModel::getDragSourceDescription, DragAndDropContainer::startDragging
+        juce::var getDragSourceDescription(juce::SparseSet<int> const& rows_to_describe) override;
+        
     private: // classes
         
+        class FileList;
         class Header;
         class RowElem;
         
+        DocumentBrowser::Drive& useDrive();
+        friend FileList;
+        
     private: // members
         
-        DocumentBrowser::Drive& m_drive;
+        DocumentBrowser::Drive&     m_drive;
+        std::unique_ptr<FileList>   m_file_list;
+    };
+    
+    // ================================================================================ //
+    //                              BROWSER DRIVE FILE LIST                             //
+    // ================================================================================ //
+    
+    class DocumentBrowserView::DriveView::FileList
+    : public juce::ListBox
+    , public juce::DragAndDropTarget
+    {
+    public: // methods
+        
+        //! @brief Constructor
+        FileList(DriveView& drive_view);
+        
+    private: // methods
+        
+        bool isInterestedInDragSource(SourceDetails const& dragSourceDetails) override;
+        
+        void itemDropped(SourceDetails const& dragSourceDetails) override;
+        
+    private: // variables
+        
+        DriveView& m_drive_view;
     };
     
     // ================================================================================ //
@@ -173,7 +212,7 @@ namespace kiwi
     public: // methods
         
         //! @brief Constructor.
-        RowElem(DriveView& drive_view, std::string const& name);
+        RowElem(DriveView& drive_view, FileList& file_list, std::string const& name);
         
         //! @brief Destructor.
         ~RowElem();
@@ -187,39 +226,26 @@ namespace kiwi
         //! @brief Called when resized.
         void resized() override;
         
-        //! @brief juce::Component::mouseEnter
-        void mouseEnter(juce::MouseEvent const& event) override;
-        
-        //! @brief juce::Component::mouseExit
-        void mouseExit(juce::MouseEvent const& event) override;
-        
-        //! @brief juce::Component::mouseDown
-        void mouseDown(juce::MouseEvent const& event) override;
-        
-        //! @brief juce::Component::mouseUp
-        void mouseUp(juce::MouseEvent const& event) override;
-        
-        //! @brief juce::Component::mouseDoubleClick
-        void mouseDoubleClick(juce::MouseEvent const& event) override;
-        
         //! @brief Called when a Label's text has changed.
         void labelTextChanged(juce::Label* label_text_that_has_changed) override;
         
         //! @brief Update the document session
-        void update(std::string const& name, int row, bool now_selected);
+        void update(std::string const& name,
+                    Api::Document::Type const& type,
+                    int row, bool now_selected);
         
     private: // variables
         
         DriveView&          m_drive_view;
         std::string         m_name;
+        Api::Document::Type m_type;
         ImageButton         m_open_btn;
         juce::Label         m_name_label;
         
         const juce::Image   m_kiwi_filetype_img;
+        const juce::Image   m_folder_img;
         
         int                 m_row;
         bool                m_selected;
-        bool                m_mouseover = false;
-        bool                m_select_row_on_mouse_up = false;
     };
 }

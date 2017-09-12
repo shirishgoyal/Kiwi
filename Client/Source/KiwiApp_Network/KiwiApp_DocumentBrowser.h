@@ -88,8 +88,8 @@ namespace kiwi
         
     private: // variables
         
-        std::unique_ptr<Drive>                          m_distant_drive;
-        engine::Listeners<Listener>                     m_listeners = {};
+        std::unique_ptr<Drive>          m_distant_drive;
+        engine::Listeners<Listener>     m_listeners = {};
     };
     
     // ================================================================================ //
@@ -224,13 +224,16 @@ namespace kiwi
         //! @brief Returns the document name
         std::string getName() const;
         
+        //! @brief Returns the document type
+        Api::Document::Type getType() const;
+        
         //! @brief Returns the session id of the document.
         uint64_t getSessionId() const;
         
         //! @brief Returns the drive that holds this document.
         DocumentBrowser::Drive const& useDrive() const;
         
-        //! @brief Rename the document.
+        //! @brief Rename the document (remotely).
         void rename(std::string const& new_name);
         
         //! @brief Returns true if the DocumentSession match another DocumentSession

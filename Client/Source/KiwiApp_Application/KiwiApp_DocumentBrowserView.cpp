@@ -99,15 +99,17 @@ namespace kiwi
     //                               DOCUMENT SESSION VIEW                              //
     // ================================================================================ //
     
-    DocumentBrowserView::DriveView::RowElem::RowElem(DriveView& drive_view, std::string const& name) :
-    m_drive_view(drive_view),
-    m_name(name),
-    m_open_btn("open", std::unique_ptr<juce::Drawable>(juce::Drawable::createFromImageData(binary_data::images::open_png, binary_data::images::open_png_size)), ImageButton::ButtonStyle::ImageFitted),
-    m_kiwi_filetype_img(juce::ImageCache::getFromMemory(binary_data::images::kiwi_filetype_png,
-                                                        binary_data::images::kiwi_filetype_png_size)),
-    m_row(-1)
+    DocumentBrowserView::DriveView::RowElem::RowElem(DriveView& drive_view, FileList& file_list, std::string const& name)
+    : m_drive_view(drive_view)
+    , m_name(name)
+    , m_open_btn("open", std::unique_ptr<juce::Drawable>(juce::Drawable::createFromImageData(binary_data::images::open_png, binary_data::images::open_png_size)), ImageButton::ButtonStyle::ImageFitted)
+    , m_kiwi_filetype_img(juce::ImageCache::getFromMemory(binary_data::images::kiwi_filetype_png,
+                                                          binary_data::images::kiwi_filetype_png_size))
+    , m_folder_img(juce::ImageCache::getFromMemory(binary_data::images::folder_png,
+                                                   binary_data::images::folder_png_size))
+    , m_row(-1)
     {
-        addMouseListener(this, true);
+        setInterceptsMouseClicks(false, false);
         
         m_open_btn.setCommand(std::bind(&DriveView::openDocument, &m_drive_view, m_row));
         m_open_btn.setSize(40, 40);
@@ -120,7 +122,6 @@ namespace kiwi
         m_name_label.setEditable(false, true, true);
         m_name_label.addListener(this);
         m_name_label.setColour(juce::Label::textColourId, juce::Colours::black);
-        m_name_label.setInterceptsMouseClicks(false, false);
         addAndMakeVisible(m_name_label);
     }
     
@@ -129,7 +130,9 @@ namespace kiwi
         removeMouseListener(this);
     }
     
-    void DocumentBrowserView::DriveView::RowElem::update(std::string const& name, int row, bool now_selected)
+    void DocumentBrowserView::DriveView::RowElem::update(std::string const& name,
+                                                         Api::Document::Type const& type,
+                                                         int row, bool now_selected)
     {
         if(row != m_row)
         {
@@ -149,6 +152,11 @@ namespace kiwi
             m_open_btn.setVisible(m_selected);
             repaint();
         }
+        
+        if(m_type != type)
+        {
+            m_type = type;
+        }
     }
     
     void DocumentBrowserView::DriveView::RowElem::paint(juce::Graphics& g)
@@ -157,7 +165,7 @@ namespace kiwi
         const juce::Colour bg_color(0xDDFFFFFF);
         const juce::Colour selected_color_color(juce::Colours::lightblue);
         
-        g.setColour(m_selected ? selected_color_color : m_mouseover ? bg_color.darker(0.1f) : bg_color);
+        g.setColour(m_selected ? selected_color_color : isMouseOver() ? bg_color.darker(0.1f) : bg_color);
         g.fillAll();
         
         // document status notifier (connected / disconnected / not-connected)
@@ -167,7 +175,7 @@ namespace kiwi
         g.setColour(bg_color.darker(0.5f));
         g.drawHorizontalLine(getBottom() - 1, 0., getWidth());
         
-        g.drawImage(m_kiwi_filetype_img,
+        g.drawImage(m_type == Api::Document::Type::Patcher ? m_kiwi_filetype_img : m_folder_img,
                     juce::Rectangle<float>(10, 5, 30, 30),
                     juce::RectanglePlacement::stretchToFit, false);
     }
@@ -177,48 +185,6 @@ namespace kiwi
         const auto bounds = getLocalBounds();
         m_open_btn.setBounds(bounds.reduced(5).withLeft(bounds.getWidth() - 40));
         m_name_label.setBounds(bounds.reduced(5).withRight(m_open_btn.getX() - 5).withLeft(40));
-    }
-    
-    void DocumentBrowserView::DriveView::RowElem::mouseEnter(juce::MouseEvent const& e)
-    {
-        m_mouseover = true;
-        repaint();
-    }
-    
-    void DocumentBrowserView::DriveView::RowElem::mouseExit(juce::MouseEvent const& e)
-    {
-        m_mouseover = false;
-        repaint();
-    }
-    
-    void DocumentBrowserView::DriveView::RowElem::mouseDown(juce::MouseEvent const& e)
-    {
-        m_select_row_on_mouse_up = false;
-        
-        if(isEnabled())
-        {
-            if(!m_selected)
-            {
-                m_drive_view.selectRowsBasedOnModifierKeys(m_row, e.mods, false);
-            }
-            else
-            {
-                m_select_row_on_mouse_up = true;
-            }
-        }
-    }
-    
-    void DocumentBrowserView::DriveView::RowElem::mouseUp(juce::MouseEvent const& e)
-    {
-        if(m_select_row_on_mouse_up && e.mouseWasClicked() && isEnabled())
-        {
-            m_drive_view.selectRowsBasedOnModifierKeys(m_row, e.mods, true);
-        }
-    }
-    
-    void DocumentBrowserView::DriveView::RowElem::mouseDoubleClick(juce::MouseEvent const& event)
-    {
-        m_drive_view.listBoxItemDoubleClicked(m_row, event);
     }
     
     void DocumentBrowserView::DriveView::RowElem::labelTextChanged(juce::Label* label)
@@ -300,24 +266,14 @@ namespace kiwi
     //                                 BROWSER DRIVE VIEW                               //
     // ================================================================================ //
     
-    DocumentBrowserView::DriveView::DriveView(DocumentBrowser::Drive& drive) :
-    juce::ListBox("document list", this),
-    m_drive(drive)
+    DocumentBrowserView::DriveView::DriveView(DocumentBrowser::Drive& drive)
+    : m_drive(drive)
+    , m_file_list(std::make_unique<FileList>(*this))
     {
         m_drive.addListener(*this);
+        m_file_list->updateContent();
         
-        setMultipleSelectionEnabled(false);
-        setRowSelectedOnMouseDown(true);
-        setRowHeight(40);
-        
-        auto* header = new Header(*this, m_drive);
-        header->setSize(getWidth(), 50);
-        setHeaderComponent(header);
-        
-        getViewport()->setScrollBarThickness(10);
-        juce::ListBox::setColour(juce::ListBox::backgroundColourId, juce::Colour(0xFFD4D4D4));
-        
-        updateContent();
+        addAndMakeVisible(*m_file_list);
     }
     
     DocumentBrowserView::DriveView::~DriveView()
@@ -325,9 +281,14 @@ namespace kiwi
         m_drive.removeListener(*this);
     }
     
+    void DocumentBrowserView::DriveView::resized()
+    {
+        m_file_list->setBounds(getLocalBounds());
+    }
+    
     void DocumentBrowserView::DriveView::driveChanged()
     {
-        updateContent();
+        m_file_list->updateContent();
         repaint();
     }
     
@@ -339,7 +300,7 @@ namespace kiwi
     void DocumentBrowserView::DriveView::paintListBoxItem(int rowNumber, juce::Graphics& g,
                                                           int width, int height, bool selected)
     {
-        ;
+        // nothing here, we use a custom row component instead.
     }
     
     juce::Component* DocumentBrowserView::DriveView::refreshComponentForRow(int row, bool selected,
@@ -359,10 +320,11 @@ namespace kiwi
         {
             if(c == nullptr)
             {
-                c = new RowElem(*this, documents[row]->getName());
+                c = new RowElem(*this, *m_file_list, documents[row]->getName());
             }
             
-            static_cast<RowElem*>(c)->update(documents[row]->getName(), row, selected);
+            auto& doc = *documents[row];
+            static_cast<RowElem*>(c)->update(doc.getName(), doc.getType(), row, selected);
         }
 
         return c;
@@ -370,14 +332,14 @@ namespace kiwi
     
     void DocumentBrowserView::DriveView::backgroundClicked(juce::MouseEvent const&)
     {
-        deselectAllRows();
+        m_file_list->deselectAllRows();
     }
     
     void DocumentBrowserView::DriveView::returnKeyPressed(int last_row_selected)
     {
-        if(getNumSelectedRows() > 0)
+        if(m_file_list->getNumSelectedRows() > 0)
         {
-            auto* c = getComponentForRowNumber(last_row_selected);
+            auto* c = m_file_list->getComponentForRowNumber(last_row_selected);
             if(c)
             {
                 static_cast<RowElem*>(c)->showEditor();
@@ -385,31 +347,96 @@ namespace kiwi
         }
     }
     
-    void DocumentBrowserView::DriveView::openDocument(int row)
+    DocumentBrowser::Drive::DocumentSession* DocumentBrowserView::DriveView::getDocumentForRow(int row)
     {
         auto& documents = m_drive.getDocuments();
         if(row < documents.size())
         {
-            documents[row]->open();
+            return documents[row].get();
+        }
+        
+        return nullptr;
+    }
+    
+    void DocumentBrowserView::DriveView::openDocument(int row)
+    {
+        if(auto* doc = getDocumentForRow(row))
+        {
+            doc->open();
         }
     }
     
     void DocumentBrowserView::DriveView::renameDocumentForRow(int row, std::string const& new_name)
     {
-        auto& documents = m_drive.getDocuments();
-        if(row < documents.size())
+        if(auto* doc = getDocumentForRow(row))
         {
-            documents[row]->rename(new_name);
+            doc->rename(new_name);
         }
+    }
+    
+    juce::var DocumentBrowserView::DriveView::getDragSourceDescription(juce::SparseSet<int> const& rows_to_describe)
+    {
+        // for our drag description, we'll just make a comma-separated list of the selected row
+        // numbers - this will be picked up by the drag target and displayed in its box.
+        juce::StringArray rows;
+        
+        auto& documents = m_drive.getDocuments();
+        
+        for(int i = 0; i < documents.size(); ++i)
+            rows.add(juce::String(documents[i]->getName()));
+        
+        return rows.joinIntoString(", ");
     }
     
     void DocumentBrowserView::DriveView::listBoxItemDoubleClicked(int row, juce::MouseEvent const& e)
     {
-        openDocument(row);
+        auto* doc = getDocumentForRow(row);
+        if(doc)
+        {
+            doc->open();
+        }
     }
     
     bool DocumentBrowserView::DriveView::operator==(DocumentBrowser::Drive const& other_drive) const
     {
         return (m_drive == other_drive);
+    }
+    
+    DocumentBrowser::Drive& DocumentBrowserView::DriveView::useDrive()
+    {
+        return m_drive;
+    }
+    
+    // ================================================================================ //
+    //                              BROWSER DRIVE FILE LIST                             //
+    // ================================================================================ //
+    
+    DocumentBrowserView::DriveView::FileList::FileList(DriveView& drive_view)
+    : juce::ListBox("document list", &drive_view)
+    , m_drive_view(drive_view)
+    {
+        setMultipleSelectionEnabled(true);
+        setRowSelectedOnMouseDown(true);
+        setRowHeight(40);
+        
+        auto* header = new Header(*this, drive_view.useDrive());
+        header->setSize(getWidth(), 50);
+        setHeaderComponent(header);
+        
+        getViewport()->setScrollBarThickness(10);
+        setColour(juce::ListBox::backgroundColourId, juce::Colour(0xFFD4D4D4));
+        
+        updateContent();
+    }
+    
+    bool DocumentBrowserView::DriveView::FileList::isInterestedInDragSource(SourceDetails const& details)
+    {
+        return dynamic_cast<FileList*>(details.sourceComponent.get()) != nullptr;
+    }
+    
+    void DocumentBrowserView::DriveView::FileList::itemDropped(SourceDetails const& details)
+    {
+        std::cout << "item droped\n";
+        std::cout << details.description.toString() << '\n';
     }
 }

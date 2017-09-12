@@ -119,9 +119,11 @@ namespace kiwi
             static const std::string root;
             static const std::string login;
             static const std::string documents;
+            static const std::string files;
             static const std::string users;
             
             static std::string document(std::string const& document_id);
+            static std::string file(std::string const& file_id);
             static std::string user(std::string const& user_id);
         };
         
@@ -278,16 +280,62 @@ namespace kiwi
     
     class Api::Document
     {
-    public:
+    public: // methods
         
+        enum Type : uint8_t
+        {
+            Unknown = 0,
+            Folder,
+            Patcher
+        };
+        
+        //! @brief Constructor
         Document() = default;
         
-        std::string _id = "0";
-        std::string name = "";
-        uint64_t    session_id = 0ul;
+        //! @brief Destructor
+        ~Document() = default;
         
         //! @brief Returns true if the Document match another Document
         bool operator==(Document const& other_doc) const;
+        
+        //! @brief Get the document name.
+        std::string const& getName() const;
+        
+        //! @brief set the document name (locally).
+        void setName(std::string const&);
+        
+        //! @brief Get the document description.
+        std::string const& getDescription() const;
+        
+        //! @brief Get the document id as a string.
+        std::string const& getIdAsString() const;
+        
+        //! @brief Get the document id as an integer.
+        uint64_t getIdAsInt() const;
+        
+        //! @brief Get the document mime type as an string.
+        std::string const& getMimeType() const;
+        
+        //! @brief Get the document mime type as an string.
+        Api::Document::Type getType() const;
+        
+        //! @brief Get the document creation time as an string.
+        std::string const& getCreatedTime() const;
+        
+        //! @brief Get the document api version.
+        int getApiVersion() const;
+        
+    private: // variables
+        
+        friend void from_json(json const&, Api::Document&);
+        
+        int         m_api_version = 0;
+        std::string m_id = "";
+        std::string m_name = "";
+        std::string m_description = "";
+        std::string m_mime_type = "";
+        std::string m_created_time = "";
+        std::string m_creator_id = "";
     };
     
     //! @brief Helper function to convert an Api::Document into a json object
@@ -295,6 +343,12 @@ namespace kiwi
     
     //! @brief Helper function to convert a json object into an Api::Document
     void from_json(json const& j, Api::Document& doc);
+    
+    //! @brief Helper function to convert an Api::Documents into a json object
+    void to_json(json& j, Api::Documents const& doc);
+    
+    //! @brief Helper function to convert a json object into an Api::Documents
+    void from_json(json const& j, Api::Documents& doc);
     
     // ================================================================================ //
     //                                   API CONTROLLER                                 //

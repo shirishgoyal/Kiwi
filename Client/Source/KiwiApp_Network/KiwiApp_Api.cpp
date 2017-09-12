@@ -26,11 +26,17 @@ namespace kiwi
     const std::string Api::Endpoint::root = "/api";
     const std::string Api::Endpoint::login {Api::Endpoint::root + "/login"};
     const std::string Api::Endpoint::documents {Api::Endpoint::root + "/documents"};
+    const std::string Api::Endpoint::files {Api::Endpoint::root + "/drive/files"};
     const std::string Api::Endpoint::users {Api::Endpoint::root + "/users"};
     
     std::string Api::Endpoint::document(std::string const& document_id)
     {
         return Api::Endpoint::documents + '/' + document_id;
+    }
+    
+    std::string Api::Endpoint::file(std::string const& file_id)
+    {
+        return Api::Endpoint::files + '/' + file_id;
     }
     
     std::string Api::Endpoint::user(std::string const& user_id)
@@ -164,19 +170,19 @@ namespace kiwi
                 {
                     auto j = json::parse(res.body);
                     
-                    if(j.is_array())
-                    {
-                        // parse each json objects as document and store them in a vector.
-                        callback(std::move(res), j);
-                        return;
-                    }
+                    Api::Documents docs;
+                    from_json(j, docs);
+                    
+                    // parse each json objects as document and store them in a vector.
+                    callback(std::move(res), std::move(docs));
+                    return;
                 }
             }
             
             callback(std::move(res), {});
         };
         
-        auto session = makeSession(Endpoint::documents);
+        auto session = makeSession(Endpoint::files);
         storeFuture(session->GetAsync(std::move(cb)));
     }
     
@@ -191,18 +197,15 @@ namespace kiwi
                 {
                     auto j = json::parse(res.body);
                     
-                    if(j.is_object())
-                    {
-                        // parse object as a document
-                        callback(std::move(res), j);
-                    }
+                    // parse object as a document
+                    callback(std::move(res), j);
                 }
             }
             
             callback(std::move(res), {});
         };
         
-        auto session = makeSession(Endpoint::documents);
+        auto session = makeSession(Endpoint::files);
         
         if(!document_name.empty())
         {
@@ -242,7 +245,7 @@ namespace kiwi
         
         const AuthUser& user = m_controller.getAuthUser();
         
-        if(add_auth && !user.isLoggedIn())
+        if(add_auth && user.isLoggedIn())
         {
             session->setAuthorization("JWT " + user.getToken());
         }
@@ -429,34 +432,116 @@ namespace kiwi
     //                                    API DOCUMENT                                  //
     // ================================================================================ //
     
+    std::string const& Api::Document::getName() const
+    {
+        return m_name;
+    }
+    
+    void Api::Document::setName(std::string const& name)
+    {
+        m_name = name;
+    }
+    
+    std::string const& Api::Document::getDescription() const
+    {
+        return m_description;
+    }
+    
+    std::string const& Api::Document::getIdAsString() const
+    {
+        return m_id;
+    }
+    
+    uint64_t Api::Document::getIdAsInt() const
+    {
+        uint64_t result = 0ull;
+        std::stringstream converter(m_id);
+        converter >> std::hex >> result;
+        
+        return result;
+    }
+    
+    std::string const& Api::Document::getMimeType() const
+    {
+        return m_mime_type;
+    }
+    
+    Api::Document::Type Api::Document::getType() const
+    {
+        if(m_mime_type == "application/cicm.kiwiapp.folder")
+        {
+            return Type::Folder;
+        }
+        else if(m_mime_type == "application/cicm.kiwiapp.patcher")
+        {
+            return Type::Patcher;
+        }
+        
+        return Type::Unknown;
+    }
+    
+    std::string const& Api::Document::getCreatedTime() const
+    {
+        return m_created_time;
+    }
+    
+    int Api::Document::getApiVersion() const
+    {
+        return m_api_version;
+    }
+    
     void to_json(json& j, Api::Document const& doc)
     {
-        std::stringstream session_id_converter;
-        session_id_converter << std::hex << doc.session_id;
-        
-        j = json{
-            {"_id", doc._id},
-            {"name", doc.name},
-            {"session_id", session_id_converter.str()}
+        j = json {
+            {"kind", "Kiwi#Document"},
+            {"__v", doc.getApiVersion()},
+            {"_id", doc.getIdAsString()},
+            {"name", doc.getName()},
+            {"description", doc.getDescription()},
+            {"mimeType", doc.getMimeType()},
+            {"createdTime", doc.getCreatedTime()}
         };
     }
     
     void from_json(json const& j, Api::Document& doc)
     {
-        doc._id = Api::getJsonValue<std::string>(j, "_id");
-        doc.name = Api::getJsonValue<std::string>(j, "name");
-        doc.session_id = 0ul;
-        
-        if(j.count("session_id"))
+        if(j.is_object() && j.count("kind") && j.at("kind").get<std::string>() == "Kiwi#Document")
         {
-            std::stringstream converter(j["session_id"].get<std::string>());
-            converter >> std::hex >> doc.session_id;
+            doc.m_api_version = Api::getJsonValue<int>(j, "__v");
+            doc.m_id = Api::getJsonValue<std::string>(j, "_id");
+            doc.m_name = Api::getJsonValue<std::string>(j, "name");
+            doc.m_description = Api::getJsonValue<std::string>(j, "description");
+            doc.m_mime_type = Api::getJsonValue<std::string>(j, "mimeType");
+            doc.m_created_time = Api::getJsonValue<std::string>(j, "createdTime");
+        }
+    }
+    
+    void to_json(json& j, Api::Documents const& docs)
+    {
+        j = json {
+            {"kind", "Kiwi#DocumentList"},
+            {"items", docs}
+        };
+    }
+    
+    void from_json(json const& j, Api::Documents& docs)
+    {
+        docs.clear();
+        
+        if(j.is_object()
+           && j.count("kind") && j.at("kind").get<std::string>() == "Kiwi#DocumentList"
+           && j.count("items"))
+        {
+            for(auto& obj : j["items"])
+            {
+                docs.emplace_back(obj);
+            }
         }
     }
     
     bool Api::Document::operator==(Api::Document const& other_doc) const
     {
-        return (_id == other_doc._id);
+        return (m_id == other_doc.m_id);
     }
     
     // ================================================================================ //

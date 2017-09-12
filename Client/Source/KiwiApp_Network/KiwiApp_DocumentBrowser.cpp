@@ -269,7 +269,7 @@ namespace kiwi
                 // name is currently the only document field that can change.
                 if(new_doc->getName() != (*it)->getName())
                 {
-                    (*it)->m_document.name = new_doc->getName();
+                    (*it)->m_document.setName(new_doc->getName());
                     auto& doc = *(it->get());
                     
                     m_listeners.call(&Listener::documentChanged, doc);
@@ -320,12 +320,17 @@ namespace kiwi
     
     std::string DocumentBrowser::Drive::DocumentSession::getName() const
     {
-        return m_document.name;
+        return m_document.getName();
+    }
+    
+    Api::Document::Type DocumentBrowser::Drive::DocumentSession::getType() const
+    {
+        return m_document.getType();
     }
     
     uint64_t DocumentBrowser::Drive::DocumentSession::getSessionId() const
     {
-        return m_document.session_id;
+        return m_document.getIdAsInt();
     }
     
     DocumentBrowser::Drive const& DocumentBrowser::Drive::DocumentSession::useDrive() const
@@ -340,7 +345,7 @@ namespace kiwi
             return;
         }
         
-        KiwiApp::useApi().renameDocument(m_document._id, new_name, [](Api::Response res) {
+        KiwiApp::useApi().renameDocument(m_document.getIdAsString(), new_name, [](Api::Response res) {
             
             if(!res.error)
             {
@@ -366,6 +371,9 @@ namespace kiwi
     
     void DocumentBrowser::Drive::DocumentSession::open()
     {
-        KiwiApp::useInstance().openRemotePatcher(*this);
+        if(m_document.getType() == Api::Document::Type::Patcher)
+        {
+            KiwiApp::useInstance().openRemotePatcher(*this);
+        }
     }
 }
