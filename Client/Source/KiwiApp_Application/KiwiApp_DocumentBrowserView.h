@@ -132,11 +132,17 @@ namespace kiwi
         //! @see juce::ListBoxModel::getDragSourceDescription, DragAndDropContainer::startDragging
         juce::var getDragSourceDescription(juce::SparseSet<int> const& rows_to_describe) override;
         
+        //! @brief Called when a drag starts.
+        void dragOperationStarted(juce::DragAndDropTarget::SourceDetails const& drag_source_details) override;
+        
+        //! @brief Called when a drag finishes.
+        void dragOperationEnded(juce::DragAndDropTarget::SourceDetails const& drag_source_details) override;
+        
     private: // classes
         
         class FileList;
         class Header;
-        class RowElem;
+        class FileElem;
         
         DocumentBrowser::Drive& useDrive();
         friend FileList;
@@ -145,30 +151,6 @@ namespace kiwi
         
         DocumentBrowser::Drive&     m_drive;
         std::unique_ptr<FileList>   m_file_list;
-    };
-    
-    // ================================================================================ //
-    //                              BROWSER DRIVE FILE LIST                             //
-    // ================================================================================ //
-    
-    class DocumentBrowserView::DriveView::FileList
-    : public juce::ListBox
-    , public juce::DragAndDropTarget
-    {
-    public: // methods
-        
-        //! @brief Constructor
-        FileList(DriveView& drive_view);
-        
-    private: // methods
-        
-        bool isInterestedInDragSource(SourceDetails const& dragSourceDetails) override;
-        
-        void itemDropped(SourceDetails const& dragSourceDetails) override;
-        
-    private: // variables
-        
-        DriveView& m_drive_view;
     };
     
     // ================================================================================ //
@@ -204,18 +186,38 @@ namespace kiwi
     };
     
     // ================================================================================ //
+    //                              BROWSER DRIVE FILE LIST                             //
+    // ================================================================================ //
+    
+    class DocumentBrowserView::DriveView::FileList
+    : public juce::ListBox
+    {
+    public: // methods
+        
+        //! @brief Constructor
+        FileList(DriveView& drive_view);
+        
+    private: // variables
+        
+        DriveView& m_drive_view;
+    };
+    
+    // ================================================================================ //
     //                            BROWSER DRIVE VIEW ROW ELEM                           //
     // ================================================================================ //
     
-    class DocumentBrowserView::DriveView::RowElem : public juce::Component, juce::Label::Listener
+    class DocumentBrowserView::DriveView::FileElem
+    : public juce::Component
+    , public juce::Label::Listener
+    , public juce::DragAndDropTarget
     {
     public: // methods
         
         //! @brief Constructor.
-        RowElem(DriveView& drive_view, FileList& file_list, std::string const& name);
+        FileElem(DriveView& drive_view, FileList& file_list, std::string const& name);
         
         //! @brief Destructor.
-        ~RowElem();
+        ~FileElem();
         
         //! @brief Show the document name editor.
         void showEditor();
@@ -234,12 +236,30 @@ namespace kiwi
                     Api::Document::Type const& type,
                     int row, bool now_selected);
         
+        bool isInterestedInDragSource(SourceDetails const& drag_source_details) override;
+        
+    private: // methods
+        
+        //! @note In order to receive DragAndDropTarget notifications,
+        //! this component needs to intercept mouse events,
+        //! but as we do so, the (private) ListBox::RowComponent machinery (selection, DnD...) is broken,
+        //! so we just forward mouse events to its parent component
+        
+        void mouseDown(juce::MouseEvent const& e) override;
+        void mouseUp(juce::MouseEvent const& e) override;
+        void mouseDoubleClick(juce::MouseEvent const& e) override;
+        void mouseDrag(juce::MouseEvent const& e) override;
+        
+        void itemDropped(SourceDetails const& dragSourceDetails) override;
+        void itemDragEnter(SourceDetails const& drag_source_details) override;
+        void itemDragMove(SourceDetails const& drag_source_details) override;
+        void itemDragExit(SourceDetails const& drag_source_details) override;
+        
     private: // variables
         
         DriveView&          m_drive_view;
         std::string         m_name;
         Api::Document::Type m_type;
-        ImageButton         m_open_btn;
         juce::Label         m_name_label;
         
         const juce::Image   m_kiwi_filetype_img;
@@ -247,5 +267,6 @@ namespace kiwi
         
         int                 m_row;
         bool                m_selected;
+        bool                m_something_is_being_dragged_over = false;
     };
 }

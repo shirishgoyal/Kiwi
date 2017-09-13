@@ -63,7 +63,7 @@ namespace kiwi
         //! @brief stop processing
         void stop();
         
-        //! @brief Scan the LAN to find a service provider.
+        //! @brief Update document list.
         void process();
         
         //! @brief juce::Timer callback.
