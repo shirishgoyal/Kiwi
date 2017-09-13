@@ -24,18 +24,16 @@
 #include <KiwiEngine/KiwiEngine_Instance.h>
 #include <KiwiEngine/KiwiEngine_Scheduler.h>
 
-#include <juce_events/timers/juce_Timer.h>
-
 #include "flip/Document.h"
 
 #include "KiwiApp_Console.h"
 #include "KiwiApp_SettingsPanel.h"
-#include "KiwiApp_DocumentBrowserView.h"
 #include "KiwiApp_BeaconDispatcher.h"
 
 #include "../KiwiApp_Patcher/KiwiApp_PatcherManager.h"
 #include "../KiwiApp_Audio/KiwiApp_DspDeviceManager.h"
 
+#include "../KiwiApp_Dashboard/KiwiApp_DocumentBrowserView.h"
 #include "../KiwiApp_Auth/KiwiApp_AuthPanel.h"
 
 namespace kiwi

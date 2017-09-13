@@ -23,14 +23,13 @@
 
 #include <KiwiEngine/KiwiEngine_Listeners.h>
 
-#include <juce_data_structures/juce_data_structures.h>
-#include <juce_events/juce_events.h>
-
 #include "../KiwiApp_Network/KiwiApp_Api.h"
+#include "../KiwiApp_Network/KiwiApp_ApiController.h"
 
 #include "../KiwiApp_General/KiwiApp_StoredSettings.h"
 
-#include "KiwiApp_ApiController.h"
+#include <juce_data_structures/juce_data_structures.h>
+#include <juce_events/juce_events.h>
 
 namespace kiwi
 {

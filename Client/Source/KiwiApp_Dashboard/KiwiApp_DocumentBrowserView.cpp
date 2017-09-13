@@ -21,11 +21,11 @@
 
 #include <KiwiEngine/KiwiEngine_Console.h>
 
-#include "KiwiApp_DocumentBrowserView.h"
-#include "KiwiApp_Instance.h"
-
+#include "../KiwiApp_Application/KiwiApp_Instance.h"
 #include "../KiwiApp_Ressources/KiwiApp_BinaryData.h"
 #include "../KiwiApp.h"
+
+#include "KiwiApp_DocumentBrowserView.h"
 
 namespace kiwi
 {

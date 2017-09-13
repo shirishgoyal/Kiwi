@@ -27,11 +27,11 @@
 #include <KiwiModel/KiwiModel_PatcherUser.h>
 #include <KiwiModel/KiwiModel_PatcherValidator.h>
 
-#include <juce_gui_extra/juce_gui_extra.h>
-
-#include "../KiwiApp_Network/KiwiApp_DocumentBrowser.h"
+#include "../KiwiApp_Dashboard/KiwiApp_DocumentBrowser.h"
 
 #include <unordered_set>
+
+#include <juce_gui_extra/juce_gui_extra.h>
 
 namespace kiwi
 {
