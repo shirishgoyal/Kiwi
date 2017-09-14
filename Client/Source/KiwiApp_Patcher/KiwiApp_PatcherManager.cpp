@@ -67,7 +67,7 @@ namespace kiwi
         m_listeners.remove(listener);
     }
     
-    void PatcherManager::connect(DocumentBrowser::Drive::DocumentSession& session)
+    void PatcherManager::connect(FileBrowser::Drive::DocumentSession& session)
     {
         if(m_session)
         {
@@ -356,12 +356,12 @@ namespace kiwi
         }
     }
     
-    void PatcherManager::documentAdded(DocumentBrowser::Drive::DocumentSession& doc)
+    void PatcherManager::documentAdded(FileBrowser::Drive::DocumentSession& doc)
     {
         ;
     }
     
-    void PatcherManager::documentChanged(DocumentBrowser::Drive::DocumentSession& doc)
+    void PatcherManager::documentChanged(FileBrowser::Drive::DocumentSession& doc)
     {
         if(m_session && (m_session == &doc))
         {
@@ -373,7 +373,7 @@ namespace kiwi
         }
     }
     
-    void PatcherManager::documentRemoved(DocumentBrowser::Drive::DocumentSession& doc)
+    void PatcherManager::documentRemoved(FileBrowser::Drive::DocumentSession& doc)
     {
         if(m_session && (m_session == &doc))
         {

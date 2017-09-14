@@ -477,7 +477,7 @@ namespace kiwi
         menu.addCommandItem(m_command_manager.get(), CommandIDs::showConsoleWindow);
         menu.addSeparator();
         
-        menu.addCommandItem(m_command_manager.get(), CommandIDs::showDocumentBrowserWindow);
+        menu.addCommandItem(m_command_manager.get(), CommandIDs::showFileBrowserWindow);
         menu.addCommandItem(m_command_manager.get(), CommandIDs::showBeaconDispatcherWindow);
     }
     
@@ -507,7 +507,7 @@ namespace kiwi
             CommandIDs::showAboutAppWindow,
             CommandIDs::showAudioStatusWindow,
             CommandIDs::showAppSettingsWindow,
-            CommandIDs::showDocumentBrowserWindow,
+            CommandIDs::showFileBrowserWindow,
             CommandIDs::showBeaconDispatcherWindow,
             CommandIDs::switchDsp,
             CommandIDs::startDsp,
@@ -610,7 +610,7 @@ namespace kiwi
                 
                 break;
             }
-            case CommandIDs::showDocumentBrowserWindow:
+            case CommandIDs::showFileBrowserWindow:
             {
                 result.setInfo(TRANS("Show Document Browser panel"), TRANS("Show Document Browser panel"),
                                CommandCategories::windows, 0);
@@ -722,9 +722,9 @@ namespace kiwi
                 m_instance->showAudioSettingsWindow();
                 break;
             }
-            case CommandIDs::showDocumentBrowserWindow :
+            case CommandIDs::showFileBrowserWindow :
             {
-                m_instance->showDocumentBrowserWindow(); break;
+                m_instance->showFileBrowserWindow(); break;
             }
             case CommandIDs::showBeaconDispatcherWindow :
             {

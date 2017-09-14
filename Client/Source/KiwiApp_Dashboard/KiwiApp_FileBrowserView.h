@@ -21,36 +21,36 @@
 
 #pragma once
 
-#include "KiwiApp_DocumentBrowser.h"
+#include "KiwiApp_FileBrowser.h"
 
 #include "../KiwiApp_Components/KiwiApp_ImageButton.h"
 
 namespace kiwi
 {
     // ================================================================================ //
-    //                               DOCUMENT BROWSER VIEW                              //
+    //                                  FILE BROWSER VIEW                              //
     // ================================================================================ //
     
-    class DocumentBrowserView
+    class FileBrowserView
     : public juce::Component
-    , public DocumentBrowser::Listener
+    , public FileBrowser::Listener
     {
     public: // methods
         
         //! @brief Constructor.
-        DocumentBrowserView(DocumentBrowser& browser);
+        FileBrowserView(FileBrowser& browser);
         
         //! @brief Destructor.
-        ~DocumentBrowserView();
+        ~FileBrowserView();
         
         //! @brief Called when the document list changed.
-        void driveAdded(DocumentBrowser::Drive& drive) override;
+        void driveAdded(FileBrowser::Drive& drive) override;
         
         //! @brief Called when a drive changed.
-        void driveChanged(DocumentBrowser::Drive const& drive) override;
+        void driveChanged(FileBrowser::Drive const& drive) override;
         
         //! @brief Called when the document list changed.
-        void driveRemoved(DocumentBrowser::Drive const& drive) override;
+        void driveRemoved(FileBrowser::Drive const& drive) override;
         
         //! @brief Called when resized.
         void resized() override;
@@ -64,7 +64,7 @@ namespace kiwi
         
     private: // members
         
-        DocumentBrowser&                        m_browser;
+        FileBrowser&                        m_browser;
         std::vector<std::unique_ptr<DriveView>> m_drives;
     };
     
@@ -72,17 +72,17 @@ namespace kiwi
     //                                 BROWSER DRIVE VIEW                               //
     // ================================================================================ //
     
-    //! @brief Listen to document browser changes.
-    class DocumentBrowserView::DriveView
+    //! @brief Listen to file browser changes.
+    class FileBrowserView::DriveView
     : public juce::Component
     , public juce::ListBoxModel
     , public juce::DragAndDropContainer
-    , public DocumentBrowser::Drive::Listener
+    , public FileBrowser::Drive::Listener
     {
     public:
         
         //! @brief Constructor.
-        DriveView(DocumentBrowser::Drive& drive);
+        DriveView(FileBrowser::Drive& drive);
         
         //! @brief Destructor.
         ~DriveView();
@@ -90,7 +90,7 @@ namespace kiwi
         //! @brief Called when resized.
         void resized() override;
         
-        //! @brief Called by the DocumentBrowser::Drive changed.
+        //! @brief Called by the FileBrowser::Drive changed.
         //! @details Called when one or more document has been changed / removed or added.
         void driveChanged() override;
         
@@ -115,9 +115,6 @@ namespace kiwi
         //! @brief Called when the user double-clicking on a row.
         void listBoxItemDoubleClicked(int row, juce::MouseEvent const& e) override;
         
-        //! @brief Returns true if the two drive view refer to the same drive.
-        bool operator==(DocumentBrowser::Drive const& other_drive) const;
-        
         //! @brief Opens document for the given row.
         void openDocument(int row);
         
@@ -125,7 +122,7 @@ namespace kiwi
         void renameDocumentForRow(int row, std::string const& new_name);
         
         //! @brief Returns the document pointer corresponding to the row.
-        DocumentBrowser::Drive::DocumentSession* getDocumentForRow(int row);
+        FileBrowser::Drive::DocumentSession* getDocumentForRow(int row);
         
     private: // methods
         
@@ -145,12 +142,12 @@ namespace kiwi
         class Header;
         class FileElem;
         
-        DocumentBrowser::Drive& useDrive();
+        FileBrowser::Drive& useDrive();
         friend FileList;
         
     private: // members
         
-        DocumentBrowser::Drive&     m_drive;
+        FileBrowser::Drive&     m_drive;
         std::unique_ptr<FileList>   m_file_list;
     };
     
@@ -158,12 +155,12 @@ namespace kiwi
     //                             BROWSER DRIVE VIEW HEADER                            //
     // ================================================================================ //
     
-    class DocumentBrowserView::DriveView::Header : public juce::Component
+    class FileBrowserView::DriveView::Header : public juce::Component
     {
     public: // methods
         
         //! @brief Constructor
-        Header(juce::ListBox& listbox, DocumentBrowser::Drive& drive);
+        Header(juce::ListBox& listbox, FileBrowser::Drive& drive);
         
         //! @brief Destructor
         ~Header() = default;
@@ -180,7 +177,7 @@ namespace kiwi
     private: // members
         
         juce::ListBox&              m_listbox;
-        DocumentBrowser::Drive&     m_drive;
+        FileBrowser::Drive&     m_drive;
         ImageButton                 m_refresh_btn;
         ImageButton                 m_create_document_btn;
         const juce::Image           m_folder_img;
@@ -190,7 +187,7 @@ namespace kiwi
     //                              BROWSER DRIVE FILE LIST                             //
     // ================================================================================ //
     
-    class DocumentBrowserView::DriveView::FileList
+    class FileBrowserView::DriveView::FileList
     : public juce::ListBox
     {
     public: // methods
@@ -207,7 +204,7 @@ namespace kiwi
     //                            BROWSER DRIVE VIEW ROW ELEM                           //
     // ================================================================================ //
     
-    class DocumentBrowserView::DriveView::FileElem
+    class FileBrowserView::DriveView::FileElem
     : public juce::Component
     , public juce::Label::Listener
     , public juce::DragAndDropTarget

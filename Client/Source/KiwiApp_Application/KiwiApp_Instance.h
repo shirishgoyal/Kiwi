@@ -33,7 +33,7 @@
 #include "../KiwiApp_Patcher/KiwiApp_PatcherManager.h"
 #include "../KiwiApp_Audio/KiwiApp_DspDeviceManager.h"
 
-#include "../KiwiApp_Dashboard/KiwiApp_DocumentBrowserView.h"
+#include "../KiwiApp_Dashboard/KiwiApp_FileBrowserView.h"
 #include "../KiwiApp_Auth/KiwiApp_AuthPanel.h"
 
 namespace kiwi
@@ -96,7 +96,7 @@ namespace kiwi
         bool closeAllPatcherWindows();
         
         //! @brief Attempt to create a new patcher with document Session informations.
-        PatcherManager* openRemotePatcher(DocumentBrowser::Drive::DocumentSession& session);
+        PatcherManager* openRemotePatcher(FileBrowser::Drive::DocumentSession& session);
         
         //! @brief Brings the Application settings window to front.
         void showAppSettingsWindow();
@@ -116,8 +116,8 @@ namespace kiwi
         //! @brief Brings the "About Kiwi" window to front.
         void showAboutKiwiWindow();
         
-        //! @brief Brings the DocumentBrowserWindow to front.
-        void showDocumentBrowserWindow();
+        //! @brief Brings the FileBrowserWindow to front.
+        void showFileBrowserWindow();
         
         //! @brief Brings the BeaconDispatcherWindow to front.
         void showBeaconDispatcherWindow();
@@ -133,7 +133,7 @@ namespace kiwi
         PatcherManagers::iterator getPatcherManager(PatcherManager const& manager);
         
         //! @internal get the given patcher manager iterator.
-        PatcherManagers::iterator getPatcherManagerForSession(DocumentBrowser::Drive::DocumentSession& session);
+        PatcherManagers::iterator getPatcherManagerForSession(FileBrowser::Drive::DocumentSession& session);
         
         //! @internal Returns the next untitled number based on current documents
         size_t getNextUntitledNumberAndIncrement();
@@ -148,7 +148,7 @@ namespace kiwi
         
         engine::Instance                            m_instance;
         
-        DocumentBrowser                             m_browser;
+        FileBrowser                             m_browser;
         
         PatcherManagers                             m_patcher_managers;
         

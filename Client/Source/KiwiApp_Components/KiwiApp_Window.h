@@ -99,7 +99,7 @@ namespace kiwi
         Console = 0,
         FormComponent,
         AboutKiwi,
-        DocumentBrowser,
+        FileBrowser,
         ApplicationSettings,
         AudioSettings,
         BeaconDispatcher,

@@ -27,7 +27,7 @@
 #include <KiwiModel/KiwiModel_PatcherUser.h>
 #include <KiwiModel/KiwiModel_PatcherValidator.h>
 
-#include "../KiwiApp_Dashboard/KiwiApp_DocumentBrowser.h"
+#include "../KiwiApp_Dashboard/KiwiApp_FileBrowser.h"
 
 #include <unordered_set>
 
@@ -45,7 +45,7 @@ namespace kiwi
     //! @brief The main DocumentObserver.
     //! @details The Instance dispatch changes to all other DocumentObserver objects
     class PatcherManager :  public flip::DocumentObserver<model::Patcher>,
-                            public DocumentBrowser::Drive::Listener
+                            public FileBrowser::Drive::Listener
     {
     public: // nested classes
         
@@ -60,7 +60,7 @@ namespace kiwi
         ~PatcherManager();
         
         //! @brief Try to connect this patcher to a remote server.
-        void connect(DocumentBrowser::Drive::DocumentSession& session);
+        void connect(FileBrowser::Drive::DocumentSession& session);
         
         //! @brief Load patcher datas from file.
         void loadFromFile(juce::File const& file);
@@ -123,13 +123,13 @@ namespace kiwi
         void removeListener(Listener& listener);
         
         //! @brief Called when a document session has been added.
-        void documentAdded(DocumentBrowser::Drive::DocumentSession& doc) override;
+        void documentAdded(FileBrowser::Drive::DocumentSession& doc) override;
         
         //! @brief Called when a document session changed.
-        void documentChanged(DocumentBrowser::Drive::DocumentSession& doc) override;
+        void documentChanged(FileBrowser::Drive::DocumentSession& doc) override;
         
         //! @brief Called when a document session has been removed.
-        void documentRemoved(DocumentBrowser::Drive::DocumentSession& doc) override;
+        void documentRemoved(FileBrowser::Drive::DocumentSession& doc) override;
         
     private:
         
@@ -165,7 +165,7 @@ namespace kiwi
         flip::Document                              m_document;
         bool                                        m_need_saving_flag;
         bool                                        m_is_remote;
-        DocumentBrowser::Drive::DocumentSession*    m_session {nullptr};
+        FileBrowser::Drive::DocumentSession*    m_session {nullptr};
         
         flip::SignalConnection                      m_user_connected_signal_cnx;
         flip::SignalConnection                      m_user_disconnected_signal_cnx;

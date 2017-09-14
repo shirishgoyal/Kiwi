@@ -19,7 +19,7 @@
  ==============================================================================
  */
 
-#include "KiwiApp_DocumentBrowser.h"
+#include "KiwiApp_FileBrowser.h"
 #include "../KiwiApp.h"
 
 #include <iostream>
@@ -31,10 +31,10 @@
 namespace kiwi
 {
     // ================================================================================ //
-    //                                 DOCUMENT BROWSER                                 //
+    //                                    FILE BROWSER                                  //
     // ================================================================================ //
     
-    DocumentBrowser::DocumentBrowser() :
+    FileBrowser::FileBrowser() :
     m_distant_drive(nullptr)
     {
         auto& settings = getAppSettings().network();
@@ -52,29 +52,29 @@ namespace kiwi
         KiwiApp::addApiConnectStatusListener(*this);
     }
     
-    DocumentBrowser::~DocumentBrowser()
+    FileBrowser::~FileBrowser()
     {
         KiwiApp::removeApiConnectStatusListener(*this);
         getAppSettings().network().removeListener(*this);
         stop();
     }
     
-    void DocumentBrowser::start(const int interval)
+    void FileBrowser::start(const int interval)
     {
         startTimer(interval);
     }
     
-    void DocumentBrowser::stop()
+    void FileBrowser::stop()
     {
         stopTimer();
     }
     
-    std::vector<DocumentBrowser::Drive*> DocumentBrowser::getDrives() const
+    std::vector<FileBrowser::Drive*> FileBrowser::getDrives() const
     {
         return {m_distant_drive.get()};
     }
     
-    void DocumentBrowser::networkSettingsChanged(NetworkSettings const& settings, const juce::Identifier& id)
+    void FileBrowser::networkSettingsChanged(NetworkSettings const& settings, const juce::Identifier& id)
     {
         if(id == Ids::session_port)
         {
@@ -95,46 +95,46 @@ namespace kiwi
         }
     }
     
-    void DocumentBrowser::addListener(Listener& listener)
+    void FileBrowser::addListener(Listener& listener)
     {
         m_listeners.add(listener);
     }
     
-    void DocumentBrowser::removeListener(Listener& listener)
+    void FileBrowser::removeListener(Listener& listener)
     {
         m_listeners.remove(listener);
     }
     
-    void DocumentBrowser::timerCallback()
+    void FileBrowser::timerCallback()
     {
         process();
     }
     
-    void DocumentBrowser::process()
+    void FileBrowser::process()
     {
         m_distant_drive->refresh();
     }
     
-    void DocumentBrowser::userLoggedIn(Api::AuthUser const& user)
+    void FileBrowser::userLoggedIn(Api::AuthUser const& user)
     {
         m_distant_drive->setName(user.getName());
     }
     
-    void DocumentBrowser::userLoggedOut(Api::AuthUser const&)
+    void FileBrowser::userLoggedOut(Api::AuthUser const&)
     {
         m_distant_drive->setName("logged out...");
     }
     
-    void DocumentBrowser::authUserChanged(Api::AuthUser const& user)
+    void FileBrowser::authUserChanged(Api::AuthUser const& user)
     {
         m_distant_drive->setName(user.isLoggedIn() ? user.getName() : "logged out...");
     }
     
     // ================================================================================ //
-    //                              DOCUMENT BROWSER DRIVE                              //
+    //                                 FILE BROWSER DRIVE                               //
     // ================================================================================ //
     
-    DocumentBrowser::Drive::Drive(std::string const& name,
+    FileBrowser::Drive::Drive(std::string const& name,
                                   uint16_t session_port) :
     m_session_port(session_port),
     m_name(name)
@@ -142,38 +142,38 @@ namespace kiwi
         ;
     };
     
-    void DocumentBrowser::Drive::addListener(Listener& listener)
+    void FileBrowser::Drive::addListener(Listener& listener)
     {
         m_listeners.add(listener);
     }
     
-    void DocumentBrowser::Drive::removeListener(Listener& listener)
+    void FileBrowser::Drive::removeListener(Listener& listener)
     {
         m_listeners.remove(listener);
     }
     
-    void DocumentBrowser::Drive::setSessionPort(uint16_t port)
+    void FileBrowser::Drive::setSessionPort(uint16_t port)
     {
         m_session_port = port;
     }
     
-    uint16_t DocumentBrowser::Drive::getSessionPort() const
+    uint16_t FileBrowser::Drive::getSessionPort() const
     {
         return m_session_port;
     }
     
-    void DocumentBrowser::Drive::setName(std::string const& name)
+    void FileBrowser::Drive::setName(std::string const& name)
     {
         m_name = name;
         m_listeners.call(&Listener::driveChanged);
     }
     
-    std::string const& DocumentBrowser::Drive::getName() const
+    std::string const& FileBrowser::Drive::getName() const
     {
         return m_name;
     }
     
-    void DocumentBrowser::Drive::createNewDocument()
+    void FileBrowser::Drive::createNewDocument()
     {
         KiwiApp::useApi().createDocument("", [this](Api::Response res, Api::Document document) {
             
@@ -201,22 +201,17 @@ namespace kiwi
         });
     }
     
-    DocumentBrowser::Drive::DocumentSessions const& DocumentBrowser::Drive::getDocuments() const
+    FileBrowser::Drive::DocumentSessions const& FileBrowser::Drive::getDocuments() const
     {
         return m_documents;
     }
     
-    DocumentBrowser::Drive::DocumentSessions& DocumentBrowser::Drive::getDocuments()
+    FileBrowser::Drive::DocumentSessions& FileBrowser::Drive::getDocuments()
     {
         return m_documents;
     }
     
-    bool DocumentBrowser::Drive::operator==(Drive const& drive) const
-    {
-        return (getSessionPort() == drive.getSessionPort()) && (m_name == drive.getName());
-    }
-    
-    void DocumentBrowser::Drive::updateDocumentList(Api::Documents docs)
+    void FileBrowser::Drive::updateDocumentList(Api::Documents docs)
     {
         bool changed = false;
         
@@ -284,7 +279,7 @@ namespace kiwi
         }
     }
     
-    void DocumentBrowser::Drive::refresh()
+    void FileBrowser::Drive::refresh()
     {
         KiwiApp::useApi().getDocuments([this](Api::Response res, Api::Documents docs) {
             
@@ -302,10 +297,10 @@ namespace kiwi
     }
     
     // ================================================================================ //
-    //                                  DRIVE DOCUMENT                                  //
+    //                                    DRIVE FILE                                    //
     // ================================================================================ //
     
-    DocumentBrowser::Drive::DocumentSession::DocumentSession(DocumentBrowser::Drive& parent,
+    FileBrowser::Drive::DocumentSession::DocumentSession(FileBrowser::Drive& parent,
                                                              Api::Document document) :
     m_drive(parent),
     m_document(std::move(document))
@@ -313,32 +308,32 @@ namespace kiwi
         
     }
     
-    DocumentBrowser::Drive::DocumentSession::~DocumentSession()
+    FileBrowser::Drive::DocumentSession::~DocumentSession()
     {
         ;
     }
     
-    std::string DocumentBrowser::Drive::DocumentSession::getName() const
+    std::string FileBrowser::Drive::DocumentSession::getName() const
     {
         return m_document.getName();
     }
     
-    Api::Document::Type DocumentBrowser::Drive::DocumentSession::getType() const
+    Api::Document::Type FileBrowser::Drive::DocumentSession::getType() const
     {
         return m_document.getType();
     }
     
-    uint64_t DocumentBrowser::Drive::DocumentSession::getSessionId() const
+    uint64_t FileBrowser::Drive::DocumentSession::getSessionId() const
     {
         return m_document.getIdAsInt();
     }
     
-    DocumentBrowser::Drive const& DocumentBrowser::Drive::DocumentSession::useDrive() const
+    FileBrowser::Drive const& FileBrowser::Drive::DocumentSession::useDrive() const
     {
         return m_drive;
     }
     
-    void DocumentBrowser::Drive::DocumentSession::rename(std::string const& new_name)
+    void FileBrowser::Drive::DocumentSession::rename(std::string const& new_name)
     {
         if(new_name.empty())
         {
@@ -359,17 +354,17 @@ namespace kiwi
         });
     }
     
-    bool DocumentBrowser::Drive::DocumentSession::operator==(DocumentSession const& other_doc) const
+    bool FileBrowser::Drive::DocumentSession::operator==(DocumentSession const& other_doc) const
     {
         return (&m_drive == &other_doc.useDrive()) && (m_document == other_doc.m_document);
     }
     
-    DocumentBrowser::Drive& DocumentBrowser::Drive::DocumentSession::useDrive()
+    FileBrowser::Drive& FileBrowser::Drive::DocumentSession::useDrive()
     {
         return m_drive;
     }
     
-    void DocumentBrowser::Drive::DocumentSession::open()
+    void FileBrowser::Drive::DocumentSession::open()
     {
         if(m_document.getType() == Api::Document::Type::Patcher)
         {

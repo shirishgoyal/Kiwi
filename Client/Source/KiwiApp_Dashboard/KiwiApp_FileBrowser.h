@@ -34,11 +34,11 @@
 namespace kiwi
 {
     // ================================================================================ //
-    //                                 DOCUMENT BROWSER                                 //
+    //                                  FILE BROWSER                                    //
     // ================================================================================ //
     
     //! @brief Request Patcher document informations through a Kiwi API.
-    class DocumentBrowser
+    class FileBrowser
     : public juce::Timer
     , public NetworkSettings::Listener
     , public ApiConnectStatusListener
@@ -51,10 +51,10 @@ namespace kiwi
     public: // methods
         
         //! @brief Constructor
-        DocumentBrowser();
+        FileBrowser();
         
         //! @brief Destructor
-        ~DocumentBrowser();
+        ~FileBrowser();
         
         //! @brief start processing
         void start(const int interval = 5000);
@@ -92,30 +92,30 @@ namespace kiwi
     };
     
     // ================================================================================ //
-    //                              DOCUMENT BROWSER LISTENER                           //
+    //                               FILE BROWSER LISTENER                              //
     // ================================================================================ //
     
     //! @brief Listen to document explorer changes.
-    struct DocumentBrowser::Listener
+    struct FileBrowser::Listener
     {
         //! @brief Destructor.
         virtual ~Listener() = default;
         
         //! @brief Called when the document list changed.
-        virtual void driveAdded(DocumentBrowser::Drive& drive) = 0;
+        virtual void driveAdded(FileBrowser::Drive& drive) = 0;
         
         //! @brief Called when the document list changed.
-        virtual void driveChanged(DocumentBrowser::Drive const& drive) = 0;
+        virtual void driveChanged(FileBrowser::Drive const& drive) = 0;
         
         //! @brief Called when the document list changed.
-        virtual void driveRemoved(DocumentBrowser::Drive const& drive) = 0;
+        virtual void driveRemoved(FileBrowser::Drive const& drive) = 0;
     };
     
     // ================================================================================ //
-    //                              DOCUMENT BROWSER DRIVE                              //
+    //                                FILE BROWSER DRIVE                                //
     // ================================================================================ //
     
-    class DocumentBrowser::Drive
+    class FileBrowser::Drive
     {
     public: // nested classes
         
@@ -157,10 +157,6 @@ namespace kiwi
         //! @brief Returns the documents.
         DocumentSessions& getDocuments();
         
-        //! @brief Returns true if the drive match the other drive
-        //! @details this operator only compares ip and port.
-        bool operator==(Drive const& drive) const;
-        
         //! @brief Refresh all the document list.
         void refresh();
         
@@ -174,42 +170,42 @@ namespace kiwi
         DocumentSessions            m_documents;
         engine::Listeners<Listener> m_listeners;
         
-        friend class DocumentBrowser;
+        friend class FileBrowser;
     };
     
     // ================================================================================ //
-    //                           DOCUMENT BROWSER LISTENER                           //
+    //                           FILE BROWSER LISTENER                           //
     // ================================================================================ //
     
-    //! @brief Listen to document browser changes.
-    struct DocumentBrowser::Drive::Listener
+    //! @brief Listen to file browser changes.
+    struct FileBrowser::Drive::Listener
     {
         //! @brief Destructor.
         virtual ~Listener() = default;
         
         //! @brief Called when a document session has been added.
-        virtual void documentAdded(DocumentBrowser::Drive::DocumentSession& doc) {};
+        virtual void documentAdded(FileBrowser::Drive::DocumentSession& doc) {};
         
         //! @brief Called when a document session changed.
-        virtual void documentChanged(DocumentBrowser::Drive::DocumentSession& doc) {};
+        virtual void documentChanged(FileBrowser::Drive::DocumentSession& doc) {};
         
         //! @brief Called when a document session has been removed.
-        virtual void documentRemoved(DocumentBrowser::Drive::DocumentSession& doc) {};
+        virtual void documentRemoved(FileBrowser::Drive::DocumentSession& doc) {};
         
         //! @brief Called when one or more documents has been added, removed or changed.
         virtual void driveChanged() {};
     };
     
     // ================================================================================ //
-    //                                  DRIVE DOCUMENT                                  //
+    //                                  DRIVE FILE                                  //
     // ================================================================================ //
     
-    class DocumentBrowser::Drive::DocumentSession
+    class FileBrowser::Drive::DocumentSession
     {
     public: // methods
         
         //! @brief Constructor.
-        DocumentSession(DocumentBrowser::Drive& parent, Api::Document document);
+        DocumentSession(FileBrowser::Drive& parent, Api::Document document);
         
         //! @brief Destructor.
         ~DocumentSession();
@@ -230,7 +226,7 @@ namespace kiwi
         uint64_t getSessionId() const;
         
         //! @brief Returns the drive that holds this document.
-        DocumentBrowser::Drive const& useDrive() const;
+        FileBrowser::Drive const& useDrive() const;
         
         //! @brief Rename the document (remotely).
         void rename(std::string const& new_name);
@@ -241,9 +237,9 @@ namespace kiwi
         
     private: // members
         
-        DocumentBrowser::Drive&             m_drive;
+        FileBrowser::Drive&             m_drive;
         Api::Document                       m_document;
         
-        friend class DocumentBrowser::Drive;
+        friend class FileBrowser::Drive;
     };
 }

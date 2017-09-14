@@ -54,7 +54,7 @@ namespace kiwi
         
         //showAppSettingsWindow();
         showBeaconDispatcherWindow();
-        showDocumentBrowserWindow();
+        showFileBrowserWindow();
         showConsoleWindow();
     }
     
@@ -276,7 +276,7 @@ namespace kiwi
         return success;
     }
     
-    PatcherManager* Instance::openRemotePatcher(DocumentBrowser::Drive::DocumentSession& session)
+    PatcherManager* Instance::openRemotePatcher(FileBrowser::Drive::DocumentSession& session)
     {
         auto mng_it = getPatcherManagerForSession(session);
         if(mng_it != m_patcher_managers.end())
@@ -329,7 +329,7 @@ namespace kiwi
         return std::find_if(m_patcher_managers.begin(), m_patcher_managers.end(), find_fn);
     }
     
-    Instance::PatcherManagers::iterator Instance::getPatcherManagerForSession(DocumentBrowser::Drive::DocumentSession& session)
+    Instance::PatcherManagers::iterator Instance::getPatcherManagerForSession(FileBrowser::Drive::DocumentSession& session)
     {
         const auto find_it = [session_id = session.getSessionId()](std::unique_ptr<PatcherManager> const& manager_uptr)
         {
@@ -372,11 +372,11 @@ namespace kiwi
         showWindowWithId(WindowId::AboutKiwi, [](){ return std::make_unique<AboutWindow>(); });
     }
     
-    void Instance::showDocumentBrowserWindow()
+    void Instance::showFileBrowserWindow()
     {
-        showWindowWithId(WindowId::DocumentBrowser, [&browser = m_browser](){
+        showWindowWithId(WindowId::FileBrowser, [&browser = m_browser](){
             return std::make_unique<Window>("Document Browser",
-                                            std::make_unique<DocumentBrowserView>(browser),
+                                            std::make_unique<FileBrowserView>(browser),
                                             true, false, "document_browser_window");
         });
     }
