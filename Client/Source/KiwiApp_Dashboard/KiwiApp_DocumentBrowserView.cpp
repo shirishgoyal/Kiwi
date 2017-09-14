@@ -390,6 +390,7 @@ namespace kiwi
         if(m_selected != now_selected)
         {
             m_selected = now_selected;
+            m_name_label.setColour(juce::Label::textColourId, m_selected ? juce::Colours::whitesmoke : juce::Colours::black);
             changed = true;
         }
         
@@ -408,37 +409,37 @@ namespace kiwi
     
     void DocumentBrowserView::DriveView::FileElem::paint(juce::Graphics& g)
     {
+        const bool is_folder = (m_type == Api::Document::Type::Folder);
         auto bounds = getLocalBounds();
         const juce::Colour bg_color(0xDDFFFFFF);
-        const juce::Colour selected_color(juce::Colours::lightblue);
+        const juce::Colour selected_color(0xFF4285f4);
         
-        g.setColour(bg_color.darker(0.5f));
-        g.fillRect(bounds.removeFromBottom(1));
-        
-        // document status notifier (connected / disconnected / not-connected)
-        g.setColour(juce::Colour(0xDD444444));
-        g.fillRect(bounds.removeFromLeft(5));
+        if(!m_something_is_being_dragged_over)
+        {
+            g.setColour(bg_color.contrasting(0.3f));
+            g.fillRect(bounds.removeFromBottom(1));
+        }
         
         g.setColour(m_selected ? selected_color : isMouseOver(true) ? bg_color.darker(0.1f) : bg_color);
         g.fillRect(bounds);
         
         if(m_something_is_being_dragged_over)
         {
-            g.setColour(selected_color.withAlpha(0.4f));
-            g.fillRect(bounds.reduced(4));
+            g.setColour(selected_color.withAlpha(0.6f));
+            g.fillRect(bounds);
             g.setColour(selected_color);
-            g.drawRect(bounds.reduced(2), 2);
+            g.drawRect(bounds, 2);
         }
         
-        g.drawImage(m_type == Api::Document::Type::Patcher ? m_kiwi_filetype_img : m_folder_img,
-                    juce::Rectangle<float>(11, 5, 30, 30),
+        g.drawImage(is_folder ? m_folder_img : m_kiwi_filetype_img,
+                    juce::Rectangle<float>(8, 5, 30, 30),
                     juce::RectanglePlacement::stretchToFit, false);
     }
     
     void DocumentBrowserView::DriveView::FileElem::resized()
     {
         const auto bounds = getLocalBounds();
-        m_name_label.setBounds(bounds.reduced(5).withLeft(42));
+        m_name_label.setBounds(bounds.reduced(5).withLeft(40));
     }
     
     void DocumentBrowserView::DriveView::FileElem::mouseDown(juce::MouseEvent const& e)
@@ -496,6 +497,7 @@ namespace kiwi
     void DocumentBrowserView::DriveView::FileElem::itemDragEnter(SourceDetails const& drag_source_details)
     {
         m_something_is_being_dragged_over = true;
+        m_name_label.setColour(juce::Label::textColourId, juce::Colours::whitesmoke);
         repaint();
     }
     
@@ -506,6 +508,7 @@ namespace kiwi
     void DocumentBrowserView::DriveView::FileElem::itemDragExit(SourceDetails const& drag_source_details)
     {
         m_something_is_being_dragged_over = false;
+        m_name_label.setColour(juce::Label::textColourId, juce::Colours::black);
         repaint();
     }
     
@@ -514,6 +517,7 @@ namespace kiwi
         std::cout << "item droped in file item\n";
         std::cout << details.description.toString() << '\n';
         m_something_is_being_dragged_over = false;
+        m_name_label.setColour(juce::Label::textColourId, juce::Colours::black);
         repaint();
     }
 }

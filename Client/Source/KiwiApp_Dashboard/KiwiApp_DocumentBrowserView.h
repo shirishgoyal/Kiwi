@@ -31,7 +31,9 @@ namespace kiwi
     //                               DOCUMENT BROWSER VIEW                              //
     // ================================================================================ //
     
-    class DocumentBrowserView : public juce::Component, public DocumentBrowser::Listener
+    class DocumentBrowserView
+    : public juce::Component
+    , public DocumentBrowser::Listener
     {
     public: // methods
         
