@@ -38,7 +38,7 @@ namespace kiwi
         public: // classes
             
             class ObjectClassBase;
-            template<class T> class ObjectClass;
+            template<class TModel, class TInheritedObject> class ObjectClass;
             
         public: // methods
             
@@ -48,7 +48,7 @@ namespace kiwi
             //! - inherit from model::Object.
             //! - be constructible with flip::Default.
             //! - be constructible with a string and a vector of atoms.
-            template<typename TModel> struct isValidObject
+            template<class TModel> struct isValidObject
             {
                 enum
                 {
@@ -59,15 +59,29 @@ namespace kiwi
                 };
             };
             
+            //! @brief isValidInheritableObject type traits
+            //! @details A valid inheritable object must inherit from or be a model::Object
+            template<class TInheritedObject> struct isValidInheritableObject
+            {
+                enum
+                {
+                    value = (std::is_same<model::Object, TInheritedObject>::value
+                             || std::is_base_of<model::Object, TInheritedObject>::value)
+                };
+            };
+            
             //! @brief Adds an object model into the Factory.
             //! @details The function throw if the object has already been added.
             //! The name you pass in parameter will be used and stored in the DataModel,
             //! thus if you pass a different name later, this will imply a breaking change in the DataModel.
             //! @param name The name of the object (must not be empty and not already used by another object or alias name in the Factory).
-            template<class TModel>
-            static ObjectClass<TModel>& add(std::string const& name)
+            template<class TModel, class TInheritedObject = model::Object>
+            static ObjectClass<TModel, TInheritedObject>& add(std::string const& name)
             {
+                static_assert(isValidInheritableObject<TInheritedObject>::value, "Not a valid inheritable Object");
                 static_assert(isValidObject<TModel>::value, "Not a valid Object");
+                
+                assert(DataModel::has<TInheritedObject>() && "Inherited object must be declared first");
                 
                 assert((!name.empty() && !DataModel::has<TModel>())
                        && "Object name empty or object class already added");
@@ -80,9 +94,9 @@ namespace kiwi
 
                 auto& object_classes = getClasses();
                 const auto it = object_classes.emplace(object_classes.end(),
-                                                       std::make_unique<ObjectClass<TModel>>(name));
+                                                       std::make_unique<ObjectClass<TModel, TInheritedObject>>(name));
                 
-                return dynamic_cast<ObjectClass<TModel>&>(*(it->get()));
+                return dynamic_cast<ObjectClass<TModel, TInheritedObject>&>(*(it->get()));
             }
             
             //! @brief Creates a new Object with a name and arguments.
@@ -207,10 +221,10 @@ namespace kiwi
             virtual ~ObjectClassBase() = default;
             
             //! @brief Returns the name of the object.
-            std::string const& getName() const { return m_name; }
+            std::string const& getClassName() const { return m_name; }
             
             //! @brief Returns the name used into the data model of kiwi.
-            std::string const& getModelName() const { return m_model_name; }
+            std::string const& getDataModelName() const { return m_model_name; }
             
             //! @brief Returns true if it's an internal object.
             bool isInternal() const noexcept { return m_internal; }
@@ -270,7 +284,7 @@ namespace kiwi
         // ================================================================================ //
         
         //! @brief ObjectClass
-        template<class TObjectClass>
+        template<class TObjectClass, class TInheritedObject>
         class Factory::ObjectClass : public ObjectClassBase
         {
         public: // methods
@@ -285,8 +299,8 @@ namespace kiwi
                               getMoldCaster<class_t>()),
             m_flip_class(DataModel::declare<class_t>())
             {
-                m_flip_class.name(getModelName().c_str())
-                .template inherit<model::Object>();
+                m_flip_class.name(getDataModelName().c_str())
+                .template inherit<TInheritedObject>();
             }
             
             //! @brief Add a flip member to the ObjectClass.

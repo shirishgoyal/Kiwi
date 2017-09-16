@@ -60,7 +60,7 @@ namespace kiwi
                 }
             }
             
-            object->m_name = object_class->getName();
+            object->m_name = object_class->getClassName();
             object->m_text = AtomHelper::toString(atoms);
             
             return object;
@@ -98,7 +98,7 @@ namespace kiwi
             const auto& object_classes = getClasses();
             for(const auto& object_class : object_classes)
             {
-                if(object_class->getName() == name || object_class->hasAlias(name))
+                if(object_class->getClassName() == name || object_class->hasAlias(name))
                     return true;
             }
             
@@ -111,7 +111,7 @@ namespace kiwi
             const auto& object_classes = getClasses();
             for(const auto& object_class : object_classes)
             {
-                if(object_class->getName() == name || (!ignore_aliases && object_class->hasAlias(name)))
+                if(object_class->getClassName() == name || (!ignore_aliases && object_class->hasAlias(name)))
                     return object_class.get();
             }
             
@@ -128,7 +128,7 @@ namespace kiwi
             {
                 if(!object_class->isInternal() || !ignore_internals)
                 {
-                    names.emplace_back(object_class->getName());
+                    names.emplace_back(object_class->getClassName());
                     
                     if(!ignore_aliases && object_class->hasAlias())
                     {
