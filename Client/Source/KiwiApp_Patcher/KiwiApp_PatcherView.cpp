@@ -1979,7 +1979,7 @@ namespace kiwi
         }
         
         // handle error box case
-        if(object_model->getClassName() == "errorbox")
+        if(object_model->isErrorBox())
         {
             model::ErrorBox& error_box = dynamic_cast<model::ErrorBox&>(*object_model);
             error_box.setInlets(old_model.getInlets());

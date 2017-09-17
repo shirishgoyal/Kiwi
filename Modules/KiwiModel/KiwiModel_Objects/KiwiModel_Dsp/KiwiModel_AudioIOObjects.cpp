@@ -62,9 +62,7 @@ namespace kiwi { namespace model {
     {
         if(!m_routes_parsed)
         {
-            auto text_atoms = AtomHelper::parse(getText());
-            text_atoms.erase(text_atoms.cbegin());
-            m_routes = parseArgsAsChannelRoutes(text_atoms);
+            m_routes = parseArgsAsChannelRoutes(AtomHelper::parse(getAdditionalText()));
             m_routes_parsed = true;
         }
         

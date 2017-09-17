@@ -129,6 +129,8 @@ namespace kiwi
         //                                  OBJECT::declare                                 //
         // ================================================================================ //
         
+        constexpr char Object::errorbox_class_name[] = "errorbox";
+        
         void Object::declare()
         {
             if(DataModel::has<model::Object>()) return;
@@ -140,7 +142,7 @@ namespace kiwi
             .name("cicm.kiwi.Object")
             .member<flip::String, &Object::m_class_name>("class_name")
             .member<flip::String, &Object::m_typed_name>("typed_name")
-            .member<flip::String, &Object::m_text>("text")
+            .member<flip::String, &Object::m_additional_text>("additional_text")
             .member<flip::Array<Inlet>, &Object::m_inlets>("inlets")
             .member<flip::Array<Outlet>, &Object::m_outlets>("outlets")
             .member<flip::Float, &Object::m_position_x>("pos_x")
@@ -172,19 +174,34 @@ namespace kiwi
             ;
         }
         
-        std::string Object::getClassName() const
+        std::string const& Object::getClassName() const
         {
             return m_class_name;
         }
         
-        std::string Object::getTypedName() const
+        std::string const& Object::getTypedName() const
         {
             return m_typed_name;
         }
         
-        std::string Object::getText() const
+        std::string const& Object::getAdditionalText() const
         {
-            return m_text;
+            return m_additional_text;
+        }
+        
+        std::string Object::getDisplayText() const
+        {
+            if(getAdditionalText().empty())
+            {
+                return getTypedName();
+            }
+            
+            return {getTypedName() + " " + getAdditionalText()};
+        }
+        
+        bool Object::isErrorBox() const
+        {
+            return getClassName() == errorbox_class_name;
         }
         
         flip::Array<Inlet> const& Object::getInlets() const

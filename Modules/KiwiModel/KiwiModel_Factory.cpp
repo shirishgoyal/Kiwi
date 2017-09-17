@@ -37,13 +37,18 @@ namespace kiwi { namespace model {
             return createNewBox();
         }
         
-        const auto createErrorBox = [&typed_name, &atoms](std::string const& error_message) {
-            
-            static auto errorbox_class_name = "errorbox";
-            auto object = std::make_unique<ErrorBox>(typed_name, atoms);
+        std::vector<Atom> args(atoms.begin() + 1, atoms.end());
+        
+        const auto createErrorBox = [&typed_name, &args](std::string const& error_message) {
+
+            auto object = std::make_unique<ErrorBox>(typed_name, args);
             
             object->setError(error_message);
-            initObjectInfos(*object, errorbox_class_name, typed_name, AtomHelper::toString(atoms));
+            
+            initObjectInfos(*object,
+                            model::Object::errorbox_class_name,
+                            typed_name,
+                            AtomHelper::toString(args));
             
             return object;
             
@@ -60,7 +65,6 @@ namespace kiwi { namespace model {
         
         try
         {
-            std::vector<Atom> args(atoms.empty() ? atoms.begin() : atoms.begin() + 1, atoms.end());
             object = object_class->create(typed_name, args);
         }
         catch(std::runtime_error & e)
@@ -68,7 +72,7 @@ namespace kiwi { namespace model {
             return createErrorBox(e.what());
         }
         
-        initObjectInfos(*object, object_class->getClassName(), typed_name, AtomHelper::toString(atoms));
+        initObjectInfos(*object, object_class->getClassName(), typed_name, AtomHelper::toString(args));
         
         return object;
     }
@@ -94,7 +98,7 @@ namespace kiwi { namespace model {
     {
         object.m_class_name = class_name;
         object.m_typed_name = typed_name;
-        object.m_text = text;
+        object.m_additional_text = text;
     }
     
     std::unique_ptr<model::Object> Factory::create(std::string const& name, flip::Mold const& mold)

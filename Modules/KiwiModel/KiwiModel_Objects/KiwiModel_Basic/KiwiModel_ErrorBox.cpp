@@ -33,7 +33,7 @@ namespace kiwi
         
         void ErrorBox::declare()
         {
-            Factory::add<ErrorBox>("errorbox").setInternal(true);
+            Factory::add<ErrorBox>(model::Object::errorbox_class_name).setInternal(true);
         }
         
         ErrorBox::ErrorBox(std::string const& name, std::vector<Atom> const& args)

@@ -155,6 +155,8 @@ namespace kiwi
         {
         public: // classes
             
+            static const char errorbox_class_name[];
+            
             using SignalKey = uint32_t;
             
             enum class Flag : unsigned int
@@ -172,16 +174,25 @@ namespace kiwi
             
             //! @brief Returns the classname of the Object.
             //! @see getTypedName
-            std::string getClassName() const;
+            std::string const& getClassName() const;
                 
             //! @brief Returns the name of the Object as it was typed.
             //! @details The typed name can be the same as the class name,
             //! but it can also be different if the object has an alias name.
             //! @see getClassName
-            std::string getTypedName() const;
+            std::string const& getTypedName() const;
             
-            //! @brief Returns the text of the Object.
-            std::string getText() const;
+            //! @brief Returns the additional text of the Object.
+            //! @details This is basically the typed text without the typed name.
+            std::string const& getAdditionalText() const;
+            
+            //! @brief Returns the text that should be display for this Object.
+            //! @details The default display text is the typed name followed by the additional text.
+            //! Subclasses can override this method to adapt the display that should be displayed.
+            virtual std::string getDisplayText() const;
+            
+            //! @brief Returns true if this object is an ErrorBox.
+            bool isErrorBox() const;
             
             //! @brief Returns the inlets of the Object.
             flip::Array<Inlet> const& getInlets() const;
@@ -291,7 +302,7 @@ namespace kiwi
             
             flip::String        m_class_name;
             flip::String        m_typed_name;
-            flip::String        m_text;
+            flip::String        m_additional_text;
             flip::Array<Inlet>  m_inlets;
             flip::Array<Outlet> m_outlets;
             flip::Enum<Flag>    m_flags;
