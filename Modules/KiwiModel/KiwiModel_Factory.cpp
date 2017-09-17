@@ -61,7 +61,7 @@ namespace kiwi { namespace model {
         try
         {
             std::vector<Atom> args(atoms.empty() ? atoms.begin() : atoms.begin() + 1, atoms.end());
-            object = object_class->create(args);
+            object = object_class->create(typed_name, args);
         }
         catch(std::runtime_error & e)
         {
@@ -81,7 +81,7 @@ namespace kiwi { namespace model {
         assert(newbox_class);
         
         static std::vector<Atom> args = {};
-        auto object = newbox_class->create(args);
+        auto object = newbox_class->create("", args);
         initObjectInfos(*object, newbox_class_name, "", "");
         
         return object;
@@ -261,7 +261,13 @@ namespace kiwi { namespace model {
     
     std::unique_ptr<model::Object> Factory::ObjectClassBase::create(std::vector<Atom> const& args) const
     {
-        return m_ctor(args);
+        return create(getClassName(), args);
+    }
+    
+    std::unique_ptr<model::Object> Factory::ObjectClassBase::create(std::string const& typed_name,
+                                                                    std::vector<Atom> const& args) const
+    {
+        return m_ctor(typed_name, args);
     }
     
     void Factory::ObjectClassBase::moldMake(model::Object const& object, flip::Mold& mold) const

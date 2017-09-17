@@ -74,9 +74,9 @@ namespace kiwi { namespace model {
     }
     
     template<class TModel>
-    auto Factory::getCtor(std::string const& name) -> ctor_fn_t
+    auto Factory::getCtor() -> ctor_fn_t
     {
-        return [name](std::vector<Atom> const& args)
+        return [](std::string const& name, std::vector<Atom> const& args)
         {
             return std::make_unique<TModel>(name, args);
         };
@@ -112,7 +112,7 @@ namespace kiwi { namespace model {
     Factory::ObjectClass<TObjectClass, TInheritedObject>::ObjectClass(std::string const& name)
     : Factory::ObjectClassBase(name,
                                Factory::sanitizeName(name),
-                               getCtor<class_t>(name),
+                               getCtor<class_t>(),
                                getMoldMaker<class_t>(),
                                getMoldCaster<class_t>())
     , m_flip_class(DataModel::declare<class_t>())

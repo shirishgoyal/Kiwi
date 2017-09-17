@@ -117,13 +117,13 @@ namespace kiwi { namespace model {
                                     std::string const& text);
         
         using object_classes_t = std::vector<std::unique_ptr<ObjectClassBase>>;
-        using ctor_fn_t = std::function<std::unique_ptr<model::Object>(std::vector<Atom>)>;
+        using ctor_fn_t = std::function<std::unique_ptr<model::Object>(std::string const&, std::vector<Atom>)>;
         using mold_maker_fn_t = std::function<void(model::Object const&, flip::Mold&)>;
         using mold_caster_fn_t = std::function<std::unique_ptr<model::Object>(flip::Mold const&)>;
         
         //! @internal Returns a constructor function.
         template<class TModel>
-        static ctor_fn_t getCtor(std::string const& name);
+        static ctor_fn_t getCtor();
         
         //! @internal Returns a mold maker function.
         template<class TModel>
@@ -192,6 +192,13 @@ namespace kiwi { namespace model {
         //! @param args A vector of Atom.
         //! @return A new model::Object.
         std::unique_ptr<model::Object> create(std::vector<Atom> const& args) const;
+        
+        //! @brief Creates and returns a new Object with a vector of Atom as parameter.
+        //! @param typed_name the classname or alias name of the object.
+        //! @param args A vector of Atom.
+        //! @return A new model::Object.
+        std::unique_ptr<model::Object> create(std::string const& typed_name,
+                                              std::vector<Atom> const& args) const;
         
         //! @brief Copy the content an object instance into a flip::Mold.
         //! @param object The object instance.
