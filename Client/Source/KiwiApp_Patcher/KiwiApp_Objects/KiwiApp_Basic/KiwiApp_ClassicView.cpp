@@ -36,7 +36,7 @@ namespace kiwi
     m_label(*this, object_model.getText()),
     m_listeners()
     {
-        juce::Colour bg_colour = object_model.getName() == "errorbox" ?
+        juce::Colour bg_colour = object_model.getClassName() == "errorbox" ?
                                  findColour(ObjectView::ColourIds::Error).withAlpha(0.4f) :
                                  findColour(ObjectView::ColourIds::Background);
         

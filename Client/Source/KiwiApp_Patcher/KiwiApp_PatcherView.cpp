@@ -729,7 +729,7 @@ namespace kiwi
                 mold.cure();
 
                 // store object name to restore it later from the model::Factory.
-                sbo << object.getName();
+                sbo << object.getClassName();
                 
                 // store object ref to find links boundaries.
                 sbo << object_ptr->ref();
@@ -1979,7 +1979,7 @@ namespace kiwi
         }
         
         // handle error box case
-        if(object_model->getName() == "errorbox")
+        if(object_model->getClassName() == "errorbox")
         {
             model::ErrorBox& error_box = dynamic_cast<model::ErrorBox&>(*object_model);
             error_box.setInlets(old_model.getInlets());

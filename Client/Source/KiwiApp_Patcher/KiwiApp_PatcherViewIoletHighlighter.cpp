@@ -75,7 +75,7 @@ namespace kiwi
     void IoletHighlighter::highlight(ObjectFrame const& object, const size_t index)
     {
         const auto& object_model = object.getModel();
-        auto new_name = object_model.getName();
+        auto new_name = object_model.getClassName();
         auto new_text = object_model.getIODescription(m_is_inlet, index);
         
         if(!isVisible() || m_text != new_text || m_object_name != new_name || m_last_index != index)

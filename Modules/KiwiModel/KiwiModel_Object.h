@@ -170,8 +170,15 @@ namespace kiwi
             //! @brief Destructor.
             virtual ~Object() = default;
             
-            //! @brief Returns the name of the Object.
-            std::string getName() const;
+            //! @brief Returns the classname of the Object.
+            //! @see getTypedName
+            std::string getClassName() const;
+                
+            //! @brief Returns the name of the Object as it was typed.
+            //! @details The typed name can be the same as the class name,
+            //! but it can also be different if the object has an alias name.
+            //! @see getClassName
+            std::string getTypedName() const;
             
             //! @brief Returns the text of the Object.
             std::string getText() const;
@@ -282,7 +289,8 @@ namespace kiwi
             
             std::map<SignalKey, std::unique_ptr<flip::SignalBase>> m_signals;
             
-            flip::String        m_name;
+            flip::String        m_class_name;
+            flip::String        m_typed_name;
             flip::String        m_text;
             flip::Array<Inlet>  m_inlets;
             flip::Array<Outlet> m_outlets;

@@ -43,8 +43,9 @@ namespace kiwi
             }
             
             auto& creators = getCreators();
-            assert(creators.count(model.getName()) != 0 && "The object has not been registered.");
-            return std::unique_ptr<Object>(creators[model.getName()](model, patcher, args));
+            const auto classname = model.getClassName();
+            assert(creators.count(classname) != 0 && "The object has not been registered.");
+            return std::unique_ptr<Object>(creators[classname](model, patcher, args));
         }
         
         bool Factory::has(std::string const& name)

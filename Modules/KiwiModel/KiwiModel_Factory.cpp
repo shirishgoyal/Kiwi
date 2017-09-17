@@ -33,37 +33,71 @@ namespace kiwi
         
         std::unique_ptr<model::Object> Factory::create(std::vector<Atom> const& atoms)
         {
-            std::unique_ptr<model::Object> object;
+            const auto typed_name = !atoms.empty() ? atoms[0].getString() : "";
             
-            auto * object_class = !atoms.empty() ? getClassByName(atoms[0].getString()) : getClassByName("newbox");
-            
-            if (object_class == nullptr)
+            if(typed_name.empty())
             {
-                object_class = getClassByName("errorbox");
+                return createNewBox();
+            }
+            
+            const auto createErrorBox = [&typed_name, &atoms](std::string const& error_message) {
                 
-                object = object_class->create(std::vector<Atom>());
-                dynamic_cast<ErrorBox*>(object.get())->setError("object \"" + atoms[0].getString() + "\" not found");
-            }
-            else
+                static auto errorbox_class_name = "errorbox";
+                auto object = std::make_unique<ErrorBox>(typed_name, atoms);
+                
+                object->setError(error_message);
+                initObjectInfos(*object, errorbox_class_name, typed_name, AtomHelper::toString(atoms));
+                
+                return object;
+                
+            };
+            
+            auto const* object_class = getClassByName(typed_name);
+            
+            if(object_class == nullptr)
             {
-                try
-                {
-                    std::vector<Atom> args(atoms.empty() ? atoms.begin() : atoms.begin() + 1, atoms.end());
-                    object = object_class->create(args);
-                }
-                catch(std::runtime_error & e)
-                {
-                    object_class = getClassByName("errorbox");
-                    
-                    object = object_class->create(std::vector<Atom>());
-                    dynamic_cast<ErrorBox*>(object.get())->setError(e.what());
-                }
+                return createErrorBox("object \"" + typed_name + "\" not found");
             }
             
-            object->m_name = object_class->getClassName();
-            object->m_text = AtomHelper::toString(atoms);
+            std::unique_ptr<model::Object> object = nullptr;
+            
+            try
+            {
+                std::vector<Atom> args(atoms.empty() ? atoms.begin() : atoms.begin() + 1, atoms.end());
+                object = object_class->create(args);
+            }
+            catch(std::runtime_error & e)
+            {
+                return createErrorBox(e.what());
+            }
+            
+            initObjectInfos(*object, object_class->getClassName(), typed_name, AtomHelper::toString(atoms));
             
             return object;
+        }
+        
+        std::unique_ptr<model::Object> Factory::createNewBox()
+        {
+            static auto newbox_class_name = "newbox";
+            static auto* newbox_class = getClassByName(newbox_class_name);
+            
+            assert(newbox_class);
+            
+            static std::vector<Atom> args = {};
+            auto object = newbox_class->create(args);
+            initObjectInfos(*object, newbox_class_name, "", "");
+            
+            return object;
+        }
+        
+        void Factory::initObjectInfos(model::Object& object,
+                                      std::string const& class_name,
+                                      std::string const& typed_name,
+                                      std::string const& text)
+        {
+            object.m_class_name = class_name;
+            object.m_typed_name = typed_name;
+            object.m_text = text;
         }
         
         std::unique_ptr<model::Object> Factory::create(std::string const& name, flip::Mold const& mold)
@@ -81,7 +115,7 @@ namespace kiwi
         
         void Factory::copy(model::Object const& object, flip::Mold& mold)
         {
-            const auto name = object.getName();
+            const auto name = object.getClassName();
             auto const* class_ptr = getClassByName(name);
             if(class_ptr != nullptr)
             {

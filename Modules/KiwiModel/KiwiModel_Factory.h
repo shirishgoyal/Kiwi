@@ -106,6 +106,9 @@ namespace kiwi
             //! @return A ptr to a model::Object.
             static std::unique_ptr<model::Object> create(std::vector<Atom> const& args);
             
+            //! @brief Creates a \"newbox"\ Object.
+            static std::unique_ptr<model::Object> createNewBox();
+            
             //! @brief Creates a new Object from a flip::Mold.
             //! @details This function will throw if the object name does not exist.
             //! @param name The name of the Object to create.
@@ -142,6 +145,11 @@ namespace kiwi
                                                      const bool ignore_internals = true);
             
         private: // methods
+            
+            static void initObjectInfos(model::Object& object,
+                                        std::string const& class_name,
+                                        std::string const& typed_name,
+                                        std::string const& text);
             
             using object_classes_t = std::vector<std::unique_ptr<ObjectClassBase>>;
             

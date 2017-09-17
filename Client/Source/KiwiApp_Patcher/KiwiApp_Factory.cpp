@@ -32,7 +32,7 @@ namespace kiwi
     {
         std::unique_ptr<ObjectView> object_view(nullptr);
         
-        std::string object_name = object_model.getName();
+        std::string object_name = object_model.getClassName();
 
         if (m_creator_map.find(object_name) != m_creator_map.end())
         {

@@ -138,7 +138,8 @@ namespace kiwi
             
             DataModel::declare<model::Object>()
             .name("cicm.kiwi.Object")
-            .member<flip::String, &Object::m_name>("name")
+            .member<flip::String, &Object::m_class_name>("class_name")
+            .member<flip::String, &Object::m_typed_name>("typed_name")
             .member<flip::String, &Object::m_text>("text")
             .member<flip::Array<Inlet>, &Object::m_inlets>("inlets")
             .member<flip::Array<Outlet>, &Object::m_outlets>("outlets")
@@ -157,22 +158,28 @@ namespace kiwi
             ;
         }
         
-        Object::Object() :
-        m_name("noobj"),
-        m_inlets(),
-        m_outlets(),
-        m_flags(),
-        m_position_x(0.),
-        m_position_y(0.),
-        m_width(60.),
-        m_height(20.)
+        Object::Object()
+        : m_class_name("noobj")
+        , m_typed_name(m_class_name)
+        , m_inlets()
+        , m_outlets()
+        , m_flags()
+        , m_position_x(0.)
+        , m_position_y(0.)
+        , m_width(60.)
+        , m_height(20.)
         {
             ;
         }
         
-        std::string Object::getName() const
+        std::string Object::getClassName() const
         {
-            return m_name;
+            return m_class_name;
+        }
+        
+        std::string Object::getTypedName() const
+        {
+            return m_typed_name;
         }
         
         std::string Object::getText() const
