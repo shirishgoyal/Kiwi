@@ -71,8 +71,7 @@ namespace kiwi
             Delay::declare();
             Pipe::declare();
             Metro::declare();
-            DacTilde::declare();
-            AdcTilde::declare();
+            AudioIOObjects::declare();
             OscTilde::declare();
             TimesTilde::declare();
             PlusTilde::declare();

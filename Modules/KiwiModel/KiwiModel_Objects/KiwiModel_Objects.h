@@ -32,13 +32,12 @@
 //                                  DSP OBJECTS                                     //
 // ================================================================================ //
 
+#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_AudioIOObjects.h>
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_SigTilde.h>
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_PlusTilde.h>
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_TimesTilde.h>
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_OscTilde.h>
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_DelaySimpleTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_AdcTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_DacTilde.h>
 
 // ================================================================================ //
 //                                  MATH OBJECTS                                    //
