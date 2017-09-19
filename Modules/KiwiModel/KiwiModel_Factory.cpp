@@ -44,7 +44,7 @@ namespace kiwi { namespace model {
         
         std::vector<Atom> args(atoms.begin() + 1, atoms.end());
         
-        static auto const* errorbox_class = getClassByName(model::Object::errorbox_class_name);
+        static auto const* errorbox_class = getClassByName("errorbox");
         
         if(object_class == nullptr)
         {

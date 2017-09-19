@@ -157,8 +157,6 @@ namespace kiwi
         {
         public: // classes
             
-            static const char errorbox_class_name[];
-            
             using SignalKey = uint32_t;
             
             enum class Flag : unsigned int
@@ -192,7 +190,7 @@ namespace kiwi
             //! @brief Returns the text that should be display for this Object.
             //! @details The default display text is the typed name followed by the additional text.
             //! Subclasses can override this method to adapt the display that should be displayed.
-            virtual std::string getDisplayText() const;
+            std::string getDisplayText() const;
             
             //! @brief Returns true if this object is an ErrorBox.
             bool isErrorBox() const;

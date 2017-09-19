@@ -24,6 +24,7 @@
 #include "KiwiModel_DataModel.h"
 #include "KiwiModel_Atom.h"
 
+#include <functional>
 #include <set>
 
 namespace kiwi { namespace model {

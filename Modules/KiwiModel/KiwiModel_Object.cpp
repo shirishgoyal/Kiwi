@@ -129,8 +129,6 @@ namespace kiwi
         //                                  OBJECT::declare                                 //
         // ================================================================================ //
         
-        constexpr char Object::errorbox_class_name[] = "errorbox";
-        
         void Object::declare()
         {
             if(DataModel::has<model::Object>()) return;
@@ -227,7 +225,7 @@ namespace kiwi
         
         bool Object::isErrorBox() const
         {
-            return getClassName() == errorbox_class_name;
+            return getClassName() == "errorbox";
         }
         
         flip::Array<Inlet> const& Object::getInlets() const
