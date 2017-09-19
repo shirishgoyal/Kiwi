@@ -41,7 +41,7 @@ namespace kiwi { namespace model {
     public: // classes
         
         class ObjectClassBase;
-        template<class TModel, class TInheritedObject> class ObjectClass;
+        template<class TObject, class TObjectBase> class ObjectClass;
         
     public: // methods
         
@@ -51,22 +51,31 @@ namespace kiwi { namespace model {
         //! - inherit from model::Object.
         //! - be constructible with flip::Default.
         //! - be constructible with a string and a vector of atoms.
-        template<class TModel>
-        struct isValidObject;
+        template<class TObject> struct isValidObject;
         
-        //! @brief isValidInheritableObject type traits
+        //! @brief isValidObjectBase type traits
         //! @details A valid inheritable object must inherit from or be a model::Object
-        template<class TInheritedObject>
-        struct isValidInheritableObject;
+        template<class TObjectBase> struct isValidObjectBase;
+        
+        //! @brief Create a new ObjectClass.
+        //! @see Factory::add
+        template<class TObject, class TObjectBase = model::Object>
+        static std::unique_ptr<ObjectClass<TObject, TObjectBase>>
+        createClass(std::string const& name);
+        
+        //! @brief Add a new ObjectClass to the Factory.
+        //! @details Use the createClass method to get an ObjectClass.
+        //! @see Factory::createClass
+        static void add(std::unique_ptr<ObjectClassBase> object_class);
         
         //! @brief Adds an object model into the Factory.
         //! @details The function throw if the object has already been added.
         //! The name you pass in parameter will be used and stored in the DataModel,
         //! thus if you pass a different name later, this will imply a breaking change in the DataModel.
         //! @param name The name of the object (must not be empty and not already used by another object or alias name in the Factory).
-        //! @see isValidObject, isValidInheritableObject
-        template<class TModel, class TInheritedObject = model::Object>
-        static ObjectClass<TModel, TInheritedObject>& add(std::string const& name);
+        //! @see isValidObject, isValidObjectBase
+        template<class TObject, class TObjectBase = model::Object>
+        static ObjectClass<TObject, TObjectBase>& add(std::string const& name);
         
         //! @brief Creates a new Object with a name and arguments.
         //! @details This function will throw if the object name does not exist.
@@ -122,15 +131,15 @@ namespace kiwi { namespace model {
         using mold_caster_fn_t = std::function<std::unique_ptr<model::Object>(flip::Mold const&)>;
         
         //! @internal Returns a constructor function.
-        template<class TModel>
+        template<class TObject>
         static ctor_fn_t getCtor();
         
         //! @internal Returns a mold maker function.
-        template<class TModel>
+        template<class TObject>
         static mold_maker_fn_t getMoldMaker();
         
         //! @internal Returns a mold caster function.
-        template<class TModel>
+        template<class TObject>
         static mold_caster_fn_t getMoldCaster();
         
         //! @internal Returns a sanitized version of the string.
@@ -232,12 +241,12 @@ namespace kiwi { namespace model {
     // ================================================================================ //
     
     //! @brief ObjectClass
-    template<class TObjectClass, class TInheritedObject = model::Object>
+    template<class TObject, class TObjectBase = model::Object>
     class Factory::ObjectClass : public ObjectClassBase
     {
     public: // methods
         
-        using object_class_t = TObjectClass;
+        using object_class_t = TObject;
         using class_t = ObjectClass<object_class_t>;
         
         //! @brief Constructor

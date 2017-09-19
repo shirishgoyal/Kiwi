@@ -29,79 +29,82 @@ namespace kiwi { namespace model {
     //                                   OBJECT FACTORY                                 //
     // ================================================================================ //
     
-    template<class TModel>
+    template<class TObject>
     struct Factory::isValidObject
     {
         enum
         {
-            value = std::is_base_of<model::Object, TModel>::value
-            && !std::is_abstract<TModel>::value
-            && std::is_constructible<TModel, std::string, std::vector<Atom>>::value
-            && std::is_constructible<TModel, flip::Default &>::value
+            value = std::is_base_of<model::Object, TObject>::value
+            && !std::is_abstract<TObject>::value
+            && std::is_constructible<TObject, std::string, std::vector<Atom>>::value
+            && std::is_constructible<TObject, flip::Default &>::value
         };
     };
     
-    template<class TInheritedObject>
-    struct Factory::isValidInheritableObject
+    template<class TObjectBase>
+    struct Factory::isValidObjectBase
     {
         enum
         {
-            value = (std::is_same<model::Object, TInheritedObject>::value
-                     || std::is_base_of<model::Object, TInheritedObject>::value)
+            value = (std::is_same<model::Object, TObjectBase>::value
+                     || std::is_base_of<model::Object, TObjectBase>::value)
         };
     };
     
-    template<class TModel, class TInheritedObject>
-    Factory::ObjectClass<TModel, TInheritedObject>& Factory::add(std::string const& name)
+    template<class TObject, class TObjectBase>
+    std::unique_ptr<Factory::ObjectClass<TObject, TObjectBase>>
+    Factory::createClass(std::string const& name)
     {
-        static_assert(isValidInheritableObject<TInheritedObject>::value, "Not a valid inheritable Object");
-        static_assert(isValidObject<TModel>::value, "Not a valid Object");
+        static_assert(isValidObjectBase<TObjectBase>::value, "Not a valid inheritable Object");
+        static_assert(isValidObject<TObject>::value, "Not a valid Object");
         
-        assert(DataModel::has<TInheritedObject>() && "Inherited object must be declared first");
+        assert(DataModel::has<TObjectBase>() && "Inherited object class must be added first");
         
-        assert((!name.empty() && !DataModel::has<TModel>())
-               && "Object name empty or object class already added");
+        assert(!name.empty() && "Object name empty");
         
-        // check if the name match the name of another object in the factory.
-        if(has(name))
-        {
-            throw std::runtime_error("The \"" + name + "\" object is already in the factory");
-        }
+        assert(!DataModel::has<TObject>() && "Object has already been declared");
         
-        auto& object_classes = getClasses();
-        const auto it = object_classes.emplace(object_classes.end(),
-                                               std::make_unique<ObjectClass<TModel, TInheritedObject>>(name));
-        
-        return dynamic_cast<ObjectClass<TModel, TInheritedObject>&>(*(it->get()));
+        return std::make_unique<ObjectClass<TObject, TObjectBase>>(name);
     }
     
-    template<class TModel>
+    template<class TObject, class TObjectBase>
+    Factory::ObjectClass<TObject, TObjectBase>& Factory::add(std::string const& name)
+    {
+        auto object_class_ptr = createClass<TObject, TObjectBase>(name);
+        auto& object_class = *object_class_ptr;
+        
+        Factory::add(std::move(object_class_ptr));
+        
+        return object_class;
+    }
+    
+    template<class TObject>
     auto Factory::getCtor() -> ctor_fn_t
     {
         return [](std::string const& name, std::vector<Atom> const& args)
         {
-            return std::make_unique<TModel>(name, args);
+            return std::make_unique<TObject>(name, args);
         };
     }
     
-    template<class TModel>
+    template<class TObject>
     auto Factory::getMoldMaker() -> mold_maker_fn_t
     {
         return [](model::Object const& object, flip::Mold& mold)
         {
             // make a mold with container_flag active
-            mold.make(static_cast<TModel const&>(object), false);
+            mold.make(static_cast<TObject const&>(object), false);
         };
     }
     
-    template<class TModel>
+    template<class TObject>
     auto Factory::getMoldCaster() -> mold_caster_fn_t
     {
         return [](flip::Mold const& mold)
         {
             flip::Default d;
-            auto object_uptr = std::make_unique<TModel>(d);
-            mold.cast<TModel>(static_cast<TModel&>(*(object_uptr.get())));
+            auto object_uptr = std::make_unique<TObject>(d);
+            mold.cast<TObject>(static_cast<TObject&>(*(object_uptr.get())));
             return object_uptr;
         };
     }
@@ -122,8 +125,8 @@ namespace kiwi { namespace model {
     //                               FACTORY OBJECT CLASS                               //
     // ================================================================================ //
     
-    template<class TObjectClass, class TInheritedObject>
-    Factory::ObjectClass<TObjectClass, TInheritedObject>::ObjectClass(std::string const& name)
+    template<class TObjectClass, class TObjectBase>
+    Factory::ObjectClass<TObjectClass, TObjectBase>::ObjectClass(std::string const& name)
     : Factory::ObjectClassBase(name,
                                Factory::sanitizeName(name),
                                getCtor<object_class_t>(),
@@ -132,12 +135,12 @@ namespace kiwi { namespace model {
     , m_flip_class(DataModel::declare<object_class_t>())
     {
         m_flip_class.name(getDataModelName().c_str())
-        .template inherit<TInheritedObject>();
+        .template inherit<TObjectBase>();
     }
     
-    template<class TObjectClass, class TInheritedObject>
+    template<class TObjectClass, class TObjectBase>
     template<class U, U TObjectClass::*ptr_to_member>
-    auto Factory::ObjectClass<TObjectClass, TInheritedObject>::addMember(char const* name) -> class_t&
+    auto Factory::ObjectClass<TObjectClass, TObjectBase>::addMember(char const* name) -> class_t&
     {
         m_flip_class.template member(name);
         return *this;

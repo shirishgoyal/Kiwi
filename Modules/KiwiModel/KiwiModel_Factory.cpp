@@ -30,6 +30,20 @@ namespace kiwi { namespace model {
     //                                      FACTORY                                     //
     // ================================================================================ //
     
+    void Factory::add(std::unique_ptr<Factory::ObjectClassBase> object_class)
+    {
+        const auto name = object_class->getClassName();
+        
+        // check if the name match the name of another object in the factory.
+        if(has(name))
+        {
+            throw std::runtime_error("The \"" + name + "\" object already exist");
+        }
+        
+        auto& object_classes = getClasses();
+        object_classes.emplace_back(std::move(object_class));
+    }
+    
     std::unique_ptr<model::Object> Factory::create(std::vector<Atom> const& atoms)
     {
         const auto typed_name = !atoms.empty() ? atoms[0].getString() : "";
