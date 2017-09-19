@@ -45,6 +45,8 @@ namespace kiwi
             
             DataModel::version(model_version);
             
+            model::ObjectBase::declare();
+            
             // patcher elements declaration :
             model::Object::declare();
             
