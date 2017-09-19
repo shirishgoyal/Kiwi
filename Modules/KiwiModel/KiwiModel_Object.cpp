@@ -183,7 +183,7 @@ namespace kiwi
         
         Factory::ObjectClassBase const* Object::getClass() const
         {
-            if(is_bound() && m_class == nullptr)
+            if(m_class == nullptr)
             {
                 assert(is_bound() && "The object has not been created by the model::Factory neither by flip...");
                 
