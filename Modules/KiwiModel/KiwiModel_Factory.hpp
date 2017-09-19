@@ -126,10 +126,10 @@ namespace kiwi { namespace model {
     Factory::ObjectClass<TObjectClass, TInheritedObject>::ObjectClass(std::string const& name)
     : Factory::ObjectClassBase(name,
                                Factory::sanitizeName(name),
-                               getCtor<class_t>(),
-                               getMoldMaker<class_t>(),
-                               getMoldCaster<class_t>())
-    , m_flip_class(DataModel::declare<class_t>())
+                               getCtor<object_class_t>(),
+                               getMoldMaker<object_class_t>(),
+                               getMoldCaster<object_class_t>())
+    , m_flip_class(DataModel::declare<object_class_t>())
     {
         m_flip_class.name(getDataModelName().c_str())
         .template inherit<TInheritedObject>();
@@ -137,8 +137,9 @@ namespace kiwi { namespace model {
     
     template<class TObjectClass, class TInheritedObject>
     template<class U, U TObjectClass::*ptr_to_member>
-    void Factory::ObjectClass<TObjectClass, TInheritedObject>::addMember(char const* name)
+    auto Factory::ObjectClass<TObjectClass, TInheritedObject>::addMember(char const* name) -> class_t&
     {
         m_flip_class.template member(name);
+        return *this;
     }
 }}

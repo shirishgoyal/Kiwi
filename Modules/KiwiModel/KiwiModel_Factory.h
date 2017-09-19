@@ -232,13 +232,13 @@ namespace kiwi { namespace model {
     // ================================================================================ //
     
     //! @brief ObjectClass
-    template<class TObjectClass, class TInheritedObject>
+    template<class TObjectClass, class TInheritedObject = model::Object>
     class Factory::ObjectClass : public ObjectClassBase
     {
     public: // methods
         
-        using class_t = TObjectClass;
-        using parent_class_t = TInheritedObject;
+        using object_class_t = TObjectClass;
+        using class_t = ObjectClass<object_class_t>;
         
         //! @brief Constructor
         ObjectClass(std::string const& name);
@@ -247,12 +247,13 @@ namespace kiwi { namespace model {
         ~ObjectClass() = default;
         
         //! @brief Adds a member to the class
-        template<class U, U class_t::*ptr_to_member>
-        void addMember(char const* name);
-        
+        //! @details This function returns a reference to the ObjectClass to allow call chaining.
+        template<class U, U object_class_t::*ptr_to_member>
+        class_t& addMember(char const* name);
+
     private: // members
         
-        flip::Class<class_t>& m_flip_class;
+        flip::Class<object_class_t>& m_flip_class;
     };
 }}
 
