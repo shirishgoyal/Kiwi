@@ -47,7 +47,7 @@ namespace kiwi { namespace model {
         
         //! @brief Constructor
         //! @details Initializes the routes by parsing arguments.
-        AudioIOObjectBase(std::vector<Atom> const& args);
+        AudioIOObjectBase(std::string const& name, std::vector<Atom> const& args);
         
     public: // internal methods
         

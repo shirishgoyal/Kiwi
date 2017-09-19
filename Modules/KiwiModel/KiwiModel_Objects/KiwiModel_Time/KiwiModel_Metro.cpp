@@ -32,10 +32,11 @@ namespace kiwi
         // ================================================================================ //
         
         Metro::Metro(std::string const& name, std::vector<Atom> const& args)
+        : model::Object(name, args)
         {
-            if (args.size() < 1 || (args.size() == 1 && !args[0].isNumber()))
+            if(!args.empty() && !args[0].isNumber())
             {
-                throw std::runtime_error("wrong argument for object Metro");
+                throw std::runtime_error("metro needs a number as first argument to set the interval time");
             }
             
             pushInlet({PinType::IType::Control});
@@ -72,5 +73,6 @@ namespace kiwi
             }
             
             return {};
-        }    }
+        }
+    }
 }

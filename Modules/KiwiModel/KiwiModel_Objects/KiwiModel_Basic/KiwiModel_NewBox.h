@@ -22,6 +22,7 @@
 #pragma once
 
 #include <KiwiModel/KiwiModel_Object.h>
+#include <KiwiModel/KiwiModel_Factory.h>
 
 namespace kiwi
 {
@@ -37,6 +38,9 @@ namespace kiwi
             
             //! @brief flip Default Constructor
             NewBox(flip::Default& d) : model::Object(d) {}
+            
+            //! @brief Constructor
+            NewBox();
             
             //! @brief Constructor
             NewBox(std::string const& name, std::vector<Atom> const& args);

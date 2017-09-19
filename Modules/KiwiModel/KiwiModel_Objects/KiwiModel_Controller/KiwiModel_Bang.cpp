@@ -32,7 +32,7 @@ namespace kiwi
         // ================================================================================ //
         
         Bang::Bang(std::string const& name, std::vector<Atom> const& args):
-        Object()
+        Object(name, args)
         {
             if (!args.empty())
             {

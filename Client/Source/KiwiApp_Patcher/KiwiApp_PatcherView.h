@@ -196,7 +196,7 @@ namespace kiwi
         void removeLinkView(model::Link& link);
         
         //! @brief Add a new object's model at current mouse position and optionally give it focus.
-        void createObjectModel(std::string const& text, bool give_focus);
+        void createObjectModel(std::string const& text, bool give_focus = false);
         
         // ================================================================================ //
         //                                     UNDO/REDO                                    //

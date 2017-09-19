@@ -140,7 +140,6 @@ namespace kiwi
             
             DataModel::declare<model::Object>()
             .name("cicm.kiwi.Object")
-            .member<flip::String, &Object::m_class_name>("class_name")
             .member<flip::String, &Object::m_typed_name>("typed_name")
             .member<flip::String, &Object::m_additional_text>("additional_text")
             .member<flip::Array<Inlet>, &Object::m_inlets>("inlets")
@@ -156,13 +155,23 @@ namespace kiwi
         // ================================================================================ //
         
         Object::Object(flip::Default&)
+        : m_typed_name()
+        , m_additional_text()
+        , m_inlets()
+        , m_outlets()
+        , m_flags()
+        , m_position_x(0.)
+        , m_position_y(0.)
+        , m_width(0.)
+        , m_height(0.)
         {
             ;
         }
         
-        Object::Object()
-        : m_class_name("noobj")
-        , m_typed_name(m_class_name)
+        Object::Object(std::string const& typed_name,
+                       std::vector<Atom> const& args)
+        : m_typed_name(typed_name)
+        , m_additional_text(AtomHelper::toString(args))
         , m_inlets()
         , m_outlets()
         , m_flags()
@@ -174,9 +183,26 @@ namespace kiwi
             ;
         }
         
-        std::string const& Object::getClassName() const
+        Factory::ObjectClassBase const* Object::getClass() const
         {
-            return m_class_name;
+            if(is_bound() && m_class == nullptr)
+            {
+                assert(is_bound() && "The object has not been created by the model::Factory neither by flip...");
+                
+                m_class = Factory::getClassByModelName(get_class().name());
+            }
+            
+            return m_class;
+        }
+        
+        std::string Object::getClassName() const
+        {
+            if(const auto* class_ptr = getClass())
+            {
+                return class_ptr->getClassName();
+            }
+            
+            return {};
         }
         
         std::string const& Object::getTypedName() const

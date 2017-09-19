@@ -2462,8 +2462,8 @@ namespace kiwi
             case juce::StandardApplicationCommandIDs::selectAll:{ selectAllObjects(); break; }
             
             case CommandIDs::newBox:                            { createObjectModel("", true); break; }
-            case CommandIDs::newBang:                           { createObjectModel("bang", true); break; }
-            case CommandIDs::newToggle:                         { createObjectModel("toggle", true); break; }
+            case CommandIDs::newBang:                           { createObjectModel("bang"); break; }
+            case CommandIDs::newToggle:                         { createObjectModel("toggle"); break; }
                 
             case CommandIDs::zoomIn:                            { zoomIn(); break; }
             case CommandIDs::zoomOut:                           { zoomOut(); break; }

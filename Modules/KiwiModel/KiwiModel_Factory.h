@@ -21,10 +21,14 @@
 
 #pragma once
 
-#include "KiwiModel_Object.h"
 #include "KiwiModel_DataModel.h"
+#include "KiwiModel_Atom.h"
+
+#include <set>
 
 namespace kiwi { namespace model {
+    
+    class Object;
     
     // ================================================================================ //
     //                                   OBJECT FACTORY                                 //
@@ -70,9 +74,6 @@ namespace kiwi { namespace model {
         //! @return A ptr to a model::Object.
         static std::unique_ptr<model::Object> create(std::vector<Atom> const& args);
         
-        //! @brief Creates a \"newbox"\ Object.
-        static std::unique_ptr<model::Object> createNewBox();
-        
         //! @brief Creates a new Object from a flip::Mold.
         //! @details This function will throw if the object name does not exist.
         //! @param name The name of the Object to create.
@@ -96,6 +97,10 @@ namespace kiwi { namespace model {
         static ObjectClassBase* getClassByName(std::string const& name,
                                                const bool ignore_aliases = false);
         
+        static ObjectClassBase* getClassByModelName(std::string const& name,
+                                                    const bool ignore_aliases = false);
+        
+        
         //! @brief Returns true if a given string match a registered object class name.
         //! @param name The name of the object class to find.
         //! @return true if the object class has been added, otherwise false.
@@ -109,12 +114,6 @@ namespace kiwi { namespace model {
                                                  const bool ignore_internals = true);
         
     private: // methods
-        
-        //! @internal Init object infos
-        static void initObjectInfos(model::Object& object,
-                                    std::string const& class_name,
-                                    std::string const& typed_name,
-                                    std::string const& text);
         
         using object_classes_t = std::vector<std::unique_ptr<ObjectClassBase>>;
         using ctor_fn_t = std::function<std::unique_ptr<model::Object>(std::string const&, std::vector<Atom>)>;
@@ -199,6 +198,12 @@ namespace kiwi { namespace model {
         //! @return A new model::Object.
         std::unique_ptr<model::Object> create(std::string const& typed_name,
                                               std::vector<Atom> const& args) const;
+        
+        //! @brief Creates and returns a new TObject with custom arguments.
+        //! @param args Variadic arguments forwarded to the object constructor.
+        //! @return A new model::Object.
+        template<class TObject, class ...Args>
+        std::unique_ptr<TObject> create(Args&& ...args) const;
         
         //! @brief Copy the content an object instance into a flip::Mold.
         //! @param object The object instance.

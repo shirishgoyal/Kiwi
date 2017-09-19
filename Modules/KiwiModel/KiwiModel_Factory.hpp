@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "flip/Mold.h"
+
 namespace kiwi { namespace model {
     
     // ================================================================================ //
@@ -102,6 +104,18 @@ namespace kiwi { namespace model {
             mold.cast<TModel>(static_cast<TModel&>(*(object_uptr.get())));
             return object_uptr;
         };
+    }
+    
+    // ================================================================================ //
+    //                             FACTORY OBJECT CLASS BASE                            //
+    // ================================================================================ //
+    
+    template<class TObject, class ...Args>
+    std::unique_ptr<TObject> Factory::ObjectClassBase::create(Args&& ...args) const
+    {
+        auto object = std::make_unique<TObject>(std::forward<Args>(args)...);
+        object->m_class = this;
+        return object;
     }
     
     // ================================================================================ //

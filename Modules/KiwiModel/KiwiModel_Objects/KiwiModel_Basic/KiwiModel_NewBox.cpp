@@ -34,15 +34,20 @@ namespace kiwi
         void NewBox::declare()
         {
             Factory::add<NewBox>("newbox").setInternal(true);
-            
         }
         
-        NewBox::NewBox(std::string const& name, std::vector<Atom> const& args)
+        NewBox::NewBox() : model::Object("", std::vector<Atom>())
         {
             setFlag(Flag::DefinedSize);
             setWidth(80);
             setHeight(20);
             pushInlet({PinType::IType::Control});
+        }
+        
+        NewBox::NewBox(std::string const& name, std::vector<Atom> const& args)
+        : NewBox()
+        {
+            ;
         }
         
         std::string NewBox::getIODescription(bool is_inlet, size_t index) const

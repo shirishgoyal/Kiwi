@@ -42,11 +42,13 @@
 #include <exception>
 #include <set>
 
+#include <KiwiModel/KiwiModel_Factory.h>
+
 namespace kiwi
 {
     namespace model
     {
-        class Factory;
+        class Object;
         
         // ================================================================================ //
         //                                  INLET/OUTLET                                    //
@@ -165,16 +167,17 @@ namespace kiwi
             };
             
         public: // methods
- 
-            //! @brief Constructor.
-            Object();
             
             //! @brief Destructor.
             virtual ~Object() = default;
             
-            //! @brief Returns the classname of the Object.
-            //! @see getTypedName
-            std::string const& getClassName() const;
+            //! @brief Returns the model::Factory::ObjectClassBase.
+            //! @details This method will assert if this object was not created by flip or via the object's Factory.
+            Factory::ObjectClassBase const* getClass() const;
+            
+            //! @brief Returns the class name of the object.
+            //! @brief the classname is the name of the object as declared in the object Factory for this object class.
+            std::string getClassName() const;
                 
             //! @brief Returns the name of the Object as it was typed.
             //! @details The typed name can be the same as the class name,
@@ -296,11 +299,17 @@ namespace kiwi
             //! @internal flip static declare method
             static void declare();
             
+        protected: // methods
+            
+            //! @brief Constructor
+            Object(std::string const& typed_name, std::vector<Atom> const& args);
+            
         private: // members
             
             std::map<SignalKey, std::unique_ptr<flip::SignalBase>> m_signals;
+
+            mutable Factory::ObjectClassBase const* m_class = nullptr;
             
-            flip::String        m_class_name;
             flip::String        m_typed_name;
             flip::String        m_additional_text;
             flip::Array<Inlet>  m_inlets;

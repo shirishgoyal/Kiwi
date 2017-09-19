@@ -32,6 +32,7 @@ namespace kiwi
         // ================================================================================ //
         
         OscTilde::OscTilde(std::string const& name, std::vector<Atom> const& args)
+        : model::Object(name, args)
         {
             pushInlet({PinType::IType::Control, PinType::IType::Signal});
             pushInlet({PinType::IType::Control, PinType::IType::Signal});

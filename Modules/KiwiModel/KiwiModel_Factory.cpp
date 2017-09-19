@@ -20,10 +20,12 @@
  */
 
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Basic/KiwiModel_ErrorBox.h>
+#include <KiwiModel/KiwiModel_Objects/KiwiModel_Basic/KiwiModel_NewBox.h>
 
 #include "KiwiModel_Factory.h"
 
 namespace kiwi { namespace model {
+    
     // ================================================================================ //
     //                                      FACTORY                                     //
     // ================================================================================ //
@@ -34,71 +36,33 @@ namespace kiwi { namespace model {
         
         if(typed_name.empty())
         {
-            return createNewBox();
+            static auto const* newbox_class = getClassByName("newbox");
+            return newbox_class->create<NewBox>();
         }
-        
-        std::vector<Atom> args(atoms.begin() + 1, atoms.end());
-        
-        const auto createErrorBox = [&typed_name, &args](std::string const& error_message) {
-
-            auto object = std::make_unique<ErrorBox>(typed_name, args);
-            
-            object->setError(error_message);
-            
-            initObjectInfos(*object,
-                            model::Object::errorbox_class_name,
-                            typed_name,
-                            AtomHelper::toString(args));
-            
-            return object;
-            
-        };
         
         auto const* object_class = getClassByName(typed_name);
         
+        std::vector<Atom> args(atoms.begin() + 1, atoms.end());
+        
+        static auto const* errorbox_class = getClassByName(model::Object::errorbox_class_name);
+        
         if(object_class == nullptr)
         {
-            return createErrorBox("object \"" + typed_name + "\" not found");
+            return errorbox_class->create<ErrorBox>(typed_name, args,
+                                                    "object \"" + typed_name + "\" not found");
         }
-        
-        std::unique_ptr<model::Object> object = nullptr;
         
         try
         {
-            object = object_class->create(typed_name, args);
+            return object_class->create(typed_name, args);
         }
         catch(std::runtime_error & e)
         {
-            return createErrorBox(e.what());
+            return errorbox_class->create<ErrorBox>(typed_name, args, e.what());
         }
         
-        initObjectInfos(*object, object_class->getClassName(), typed_name, AtomHelper::toString(args));
-        
-        return object;
-    }
-    
-    std::unique_ptr<model::Object> Factory::createNewBox()
-    {
-        static auto newbox_class_name = "newbox";
-        static auto* newbox_class = getClassByName(newbox_class_name);
-        
-        assert(newbox_class);
-        
-        static std::vector<Atom> args = {};
-        auto object = newbox_class->create("", args);
-        initObjectInfos(*object, newbox_class_name, "", "");
-        
-        return object;
-    }
-    
-    void Factory::initObjectInfos(model::Object& object,
-                                  std::string const& class_name,
-                                  std::string const& typed_name,
-                                  std::string const& text)
-    {
-        object.m_class_name = class_name;
-        object.m_typed_name = typed_name;
-        object.m_additional_text = text;
+        assert(true && "this should never happen");
+        return {};
     }
     
     std::unique_ptr<model::Object> Factory::create(std::string const& name, flip::Mold const& mold)
@@ -116,15 +80,15 @@ namespace kiwi { namespace model {
     
     void Factory::copy(model::Object const& object, flip::Mold& mold)
     {
-        const auto name = object.getClassName();
-        auto const* class_ptr = getClassByName(name);
+        //const auto name = object.getClassName();
+        auto const* class_ptr = object.getClass();
         if(class_ptr != nullptr)
         {
             class_ptr->moldMake(object, mold);
         }
         else
         {
-            throw std::runtime_error("can't copy object " + name);
+            throw std::runtime_error("can't copy the object!");
         }
     }
     
@@ -147,6 +111,19 @@ namespace kiwi { namespace model {
         for(const auto& object_class : object_classes)
         {
             if(object_class->getClassName() == name || (!ignore_aliases && object_class->hasAlias(name)))
+                return object_class.get();
+        }
+        
+        return nullptr;
+    }
+    
+    Factory::ObjectClassBase* Factory::getClassByModelName(std::string const& data_model_name,
+                                                           const bool ignore_aliases)
+    {
+        const auto& object_classes = getClasses();
+        for(const auto& object_class : object_classes)
+        {
+            if(object_class->getDataModelName() == data_model_name)
                 return object_class.get();
         }
         
@@ -271,7 +248,9 @@ namespace kiwi { namespace model {
     std::unique_ptr<model::Object> Factory::ObjectClassBase::create(std::string const& typed_name,
                                                                     std::vector<Atom> const& args) const
     {
-        return m_ctor(typed_name, args);
+        auto object = m_ctor(typed_name, args);
+        object->m_class = this;
+        return object;
     }
     
     void Factory::ObjectClassBase::moldMake(model::Object const& object, flip::Mold& mold) const
@@ -281,6 +260,8 @@ namespace kiwi { namespace model {
     
     std::unique_ptr<model::Object> Factory::ObjectClassBase::moldCast(flip::Mold const& mold) const
     {
-        return m_mold_caster(mold);
+        auto object = m_mold_caster(mold);
+        object->m_class = this;
+        return object;
     }
 }}

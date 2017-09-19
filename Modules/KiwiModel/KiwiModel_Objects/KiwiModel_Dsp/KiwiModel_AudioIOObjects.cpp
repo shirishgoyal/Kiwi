@@ -51,8 +51,9 @@ namespace kiwi { namespace model {
         ;
     }
     
-    AudioIOObjectBase::AudioIOObjectBase(std::vector<Atom> const& args)
-    : m_routes(parseArgsAsChannelRoutes(args))
+    AudioIOObjectBase::AudioIOObjectBase(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
+    , m_routes(parseArgsAsChannelRoutes(args))
     , m_routes_parsed(true)
     {
         ;
@@ -133,7 +134,7 @@ namespace kiwi { namespace model {
     }
     
     DacTilde::DacTilde(std::string const& name, std::vector<Atom> const& args)
-    : AudioIOObjectBase(args)
+    : AudioIOObjectBase(name, args)
     {
         size_t channels = useRoutes().size();
         
@@ -178,7 +179,7 @@ namespace kiwi { namespace model {
     }
     
     AdcTilde::AdcTilde(std::string const& name, std::vector<Atom> const& args)
-    : AudioIOObjectBase(args)
+    : AudioIOObjectBase(name, args)
     {
         size_t channels = useRoutes().size();
         

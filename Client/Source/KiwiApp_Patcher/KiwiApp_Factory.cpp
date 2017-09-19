@@ -28,22 +28,17 @@ namespace kiwi
 {
     std::map<std::string, Factory::factory_func> Factory::m_creator_map;
     
-    std::unique_ptr<ObjectView> Factory::createObjectView(model::Object & object_model)
+    std::unique_ptr<ObjectView> Factory::createObjectView(model::Object& object_model)
     {
-        std::unique_ptr<ObjectView> object_view(nullptr);
+        const auto object_name = object_model.getClassName();
+        const auto it = m_creator_map.find(object_name);
         
-        std::string object_name = object_model.getClassName();
-
-        if (m_creator_map.find(object_name) != m_creator_map.end())
+        if(it != m_creator_map.end())
         {
-            object_view = std::move(m_creator_map[object_name](object_model));
+            return it->second(object_model);
         }
-        else
-        {
-            object_view = std::move(std::make_unique<ClassicView>(object_model));
-        }
-
-        return object_view;
+        
+        return std::make_unique<ClassicView>(object_model);
     }
     
     void Factory::initialise()

@@ -75,13 +75,15 @@ namespace kiwi
     void IoletHighlighter::highlight(ObjectFrame const& object, const size_t index)
     {
         const auto& object_model = object.getModel();
+        
         auto new_name = object_model.getClassName();
         auto new_text = object_model.getIODescription(m_is_inlet, index);
         
         if(!isVisible() || m_text != new_text || m_object_name != new_name || m_last_index != index)
         {
-            auto pos = m_is_inlet
-            ? object.getInletPatcherPosition(index) : object.getOutletPatcherPosition(index);
+            const auto pos = (m_is_inlet
+                              ? object.getInletPatcherPosition(index)
+                              : object.getOutletPatcherPosition(index));
             
             m_text = std::move(new_text);
             m_object_name = std::move(new_name);
@@ -90,7 +92,9 @@ namespace kiwi
             setBounds(juce::Rectangle<int>(pos, pos).expanded(5));
             setVisible(true);
             
-            m_show_tooltip_on_left = m_is_inlet ? index < object_model.getNumberOfInlets() * 0.5 : index < object_model.getNumberOfOutlets() * 0.5;
+            m_show_tooltip_on_left = (m_is_inlet
+                                      ? index < object_model.getNumberOfInlets() * 0.5
+                                      : index < object_model.getNumberOfOutlets() * 0.5);
             
             KiwiApp::useTooltipWindow().setCustomTooltipClient(*this);
         }

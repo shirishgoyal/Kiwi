@@ -32,6 +32,7 @@ namespace kiwi
         // ================================================================================ //
         
         Loadmess::Loadmess(std::string const& name, std::vector<Atom> const& args)
+        : model::Object(name, args)
         {
             pushOutlet(PinType::IType::Control);
         }

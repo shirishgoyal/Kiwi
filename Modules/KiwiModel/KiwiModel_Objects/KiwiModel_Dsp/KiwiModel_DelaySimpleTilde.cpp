@@ -32,6 +32,7 @@ namespace kiwi
         // ================================================================================ //
         
         DelaySimpleTilde::DelaySimpleTilde(std::string const& name, std::vector<Atom> const& args)
+        : model::Object(name, args)
         {
             if (args.size() > 0)
             {

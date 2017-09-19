@@ -37,6 +37,13 @@ namespace kiwi
         }
         
         ErrorBox::ErrorBox(std::string const& name, std::vector<Atom> const& args)
+        : model::Object(name, args)
+        {
+        }
+        
+        ErrorBox::ErrorBox(std::string const& name, std::vector<Atom> const& args, std::string const& err_message)
+        : model::Object(name, args)
+        , m_error(err_message)
         {
         }
         

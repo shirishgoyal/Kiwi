@@ -32,6 +32,7 @@ namespace kiwi
         // ================================================================================ //
         
         SigTilde::SigTilde(std::string const& name, std::vector<Atom> const& args)
+        : model::Object(name, args)
         {
             if (args.empty() || !args[0].isNumber())
             {

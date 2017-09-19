@@ -22,6 +22,7 @@
 #pragma once
 
 #include <KiwiModel/KiwiModel_Object.h>
+#include <KiwiModel/KiwiModel_Factory.h>
 
 namespace kiwi
 {
@@ -40,6 +41,9 @@ namespace kiwi
             
             //! @brief Constructor
             ErrorBox(std::string const& name, std::vector<Atom> const& args);
+            
+            //! @brief Constructor
+            ErrorBox(std::string const& name, std::vector<Atom> const& args, std::string const& err_message);
             
             //! @brief Set the number of inlets.
             //! @param inlets The number of inlets.
