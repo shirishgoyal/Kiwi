@@ -21,8 +21,6 @@
 
 #pragma once
 
-#include <KiwiModel/Kiwi_ObjectBase.h>
-
 #include "flip/Bool.h"
 #include "flip/Int.h"
 #include "flip/Float.h"
@@ -33,6 +31,8 @@
 #include "flip/ObjectRef.h"
 #include "flip/Enum.h"
 #include "flip/Signal.h"
+
+#include <KiwiModel/Kiwi_ObjectBase.h>
 
 namespace kiwi { namespace model {
     

@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "flip/Class.h"
+
 namespace kiwi { namespace model {
     
     // ================================================================================ //

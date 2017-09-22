@@ -22,13 +22,13 @@
 #pragma once
 
 #include <KiwiModel/Kiwi_ObjectBase.h>
+#include <KiwiModel/Kiwi_PatcherView.h>
 
 #include "flip/Collection.h"
 
 namespace kiwi { namespace model {
     
     class Patcher;
-    class PatcherView;
     
     // ================================================================================ //
     //                               PATCHER USER MODEL                                 //

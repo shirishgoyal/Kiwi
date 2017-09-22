@@ -23,7 +23,6 @@
 
 #include "flip/Object.h"
 #include "flip/Signal.h"
-#include "flip/Class.h"
 
 #include <map>
 
