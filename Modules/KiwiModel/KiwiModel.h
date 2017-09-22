@@ -29,7 +29,6 @@
 #include <KiwiModel/Kiwi_PatcherView.h>
 #include <KiwiModel/Kiwi_PatcherUser.h>
 #include <KiwiModel/Kiwi_Patcher.h>
-
 #include <KiwiModel/KiwiObjectBoxes/Kiwi_ObjectBoxes.h>
-
+#include <KiwiModel/Kiwi_DocumentValidator.h>
 #include <KiwiModel/Kiwi_DataModel.h>

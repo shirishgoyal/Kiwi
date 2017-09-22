@@ -25,7 +25,7 @@
 
 #include <KiwiModel/KiwiModel.h>
 
-#define KIWI_MODEL_VERSION_STRING "v0.1.0"
+#define KIWI_MODEL_VERSION_STRING "v0.2.0"
 
 namespace kiwi { namespace model {
     
