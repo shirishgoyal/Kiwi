@@ -22,6 +22,7 @@
 #pragma once
 
 #include <KiwiModel/Kiwi_ObjectBase.h>
+#include <KiwiModel/Kiwi_PatcherUser.h>
 
 #include "flip/Collection.h"
 #include "flip/Array.h"
@@ -32,7 +33,6 @@ namespace kiwi { namespace model {
     class ObjectBox;
     class Link;
     class PatcherView;
-    class PatcherUser;
     
     // ================================================================================ //
     //                                  PATCHER MODEL                                   //
@@ -139,12 +139,12 @@ namespace kiwi { namespace model {
         
     private: // members
         
-        ObjectBoxes         m_objects;
+        flip::String    m_patcher_name;
+        
+        ObjectBoxes     m_objects;
         Links           m_links;
         
         Users           m_users;
-        
-        flip::String    m_patcher_name;
         
     private: // deleted methods
         
