@@ -2,11 +2,11 @@
  ==============================================================================
  
  This file is part of the KIWI library.
- - Copyright (c) 2014-2016, Pierre Guillot & Eliott Paris.
- - Copyright (c) 2016-2017, CICM, ANR MUSICOLL, Eliott Paris, Pierre Guillot, Jean Millot.
+ - Copyright(c) 2014-2016, Pierre Guillot & Eliott Paris.
+ - Copyright(c) 2016-2017, CICM, ANR MUSICOLL, Eliott Paris, Pierre Guillot, Jean Millot.
  
  Permission is granted to use this software under the terms of the GPL v3
- (or any later version). Details can be found at: www.gnu.org/licenses
+(or any later version). Details can be found at: www.gnu.org/licenses
  
  KIWI is distributed in the hope that it will be useful, but WITHOUT ANY
  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -24,26 +24,36 @@
 #include <thread>
 
 #include <KiwiServer/KiwiServer_Server.h>
-#include <KiwiModel/KiwiModel_DataModel.h>
+#include <KiwiModel/Kiwi_DataModel.h>
 
 #include <flip/Document.h>
 #include <flip/contrib/transport_tcp/CarrierTransportSocketTcp.h>
 
 using namespace kiwi;
 
+using Model = kiwi::model::DataModel;
+using Server = kiwi::server::Server;
+
 // ==================================================================================== //
 //                                          SERVER                                      //
 // ==================================================================================== //
 
-TEST_CASE("Server - Server", "[Server, Server]")
+TEST_CASE("Server - Model declaration", "[Server]")
+{
+    Model::version(KIWI_MODEL_VERSION_STRING);
+    Model::declare();
+    Model::use();
+}
+
+TEST_CASE("Server - Server", "[Server]")
 {
     SECTION("Simple Connection - Deconnection")
     {
-        kiwi::server::Server server(9191, "./server_backend_test");
+        Server server(9191, "./server_backend_test");
         
         // Initializing document
-        flip::Document document (kiwi::model::DataModel::use (), 123456789, 'appl', 'gui ');
-        flip::CarrierTransportSocketTcp carrier (document, 987654, "localhost", 9191);
+        flip::Document document(Model::use(), 123456789, 'appl', 'gui ');
+        flip::CarrierTransportSocketTcp carrier(document, 987654, "localhost", 9191);
         
         // Client/Document connecting to server.
         while(!carrier.is_connected() || server.getSessions().empty())
@@ -69,9 +79,9 @@ TEST_CASE("Server - Server", "[Server, Server]")
         CHECK(!carrier.is_connected());
         CHECK(server.getSessions().empty());
         
-        juce::File backend ("./server_backend_test");
+        juce::File backend("./server_backend_test");
         
-        if (backend.exists())
+        if(backend.exists())
         {
             backend.deleteRecursively();
         }
@@ -79,11 +89,11 @@ TEST_CASE("Server - Server", "[Server, Server]")
     
     SECTION("Simple Connection - Server Killed")
     {
-        std::unique_ptr<kiwi::server::Server> server(new kiwi::server::Server(9191, "./server_backend_test"));
+        std::unique_ptr<Server> server(new Server(9191, "./server_backend_test"));
         
         // Initializing document.
-        flip::Document document (kiwi::model::DataModel::use (), 123456789, 'appl', 'gui ');
-        flip::CarrierTransportSocketTcp carrier (document, 987654, "localhost", 9191);
+        flip::Document document(Model::use(), 123456789, 'appl', 'gui ');
+        flip::CarrierTransportSocketTcp carrier(document, 987654, "localhost", 9191);
         
         // Client/Document connecting to server.
         while(!carrier.is_connected() || server->getSessions().empty())
@@ -107,9 +117,9 @@ TEST_CASE("Server - Server", "[Server, Server]")
         
         CHECK(!carrier.is_connected());
         
-        juce::File backend ("./server_backend_test");
+        juce::File backend("./server_backend_test");
         
-        if (backend.exists())
+        if(backend.exists())
         {
             backend.deleteRecursively();
         }
@@ -117,14 +127,14 @@ TEST_CASE("Server - Server", "[Server, Server]")
     
     SECTION("One user connecting to multiple document")
     {
-        kiwi::server::Server server(9191, "./server_backend_test");
+        Server server(9191, "./server_backend_test");
         
         // Initializing documents.
-        flip::Document document_1 (kiwi::model::DataModel::use (), 123456789, 'appl', 'gui ');
-        flip::CarrierTransportSocketTcp carrier_1 (document_1, 987654, "localhost", 9191);
+        flip::Document document_1(Model::use(), 123456789, 'appl', 'gui ');
+        flip::CarrierTransportSocketTcp carrier_1(document_1, 987654, "localhost", 9191);
         
-        flip::Document document_2 (kiwi::model::DataModel::use (), 123456789, 'appl', 'gui ');
-        flip::CarrierTransportSocketTcp carrier_2 (document_2, 987655, "localhost", 9191);
+        flip::Document document_2(Model::use(), 123456789, 'appl', 'gui ');
+        flip::CarrierTransportSocketTcp carrier_2(document_2, 987655, "localhost", 9191);
         
         // Client/Document connecting to server.
         while(!carrier_1.is_connected() || !carrier_2.is_connected() || server.getSessions().size() != 2)
@@ -152,9 +162,9 @@ TEST_CASE("Server - Server", "[Server, Server]")
         CHECK(!carrier_1.is_connected());
         CHECK(!carrier_2.is_connected());
         
-        juce::File backend ("./server_backend_test");
+        juce::File backend("./server_backend_test");
         
-        if (backend.exists())
+        if(backend.exists())
         {
             backend.deleteRecursively();
         }
@@ -162,11 +172,11 @@ TEST_CASE("Server - Server", "[Server, Server]")
     
     SECTION("Multiple connections")
     {
-        kiwi::server::Server server(9191, "./server_backend_test");
+        Server server(9191, "./server_backend_test");
         
         // Initializing client 1
-        flip::Document document_1 (kiwi::model::DataModel::use (), 1, 'appl', 'gui ');
-        flip::CarrierTransportSocketTcp carrier_1 (document_1, 1234, "localhost", 9191);
+        flip::Document document_1(Model::use(), 1, 'appl', 'gui ');
+        flip::CarrierTransportSocketTcp carrier_1(document_1, 1234, "localhost", 9191);
         
         kiwi::model::Patcher& patcher_1 = document_1.root<kiwi::model::Patcher>();
         
@@ -185,8 +195,8 @@ TEST_CASE("Server - Server", "[Server, Server]")
         });
         
         // Initializing client 2
-        flip::Document document_2 (kiwi::model::DataModel::use (), 2, 'appl', 'gui ');
-        flip::CarrierTransportSocketTcp carrier_2 (document_2, 1234, "localhost", 9191);
+        flip::Document document_2(Model::use(), 2, 'appl', 'gui ');
+        flip::CarrierTransportSocketTcp carrier_2(document_2, 1234, "localhost", 9191);
         
         kiwi::model::Patcher& patcher_2 = document_2.root<kiwi::model::Patcher>();
         
@@ -239,9 +249,9 @@ TEST_CASE("Server - Server", "[Server, Server]")
         
         server.stop();
         
-        juce::File backend ("./server_backend_test");
+        juce::File backend("./server_backend_test");
         
-        if (backend.exists())
+        if(backend.exists())
         {
             backend.deleteRecursively();
         }

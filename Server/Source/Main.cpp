@@ -19,10 +19,10 @@
  ==============================================================================
  */
 
-#include <KiwiModel/KiwiModel_DataModel.h>
 #include <KiwiServer/KiwiServer_Server.h>
-#include "KiwiServer_CommandLineParser.h"
+#include <KiwiModel/Kiwi_DataModel.h>
 
+#include "KiwiServer_CommandLineParser.h"
 #include <json.hpp>
 
 void showHelp()
@@ -54,7 +54,11 @@ int main(int argc, char const* argv[])
         return 0;
     }
     
-    model::DataModel::init();
+    using Model = model::DataModel;
+    
+    Model::version(KIWI_MODEL_VERSION_STRING);
+    Model::declare();
+    Model::use();
     
     json config;
     
