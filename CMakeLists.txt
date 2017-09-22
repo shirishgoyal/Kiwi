@@ -331,13 +331,25 @@ set(JSON_INCLUDE_DIRS ${ROOT_DIR}/ThirdParty/json)
 #----------------------------------
 
 file(GLOB_RECURSE KIWI_MODEL_SRC ${ROOT_DIR}/Modules/KiwiModel/*.[c|h]pp
-                                 ${ROOT_DIR}/Modules/KiwiModel/*.h)
+${ROOT_DIR}/Modules/KiwiModel/*.h)
 add_library(KiwiModel STATIC ${KIWI_MODEL_SRC})
 target_include_directories(KiwiModel PUBLIC ${ROOT_DIR}/Modules ${FLIP_INCLUDE_DIRS})
 target_link_libraries(KiwiModel ${FLIP_LIBRARIES})
 target_compile_definitions(KiwiModel PUBLIC ${FLIP_COMPILE_DEFINITIONS})
 set_target_properties(KiwiModel PROPERTIES FOLDER Modules)
 source_group_rec("${KIWI_MODEL_SRC}" ${ROOT_DIR}/Modules/KiwiModel)
+
+#----------------------------------
+# Core
+#----------------------------------
+
+# file(GLOB_RECURSE KIWI_CORE_SRC ${ROOT_DIR}/Modules/KiwiCore/*.[c|h]pp
+# ${ROOT_DIR}/Modules/KiwiCore/*.h)
+# add_library(KiwiCore STATIC ${KIWI_CORE_SRC})
+# target_add_dependency(KiwiCore KiwiModel)
+# target_compile_definitions(KiwiCore PUBLIC ${FLIP_COMPILE_DEFINITIONS})
+# set_target_properties(KiwiCore PROPERTIES FOLDER Modules)
+# source_group_rec("${KIWI_CORE_SRC}" ${ROOT_DIR}/Modules/KiwiCore)
 
 #----------------------------------
 # Dsp
@@ -377,73 +389,84 @@ source_group_rec("${KIWI_NETWORK_SRC}" ${ROOT_DIR}/Modules/KiwiNetwork)
 # Engine
 #----------------------------------
 
-file(GLOB_RECURSE KIWI_ENGINE_SRC ${ROOT_DIR}/Modules/KiwiEngine/*.[c|h]pp
-                                  ${ROOT_DIR}/Modules/KiwiEngine/*.h)
-add_library(KiwiEngine STATIC ${KIWI_ENGINE_SRC})
-target_include_directories(KiwiEngine PUBLIC ${ROOT_DIR}/ThirdParty/concurrentqueue)
-target_include_directories(KiwiEngine PUBLIC ${ROOT_DIR}/Modules)
-target_add_dependency(KiwiEngine KiwiModel)
-target_add_dependency(KiwiEngine KiwiDsp)
-set_target_properties(KiwiEngine PROPERTIES FOLDER Modules)
-source_group_rec("${KIWI_ENGINE_SRC}" ${ROOT_DIR}/Modules/KiwiEngine)
+# file(GLOB_RECURSE KIWI_ENGINE_SRC ${ROOT_DIR}/Modules/KiwiEngine/*.[c|h]pp
+#                                   ${ROOT_DIR}/Modules/KiwiEngine/*.h)
+# add_library(KiwiEngine STATIC ${KIWI_ENGINE_SRC})
+# target_include_directories(KiwiEngine PUBLIC ${ROOT_DIR}/ThirdParty/concurrentqueue)
+# target_include_directories(KiwiEngine PUBLIC ${ROOT_DIR}/Modules)
+# target_add_dependency(KiwiEngine KiwiCore)
+# target_add_dependency(KiwiEngine KiwiDsp)
+# set_target_properties(KiwiEngine PROPERTIES FOLDER Modules)
+# source_group_rec("${KIWI_ENGINE_SRC}" ${ROOT_DIR}/Modules/KiwiEngine)
 
 #----------------------------------
 # Server
 #----------------------------------
 
-file(GLOB_RECURSE KIWI_SERVER_SRC ${ROOT_DIR}/Modules/KiwiServer/*.[c|h]pp
-                                  ${ROOT_DIR}/Modules/KiwiServer/*.h)
-add_library(KiwiServer ${KIWI_SERVER_SRC})
-target_include_directories(KiwiServer PUBLIC ${JSON_INCLUDE_DIRS})
-target_add_dependency(KiwiServer KiwiModel)
-target_add_dependency(KiwiServer Juce)
-set_target_properties(KiwiServer PROPERTIES FOLDER Modules)
-source_group_rec("${KIWI_SERVER_SRC}" ${ROOT_DIR}/Modules/KiwiServer)
-
-file(GLOB_RECURSE SERVER_SRC ${ROOT_DIR}/Server/Source/*.[c|h]pp
-                             ${ROOT_DIR}/Server/Source/*.h)
-add_executable(Server ${SERVER_SRC})
-target_add_dependency(Server KiwiServer)
-source_group_rec("${SERVER_SRC}" ${ROOT_DIR}/Server/Source)
+# file(GLOB_RECURSE KIWI_SERVER_SRC ${ROOT_DIR}/Modules/KiwiServer/*.[c|h]pp
+#                                   ${ROOT_DIR}/Modules/KiwiServer/*.h)
+# add_library(KiwiServer ${KIWI_SERVER_SRC})
+# target_include_directories(KiwiServer PUBLIC ${JSON_INCLUDE_DIRS})
+# target_add_dependency(KiwiServer KiwiModel)
+# target_add_dependency(KiwiServer KiwiCore)
+# target_add_dependency(KiwiServer Juce)
+# set_target_properties(KiwiServer PROPERTIES FOLDER Modules)
+# source_group_rec("${KIWI_SERVER_SRC}" ${ROOT_DIR}/Modules/KiwiServer)
+#
+# file(GLOB_RECURSE SERVER_SRC ${ROOT_DIR}/Server/Source/*.[c|h]pp
+#                              ${ROOT_DIR}/Server/Source/*.h)
+# add_executable(Server ${SERVER_SRC})
+# target_add_dependency(Server KiwiServer)
+# source_group_rec("${SERVER_SRC}" ${ROOT_DIR}/Server/Source)
 
 #----------------------------------
 # Client
 #----------------------------------
 
-file(GLOB_RECURSE KIWI_CLIENT_SRC ${ROOT_DIR}/Client/Source/*.[c|h]pp
-                                  ${ROOT_DIR}/Client/Source/*.h)
-add_executable(Kiwi ${KIWI_CLIENT_SRC} "${KIWI_CLIENT_RESSOURCES}")
-target_add_dependency(Kiwi KiwiNetwork)
-target_add_dependency(Kiwi KiwiEngine)
-target_add_dependency(Kiwi KiwiModel)
-target_add_dependency(Kiwi KiwiDsp)
-target_add_dependency(Kiwi Juce)
-target_include_directories(Kiwi PUBLIC ${JSON_INCLUDE_DIRS} ${ROOT_DIR}/Client/Source)
-
-if (APPLE)
-	set_target_properties(Kiwi PROPERTIES MACOSX_BUNDLE TRUE
-									      MACOSX_BUNDLE_INFO_PLIST ${KIWI_PLIST})
-elseif(WIN32)
-	if (CMAKE_CL_64)
-		set(CRT_LIB "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT")
-	else()
-		set(CRT_LIB "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT")
-	endif()
-
-	add_custom_command(TARGET Kiwi POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CRT_LIB} "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}" USES_TERMINAL)
-
-	if (DEBUG)
-		set_target_properties(Kiwi PROPERTIES LINK_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
-	else()
-		set_target_properties(Kiwi PROPERTIES LINK_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
-	endif()
-endif()
-
-source_group_rec("${KIWI_CLIENT_SRC}" ${ROOT_DIR}/Client/Source)
+# file(GLOB_RECURSE KIWI_CLIENT_SRC ${ROOT_DIR}/Client/Source/*.[c|h]pp
+#                                   ${ROOT_DIR}/Client/Source/*.h)
+# add_executable(Kiwi ${KIWI_CLIENT_SRC} "${KIWI_CLIENT_RESSOURCES}")
+# target_add_dependency(Kiwi KiwiNetwork)
+# target_add_dependency(Kiwi KiwiEngine)
+# target_add_dependency(Kiwi KiwiCore)
+# target_add_dependency(Kiwi KiwiDsp)
+# target_add_dependency(Kiwi Juce)
+# target_add_dependency(Kiwi KiwiModel)
+# target_include_directories(Kiwi PUBLIC ${JSON_INCLUDE_DIRS} ${ROOT_DIR}/Client/Source)
+#
+# if (APPLE)
+# 	set_target_properties(Kiwi PROPERTIES MACOSX_BUNDLE TRUE
+# 									      MACOSX_BUNDLE_INFO_PLIST ${KIWI_PLIST})
+# elseif(WIN32)
+# 	if (CMAKE_CL_64)
+# 		set(CRT_LIB "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT")
+# 	else()
+# 		set(CRT_LIB "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT")
+# 	endif()
+#
+# 	add_custom_command(TARGET Kiwi POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CRT_LIB} "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}" USES_TERMINAL)
+#
+# 	if (DEBUG)
+# 		set_target_properties(Kiwi PROPERTIES LINK_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
+# 	else()
+# 		set_target_properties(Kiwi PROPERTIES LINK_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
+# 	endif()
+# endif()
+#
+# source_group_rec("${KIWI_CLIENT_SRC}" ${ROOT_DIR}/Client/Source)
 
 #----------------------------------
 # Tests
 #----------------------------------
+
+# Test Model
+
+file(GLOB TEST_MODEL_SRC ${ROOT_DIR}/Test/Model/*.[c|h]pp
+                         ${ROOT_DIR}/Test/Model/*.h)
+add_executable(test_model ${TEST_MODEL_SRC})
+target_add_dependency(test_model KiwiModel)
+set_target_properties(test_model PROPERTIES FOLDER Test)
+source_group_rec("${TEST_MODEL_SRC}" ${ROOT_DIR}/Test/Model)
 
 # Test Dsp
 
@@ -454,14 +477,14 @@ target_add_dependency(test_dsp KiwiDsp)
 set_target_properties(test_dsp PROPERTIES FOLDER Test)
 source_group_rec("${TEST_DSP_SRC}" ${ROOT_DIR}/Test/Dsp)
 
-# Test Model
+# Test Core
 
-file(GLOB TEST_MODEL_SRC ${ROOT_DIR}/Test/Model/*.[c|h]pp
-                         ${ROOT_DIR}/Test/Model/*.h)
-add_executable(test_model ${TEST_MODEL_SRC})
-target_add_dependency(test_model KiwiModel)
-set_target_properties(test_model PROPERTIES FOLDER Test)
-source_group_rec("${TEST_MODEL_SRC}" ${ROOT_DIR}/Test/Model)
+# file(GLOB TEST_CORE_SRC ${ROOT_DIR}/Test/Core/*.[c|h]pp
+#                         ${ROOT_DIR}/Test/Core/*.h)
+# add_executable(test_core ${TEST_CORE_SRC})
+# target_add_dependency(test_core KiwiCore)
+# set_target_properties(test_core PROPERTIES FOLDER Test)
+# source_group_rec("${TEST_CORE_SRC}" ${ROOT_DIR}/Test/Core)
 
 # Test Network
 
@@ -474,49 +497,52 @@ source_group_rec("${TEST_NETWORK_SRC}" ${ROOT_DIR}/Test/Network)
 
 # Test Engine
 
-file(GLOB TEST_ENGINE_SRC ${ROOT_DIR}/Test/Engine/*.[c|h]pp
-                          ${ROOT_DIR}/Test/Engine/*.h)
-add_executable(test_engine ${TEST_ENGINE_SRC})
-target_add_dependency(test_engine KiwiEngine)
-if (LINUX)
-  target_link_libraries(test_engine PUBLIC ${PTHREAD})
-endif()
-set_target_properties(test_engine PROPERTIES FOLDER Test)
-source_group_rec("${TEST_ENGINE_SRC}" ${ROOT_DIR}/Test/Engine)
+# file(GLOB TEST_ENGINE_SRC ${ROOT_DIR}/Test/Engine/*.[c|h]pp
+#                           ${ROOT_DIR}/Test/Engine/*.h)
+# add_executable(test_engine ${TEST_ENGINE_SRC})
+# target_add_dependency(test_engine KiwiEngine)
+# if (LINUX)
+#   target_link_libraries(test_engine PUBLIC ${PTHREAD})
+# endif()
+# set_target_properties(test_engine PROPERTIES FOLDER Test)
+# source_group_rec("${TEST_ENGINE_SRC}" ${ROOT_DIR}/Test/Engine)
 
 # Test Server
 
-file(GLOB TEST_SERVER_SRC ${ROOT_DIR}/Test/Server/*.[c|h]pp
-                          ${ROOT_DIR}/Test/Server/*.h)
-add_executable(test_server ${TEST_SERVER_SRC})
-target_add_dependency(test_server KiwiServer)
-set_target_properties(test_server PROPERTIES FOLDER Test)
-if (LINUX)
-  target_link_libraries(test_server PUBLIC ${PTHREAD})
-endif()
-source_group_rec("${TEST_SERVER_SRC}" ${ROOT_DIR}/Test/Server)
+# file(GLOB TEST_SERVER_SRC ${ROOT_DIR}/Test/Server/*.[c|h]pp
+#                           ${ROOT_DIR}/Test/Server/*.h)
+# add_executable(test_server ${TEST_SERVER_SRC})
+# target_add_dependency(test_server KiwiServer)
+# set_target_properties(test_server PROPERTIES FOLDER Test)
+# if (LINUX)
+#   target_link_libraries(test_server PUBLIC ${PTHREAD})
+# endif()
+# source_group_rec("${TEST_SERVER_SRC}" ${ROOT_DIR}/Test/Server)
 
 # Coverage setting
 if(${GCOV_SUPPORT} STREQUAL "On" AND DEBUG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
   set(CMAKE_EXE_LINKER_FLAGS="-fprofile-arcs -ftest-coverage")
-  target_link_libraries(test_dsp PUBLIC gcov)
   target_link_libraries(test_model PUBLIC gcov)
-  target_link_libraries(test_engine PUBLIC gcov)
-  target_link_libraries(test_server PUBLIC gcov)
+  target_link_libraries(test_dsp PUBLIC gcov)
+  #target_link_libraries(test_core PUBLIC gcov)
+  #target_link_libraries(test_engine PUBLIC gcov)
+  #target_link_libraries(test_server PUBLIC gcov)
   target_link_libraries(test_network PUBLIC gcov)
 endif()
 
 # Tests Target
 
-add_custom_target(Tests ALL DEPENDS test_dsp test_model test_engine test_network)
+#add_custom_target(Tests ALL DEPENDS test_model test_dsp test_core test_engine test_network)
+add_custom_target(Tests ALL DEPENDS test_model test_dsp test_network)
 set_target_properties(Tests PROPERTIES FOLDER Test)
 
 add_custom_command(TARGET Tests
-                   POST_BUILD COMMAND test_dsp
-                              COMMAND test_model
-                              COMMAND test_engine
-                              COMMAND test_server
+                   POST_BUILD COMMAND test_model
+                              COMMAND test_dsp
+                              #COMMAND test_core
+                              #COMMAND test_engine
+                              #COMMAND test_server
                               COMMAND test_network
                    USES_TERMINAL)
