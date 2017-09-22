@@ -19,77 +19,15 @@
  ==============================================================================
  */
 
+#define CATCH_CONFIG_RUNNER
+
 #include "../catch.hpp"
 
-#include <KiwiModel/KiwiModel.h>
-
-#include "flip/DataModel.h"
-#include "flip/Document.h"
-
-using namespace kiwi::model;
-
-// ==================================================================================== //
-//                                  KIWI MODEL TEST                                     //
-// ==================================================================================== //
-
-TEST_CASE("Model test", "[Model]")
+int main(int argc, char* const argv[])
 {
-    struct Model : public DataModel {};
+    std::cout << "running Unit-Tests - KiwiCore ..." << '\n' << '\n';
     
-    Model::version("model-test");
-    Model::declare();
-    Model::use();
+    int result = Catch::Session().run( argc, argv );
     
-    using namespace box;
-    
-    //std::cout << "newbox name: " << flip::Class<NewBox>::use().name() << '\n';
-    
-    flip::Document document(Model::use(), 123456789UL, 'appl', 'test');
-    
-    auto& patcher = document.root<Patcher>();
-    
-    patcher.addObjectBox(std::make_unique<NewBox>());
-    patcher.addObjectBox(std::make_unique<ErrorBox>());
-    document.commit();
-    
-    auto& boxes = patcher.getObjectBoxes();
-    CHECK(boxes.count_if([](auto&){return true;}) == 2);
-    
-    auto& user = patcher.useSelfUser();
-    user.addView();
-    document.commit();
-    
-    auto& user_views = user.getViews();
-    
-    CHECK(user_views.count_if([](auto&){return true;}) == 1);
-}
-
-TEST_CASE("Model test clone", "[Model]")
-{
-    struct Model : public flip::DataModel<Model> {};
-    
-    Model::clone_from<DataModel>();
-    Model::set_root<Patcher>();
-    Model::use();
-    
-    using namespace box;
-    
-    flip::Document document(Model::use(), 123456789UL, 'appl', 'test');
-    
-    auto& patcher = document.root<Patcher>();
-    
-    patcher.addObjectBox(std::make_unique<NewBox>());
-    patcher.addObjectBox(std::make_unique<ErrorBox>());
-    document.commit();
-    
-    auto& boxes = patcher.getObjectBoxes();
-    CHECK(boxes.count_if([](auto&){return true;}) == 2);
-    
-    auto& user = patcher.useSelfUser();
-    user.addView();
-    document.commit();
-    
-    auto& user_views = user.getViews();
-    
-    CHECK(user_views.count_if([](auto&){return true;}) == 1);
+    return result;
 }
