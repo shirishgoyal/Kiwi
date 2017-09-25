@@ -76,11 +76,10 @@ namespace kiwi { namespace server {
     {
         if(!m_running)
         {
-            flip::RunLoopTimer run_loop ([this]
-                                         {
-                                             process();
-                                             return m_running.load();
-                                         }, 0.02);
+            flip::RunLoopTimer run_loop ([this] {
+                process();
+                return m_running.load();
+            }, 0.02);
             
             m_running.store(true);
             
@@ -220,7 +219,7 @@ namespace kiwi { namespace server {
     {
         DBG("[server] - creating new session for session_id : " << hexadecimal_convert(m_identifier));
         
-        model::Patcher& patcher = m_document->root<model::Patcher>();
+        model::Patcher& patcher = m_document->root<model::PatcherRoot>().usePatcher();
         
         auto cnx = patcher.signal_get_connected_users.connect(std::bind(&Server::Session::sendConnectedUsers, this));
         
@@ -297,7 +296,7 @@ namespace kiwi { namespace server {
             
             m_document->port_greet(port);
             
-            model::Patcher& patcher = m_document->root<model::Patcher>();
+            model::Patcher& patcher = m_document->root<model::PatcherRoot>().usePatcher();
             
             std::set<uint64_t> user_lit = getConnectedUsers();
             std::vector<uint64_t> users(user_lit.begin(), user_lit.end());
@@ -327,7 +326,7 @@ namespace kiwi { namespace server {
         DBG("[server] - User " << std::to_string(port.user())
             << " disconnecting from session: " << hexadecimal_convert(m_identifier));
         
-        model::Patcher& patcher = m_document->root<model::Patcher>();
+        model::Patcher& patcher = m_document->root<model::PatcherRoot>().usePatcher();
         
         m_document->send_signal_if(patcher.signal_user_disconnect.make(port.user()),
                                    [](flip::PortBase& port)
@@ -368,7 +367,7 @@ namespace kiwi { namespace server {
     
     void Server::Session::sendConnectedUsers() const
     {
-        model::Patcher& patcher = m_document->root<model::Patcher>();
+        model::Patcher& patcher = m_document->root<model::PatcherRoot>().usePatcher();
         
         std::set<uint64_t> user_list = getConnectedUsers();
         std::vector<uint64_t> users(user_list.begin(), user_list.end());

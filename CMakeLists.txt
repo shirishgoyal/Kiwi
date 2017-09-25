@@ -534,7 +534,7 @@ endif()
 # Tests Target
 
 #add_custom_target(Tests ALL DEPENDS test_model test_dsp test_core test_engine test_network)
-add_custom_target(Tests ALL DEPENDS test_model test_dsp test_network)
+add_custom_target(Tests ALL DEPENDS test_model test_dsp test_server test_network)
 set_target_properties(Tests PROPERTIES FOLDER Test)
 
 add_custom_command(TARGET Tests
@@ -542,6 +542,6 @@ add_custom_command(TARGET Tests
                               COMMAND test_dsp
                               #COMMAND test_core
                               #COMMAND test_engine
-                              #COMMAND test_server
+                              COMMAND test_server
                               COMMAND test_network
                    USES_TERMINAL)
