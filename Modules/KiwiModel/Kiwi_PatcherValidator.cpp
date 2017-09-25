@@ -19,7 +19,7 @@
  ==============================================================================
  */
 
-#include <KiwiModel/Kiwi_DocumentValidator.h>
+#include <KiwiModel/Kiwi_PatcherValidator.h>
 #include <KiwiModel/Kiwi_Link.h>
 #include <KiwiModel/Kiwi_ObjectBox.h>
 
@@ -29,7 +29,15 @@ namespace kiwi { namespace model {
     //                             KIWI DOCUMENT VALIDATOR                              //
     // ================================================================================ //
     
-    void PatcherValidator::validate(Patcher & patcher)
+    void PatcherValidator::validate(PatcherRoot & root)
+    {
+        if(root.changed())
+        {
+            validatePatcher(root.usePatcher());
+        }
+    }
+    
+    void PatcherValidator::validatePatcher(Patcher& patcher)
     {
         if (patcher.changed())
         {
@@ -63,7 +71,7 @@ namespace kiwi { namespace model {
         {
             if(!link.removed() && (link.sender.value() == &object || link.receiver.value() == &object))
             {
-                flip_VALIDATION_FAILED ("Removing object without removing its links");
+                flip_VALIDATION_FAILED("Removing object without removing its links");
             }
         }    
     }
@@ -72,7 +80,7 @@ namespace kiwi { namespace model {
     {
         if(link.sender.value() == nullptr || link.receiver.value() == nullptr)
         {
-            flip_VALIDATION_FAILED ("Creating link to non existing object");
+            flip_VALIDATION_FAILED("Creating link to non existing object");
         }
     }
     

@@ -21,17 +21,12 @@
 
 #pragma once
 
-#include <KiwiModel/Kiwi_ObjectBase.h>
+#include <KiwiModel/Kiwi_ObjectBox.h>
+#include <KiwiModel/Kiwi_Link.h>
 #include <KiwiModel/Kiwi_PatcherUser.h>
-
-#include "flip/Collection.h"
-#include "flip/Array.h"
-#include "flip/String.h"
 
 namespace kiwi { namespace model {
     
-    class ObjectBox;
-    class Link;
     class PatcherView;
     
     // ================================================================================ //
@@ -57,6 +52,11 @@ namespace kiwi { namespace model {
         //! @param The object to add.
         //! @return A reference to the object added.
         ObjectBox& addObjectBox(std::unique_ptr<ObjectBox> && object);
+        
+        //! @brief Adds a link to the patcher model.
+        //! @param The link to add.
+        //! @return A reference to the link added.
+        Link& addLink(std::unique_ptr<Link> && link);
         
         //! @brief Returns true if an Object has been added, removed or changed.
         bool objectsChanged() const noexcept;

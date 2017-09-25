@@ -23,11 +23,19 @@
 
 #include "../catch.hpp"
 
+#include <KiwiModel/KiwiModel.h>
+
 int main(int argc, char* const argv[])
 {
-    std::cout << "running Unit-Tests - KiwiCore ..." << '\n' << '\n';
+    std::cout << "running Unit-Tests - KiwiModel ..." << '\n' << '\n';
+    
+    using namespace kiwi::model;
+    using Model = kiwi::model::PatcherDataModel;
+    Model::version("Model-test");
+    Model::declare();
     
     int result = Catch::Session().run( argc, argv );
-    
     return result;
+    
+    return 0;
 }

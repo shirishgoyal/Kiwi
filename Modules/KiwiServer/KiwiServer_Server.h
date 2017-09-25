@@ -27,7 +27,7 @@
 #include <flip/DocumentServer.h>
 
 #include <KiwiModel/Kiwi_Patcher.h>
-#include <KiwiModel/Kiwi_DocumentValidator.h>
+#include <KiwiModel/Kiwi_PatcherValidator.h>
 
 #include <juce_core/juce_core.h>
 

@@ -25,7 +25,7 @@
 #include <flip/contrib/RunLoopTimer.h>
 
 #include <KiwiServer/KiwiServer_Server.h>
-#include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_PatcherDataModel.h>
 
 #include <sstream>
 
@@ -214,7 +214,7 @@ namespace kiwi { namespace server {
     Server::Session::Session(uint64_t identifier, juce::File const& backend_file)
     : m_identifier(identifier)
     , m_validator(new model::PatcherValidator())
-    , m_document(new flip::DocumentServer(model::DataModel::use(), *m_validator, m_identifier))
+    , m_document(new flip::DocumentServer(model::PatcherDataModel::use(), *m_validator, m_identifier))
     , m_signal_connections()
     , m_backend_file(backend_file)
     {

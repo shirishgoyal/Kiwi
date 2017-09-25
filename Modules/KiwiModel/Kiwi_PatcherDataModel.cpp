@@ -19,26 +19,48 @@
  ==============================================================================
  */
 
-#pragma once
+#include <KiwiModel/Kiwi_PatcherDataModel.h>
+#include <KiwiModel/KiwiModel.h>
 
 namespace kiwi { namespace model {
     
     // ================================================================================ //
-    //                                   OBJECT BASE                                    //
+    //                                  KIWI DATA MODEL                                 //
     // ================================================================================ //
     
-    template<class TDataModel>
-    void Link::declare()
+    bool PatcherDataModel::declared_flag = false;
+    
+    void PatcherDataModel::declare()
     {
-        flip::Class<Link>::declare()
-        .name("cicm.kiwi.patch.Link")
-        .inherit<ObjectBase>()
-        .member<flip::ObjectRef<ObjectBox>, &Link::sender>    ("sender_obj")
-        .member<flip::ObjectRef<ObjectBox>, &Link::receiver>  ("receiver_obj")
-        .member<flip::Int, &Link::outlet_index>               ("outlet_index")
-        .member<flip::Int, &Link::inlet_index>                ("inlet_index");
+        assert(!declared() && "Model already declared");
         
-        TDataModel::template add<Link>();
+        declarePatcher();
+        declareObjectBoxes();
+        
+        set_root<PatcherRoot>();
+        
+        declared_flag = true;
+    }
+    
+    bool PatcherDataModel::declared()
+    {
+        return declared_flag;
+    }
+    
+    void PatcherDataModel::declarePatcher()
+    {
+        ObjectBase      :: declare<DataModel>();
+        ObjectBox       :: declare<DataModel>();
+        Link            :: declare<DataModel>();
+        PatcherView     :: declare<DataModel>();
+        PatcherUser     :: declare<DataModel>();
+        Patcher         :: declare<DataModel>();
+        PatcherRoot     :: declare<DataModel>();
+    }
+    
+    void PatcherDataModel::declareObjectBoxes()
+    {
+        boxes::declare<PatcherDataModel>();
     }
     
 }}

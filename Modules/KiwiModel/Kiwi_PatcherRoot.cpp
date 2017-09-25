@@ -19,26 +19,27 @@
  ==============================================================================
  */
 
-#pragma once
+#include <KiwiModel/Kiwi_PatcherRoot.h>
 
 namespace kiwi { namespace model {
     
     // ================================================================================ //
-    //                                   OBJECT BASE                                    //
+    //                                  PATCHER MODEL                                   //
     // ================================================================================ //
     
-    template<class TDataModel>
-    void Link::declare()
+    PatcherRoot::PatcherRoot()
     {
-        flip::Class<Link>::declare()
-        .name("cicm.kiwi.patch.Link")
-        .inherit<ObjectBase>()
-        .member<flip::ObjectRef<ObjectBox>, &Link::sender>    ("sender_obj")
-        .member<flip::ObjectRef<ObjectBox>, &Link::receiver>  ("receiver_obj")
-        .member<flip::Int, &Link::outlet_index>               ("outlet_index")
-        .member<flip::Int, &Link::inlet_index>                ("inlet_index");
-        
-        TDataModel::template add<Link>();
+        ;
+    }
+    
+    Patcher& PatcherRoot::usePatcher()
+    {
+        return m_patcher_root;
+    }
+    
+    Patcher const& PatcherRoot::usePatcher() const
+    {
+        return m_patcher_root;
     }
     
 }}

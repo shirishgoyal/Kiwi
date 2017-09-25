@@ -24,14 +24,14 @@
 #include <thread>
 
 #include <KiwiServer/KiwiServer_Server.h>
-#include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_PatcherDataModel.h>
 
 #include <flip/Document.h>
 #include <flip/contrib/transport_tcp/CarrierTransportSocketTcp.h>
 
 using namespace kiwi;
 
-using Model = kiwi::model::DataModel;
+using Model = kiwi::model::PatcherDataModel;
 using Server = kiwi::server::Server;
 
 // ==================================================================================== //

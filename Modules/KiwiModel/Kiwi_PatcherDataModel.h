@@ -21,24 +21,38 @@
 
 #pragma once
 
+#include "flip/DataModel.h"
+
+#define KIWI_MODEL_VERSION_STRING "v0.2.0"
+
 namespace kiwi { namespace model {
     
     // ================================================================================ //
-    //                                   OBJECT BASE                                    //
+    //                                  KIWI DATA MODEL                                 //
     // ================================================================================ //
     
-    template<class TDataModel>
-    void Link::declare()
+    struct PatcherDataModel : public flip::DataModel<PatcherDataModel>
     {
-        flip::Class<Link>::declare()
-        .name("cicm.kiwi.patch.Link")
-        .inherit<ObjectBase>()
-        .member<flip::ObjectRef<ObjectBox>, &Link::sender>    ("sender_obj")
-        .member<flip::ObjectRef<ObjectBox>, &Link::receiver>  ("receiver_obj")
-        .member<flip::Int, &Link::outlet_index>               ("outlet_index")
-        .member<flip::Int, &Link::inlet_index>                ("inlet_index");
+        //! @brief Declare the DataModel.
+        //! @details This method must be called only once.
+        //! After the DataModel declaration,
+        //! you can use its singleton instance using the static use() method.
+        static void declare();
         
-        TDataModel::template add<Link>();
-    }
+        //! @brief Returns true if this DataModel has been declared
+        static bool declared();
+        
+    private: // methods
+        
+        //! @internal Declare Patcher classes.
+        static void declarePatcher();
+        
+        //! @internal Declare object boxes.
+        static void declareObjectBoxes();
+        
+    private: // variables
+        
+        static bool declared_flag;
+    };
     
 }}

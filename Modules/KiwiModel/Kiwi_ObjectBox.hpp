@@ -85,6 +85,7 @@ namespace kiwi { namespace model {
         
         flip::Class<ObjectBox>::declare()
         .name("cicm.kiwi.patch.Object")
+        .inherit<ObjectBase>()
         .member<flip::String,           &ObjectBox::m_typed_name>         ("typed_name")
         .member<flip::String,           &ObjectBox::m_additional_text>    ("additional_text")
         .member<flip::Array<Inlet>,     &ObjectBox::m_inlets>             ("inlets")

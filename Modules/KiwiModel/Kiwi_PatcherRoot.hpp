@@ -21,42 +21,21 @@
 
 #pragma once
 
-#include "flip/DataModel.h"
-
-#include <KiwiModel/KiwiModel.h>
-
-#define KIWI_MODEL_VERSION_STRING "v0.2.0"
-
 namespace kiwi { namespace model {
     
-    struct DataModel : public flip::DataModel<DataModel>
+    // ================================================================================ //
+    //                                  PATCHER MODEL                                   //
+    // ================================================================================ //
+    
+    template<class TDataModel>
+    void PatcherRoot::declare()
     {
-        static void declarePatcher()
-        {
-            ObjectBase::declare<DataModel>();
-            
-            ObjectBox::declare<DataModel>();
-            
-            Link::declare<DataModel>();
-            
-            PatcherView::declare<DataModel>();
-            PatcherUser::declare<DataModel>();
-            
-            Patcher::declare<DataModel>();
-        }
+        flip::Class<PatcherRoot>::declare()
+        .name("cicm.kiwi.patch.PatcherRoot")
+        .member<flip::String, &PatcherRoot::m_patcher_name>       ("patcher_name")
+        .member<Patcher, &PatcherRoot::m_patcher_root>            ("patcher_root");
         
-        static void declareObjectBoxes()
-        {
-            boxes::declare<DataModel>();
-        }
-        
-        static void declare()
-        {
-            declarePatcher();
-            declareObjectBoxes();
-            
-            set_root<Patcher>();
-        }
-    };
+        TDataModel::template add<PatcherRoot>();
+    }
     
 }}

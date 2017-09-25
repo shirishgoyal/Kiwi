@@ -32,10 +32,13 @@ namespace kiwi { namespace model {
     {
         flip::Class<Patcher>::declare()
         .name("cicm.kiwi.patch.Patcher")
+        .inherit<ObjectBase>()
         .member<Patcher::ObjectBoxes, &Patcher::m_objects>    ("objects")
-        .member<Patcher::Links, &Patcher::m_links>        ("links")
-        .member<Patcher::Users, &Patcher::m_users>        ("users")
-        .member<flip::String, &Patcher::m_patcher_name>        ("patcher_name");
+        .member<Patcher::Links, &Patcher::m_links>            ("links")
+        .member<Patcher::Users, &Patcher::m_users>            ("users")
+        .member<flip::String, &Patcher::m_patcher_name>       ("patcher_name");
+        
+        TDataModel::template add<Patcher>();
     }
     
 }}

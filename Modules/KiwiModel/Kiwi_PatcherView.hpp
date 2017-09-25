@@ -54,6 +54,7 @@ namespace kiwi { namespace model {
         
         flip::Class<PatcherView>::declare()
         .name("cicm.kiwi.patch.PatcherView")
+        .inherit<ObjectBase>()
         .member<object_selection_t, &PatcherView::m_selected_objects>("object_selection")
         .member<link_selection_t, &PatcherView::m_selected_links>("link_selection")
         .member<flip::Bool, &PatcherView::m_is_locked>("locked")

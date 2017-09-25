@@ -21,21 +21,11 @@
 
 #pragma once
 
-#include "flip/Bool.h"
-#include "flip/Int.h"
-#include "flip/Float.h"
-#include "flip/String.h"
-#include "flip/Array.h"
-#include "flip/Collection.h"
-#include "flip/Object.h"
-#include "flip/ObjectRef.h"
-#include "flip/Enum.h"
-#include "flip/Signal.h"
-
 #include <KiwiModel/Kiwi_ObjectBase.h>
 
 namespace kiwi { namespace model {
     
+    class PinType;
     class Inlet;
     class Outlet;
     
@@ -57,6 +47,24 @@ namespace kiwi { namespace model {
         
         //! @brief Destructor.
         virtual ~ObjectBox() = default;
+        
+        //! @brief Returns the array of Inlet.
+        flip::Array<Inlet> const& useInlets() const;
+        
+        //! @brief Returns the inlets at index
+        Inlet const* getInlet(size_t index) const;
+        
+        //! @brief Returns the array of Outlet.
+        flip::Array<Outlet> const& useOutlets() const;
+         
+        //! @brief Returns the outlets at corresponding index.
+        Outlet const* getOutlet(size_t index) const;
+        
+        //! @brief Adds an inlet at end of current inlet list.
+        void addInlet(std::set<PinType> type);
+        
+        //! @brief Adds an outlet at end of current outlet list.
+        void addOutlet(PinType type);
         
     public: // properties
         

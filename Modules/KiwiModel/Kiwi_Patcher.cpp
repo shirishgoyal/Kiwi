@@ -25,6 +25,8 @@
 #include <KiwiModel/Kiwi_PatcherUser.h>
 #include <KiwiModel/Kiwi_PatcherView.h>
 
+#include "flip/Signal.h"
+
 namespace kiwi { namespace model {
     
     // ================================================================================ //
@@ -45,6 +47,12 @@ namespace kiwi { namespace model {
     {
         assert(object != nullptr);
         return *m_objects.insert(m_objects.end(), std::move(object));
+    }
+    
+    Link& Patcher::addLink(std::unique_ptr<Link>&& link)
+    {
+        assert(link != nullptr);
+        return *m_links.insert(m_links.end(), std::move(link));
     }
     
     bool Patcher::objectsChanged() const noexcept

@@ -32,6 +32,7 @@ namespace kiwi { namespace model {
     {
         flip::Class<PatcherUser>::declare()
         .name("Patcher.User")
+        .inherit<ObjectBase>()
         .member<flip::Collection<PatcherView>, &PatcherUser::m_views>("views");
         
         TDataModel::template add<PatcherUser>();

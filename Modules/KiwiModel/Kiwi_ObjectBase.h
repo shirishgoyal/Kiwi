@@ -21,7 +21,15 @@
 
 #pragma once
 
+#include "flip/Bool.h"
+#include "flip/Int.h"
+#include "flip/Float.h"
+#include "flip/String.h"
+#include "flip/Array.h"
+#include "flip/Collection.h"
 #include "flip/Object.h"
+#include "flip/ObjectRef.h"
+#include "flip/Enum.h"
 #include "flip/Signal.h"
 
 #include <map>

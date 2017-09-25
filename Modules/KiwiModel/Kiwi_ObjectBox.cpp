@@ -87,4 +87,14 @@ namespace kiwi { namespace model {
     {
         ;
     }
+    
+    void ObjectBox::addInlet(std::set<PinType> types)
+    {
+        m_inlets.emplace(m_inlets.end(), types);
+    }
+    
+    void ObjectBox::addOutlet(PinType type)
+    {
+        m_outlets.emplace(m_outlets.end(), type);
+    }
 }}
