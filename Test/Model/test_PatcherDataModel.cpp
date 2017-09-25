@@ -23,7 +23,6 @@
 
 #include <KiwiModel/KiwiModel.h>
 
-#include "flip/DataModel.h"
 #include "flip/Document.h"
 
 namespace kiwi { namespace model { namespace tests {

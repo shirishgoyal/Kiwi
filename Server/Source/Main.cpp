@@ -20,7 +20,7 @@
  */
 
 #include <KiwiServer/KiwiServer_Server.h>
-#include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_PatcherDataModel.h>
 
 #include "KiwiServer_CommandLineParser.h"
 #include <json.hpp>
@@ -54,7 +54,7 @@ int main(int argc, char const* argv[])
         return 0;
     }
     
-    using Model = model::DataModel;
+    using Model = model::PatcherDataModel;
     
     Model::version(KIWI_MODEL_VERSION_STRING);
     Model::declare();

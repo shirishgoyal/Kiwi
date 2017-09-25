@@ -21,9 +21,8 @@
 
 #include "../catch.hpp"
 
-#include <KiwiCore/Kiwi_Atom.h>
-#include <KiwiModel/Kiwi_PatcherDataModel.h>
 #include <KiwiModel/Kiwi_Patcher.h>
+#include <KiwiModel/Kiwi_PatcherDataModel.h>
 #include <KiwiModel/Kiwi_PatcherValidator.h>
 
 #include "flip/Document.h"
