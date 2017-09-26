@@ -111,18 +111,6 @@ namespace kiwi { namespace model {
             Signal_RECEIVE_CONNECTED_USERS,
         };
         
-        // from server to client
-        flip::Signal<uint64_t>              signal_user_connect;
-        
-        // from server to client
-        flip::Signal<uint64_t>              signal_user_disconnect;
-        
-        // from client to server
-        flip::Signal<>                      signal_get_connected_users;
-        
-        // from server to client
-        flip::Signal<std::vector<uint64_t>> signal_receive_connected_users;
-        
     public: // internal methods
         
         //! @brief flip class declaration

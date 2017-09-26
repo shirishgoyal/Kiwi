@@ -221,7 +221,8 @@ namespace kiwi { namespace server {
         
         model::Patcher& patcher = m_document->root<model::PatcherRoot>().usePatcher();
         
-        auto cnx = patcher.signal_get_connected_users.connect(std::bind(&Server::Session::sendConnectedUsers, this));
+        auto cnx = patcher.getSignal(model::Patcher::Signal_GET_CONNECTED_USERS)
+        .connect(std::bind(&Server::Session::sendConnectedUsers, this));
         
         m_signal_connections.emplace_back(std::move(cnx));
         
@@ -301,19 +302,19 @@ namespace kiwi { namespace server {
             std::set<uint64_t> user_lit = getConnectedUsers();
             std::vector<uint64_t> users(user_lit.begin(), user_lit.end());
             
+            auto& signal_receive = patcher.getSignal<std::vector<uint64_t>>(model::Patcher::Signal_RECEIVE_CONNECTED_USERS);
+            
             // send a list of connected users to the user that is connecting.
-            m_document->send_signal_if(patcher.signal_receive_connected_users.make(users),
-                                       [&port](flip::PortBase& current_port)
-                                       {
-                                           return port.user() == current_port.user();
-                                       });
+            m_document->send_signal_if(signal_receive.make(users), [&port](flip::PortBase& current_port) {
+                return port.user() == current_port.user();
+            });
+            
+            auto& signal_connect = patcher.getSignal<uint64_t>(model::Patcher::Signal_USER_CONNECT);
             
             // Notify other users that this one is connected.
-            m_document->send_signal_if(patcher.signal_user_connect.make(port.user()),
-                                       [&port](flip::PortBase& current_port)
-                                       {
-                                           return port.user() != current_port.user();
-                                       });
+            m_document->send_signal_if(signal_connect.make(port.user()), [&port](flip::PortBase& current_port) {
+                return port.user() != current_port.user();
+            });
         }
         else
         {
@@ -327,12 +328,11 @@ namespace kiwi { namespace server {
             << " disconnecting from session: " << hexadecimal_convert(m_identifier));
         
         model::Patcher& patcher = m_document->root<model::PatcherRoot>().usePatcher();
+        auto& signal_disconnect = patcher.getSignal<uint64_t>(model::Patcher::Signal_USER_DISCONNECT);
         
-        m_document->send_signal_if(patcher.signal_user_disconnect.make(port.user()),
-                                   [](flip::PortBase& port)
-                                   {
-                                       return true;
-                                   });
+        m_document->send_signal_if(signal_disconnect.make(port.user()), [](flip::PortBase& port) {
+            return true;
+        });
         
         m_document->port_factory_remove(port);
         
@@ -372,7 +372,9 @@ namespace kiwi { namespace server {
         std::set<uint64_t> user_list = getConnectedUsers();
         std::vector<uint64_t> users(user_list.begin(), user_list.end());
         
-        m_document->reply_signal(patcher.signal_receive_connected_users.make(users));
+        auto& signal_receive_connected = patcher.getSignal<std::vector<uint64_t>>(model::Patcher::Signal_RECEIVE_CONNECTED_USERS);
+        
+        m_document->reply_signal(signal_receive_connected.make(users));
     }
     
 }}

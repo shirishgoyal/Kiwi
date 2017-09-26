@@ -182,15 +182,16 @@ TEST_CASE("Server - Server", "[Server]")
         
         uint64_t other_connect_1 = 0;
         
-        auto m_cnx_connect_1 = patcher_1.signal_user_connect.connect([&other_connect_1](uint64_t user_id)
+        auto m_cnx_connect_1 = patcher_1.getSignal<uint64_t>(model::Patcher::Signal_USER_CONNECT)
+        .connect([&other_connect_1](uint64_t user_id)
         {
             other_connect_1 = user_id;
         });
         
         uint64_t other_disonnect_1 = 0;
         
-        auto m_cnx_disconnect_1 = patcher_1.signal_user_disconnect.connect([&other_disonnect_1](uint64_t user_id)
-        {
+        auto m_cnx_disconnect_1 = patcher_1.getSignal<uint64_t>(model::Patcher::Signal_USER_DISCONNECT)
+        .connect([&other_disonnect_1](uint64_t user_id) {
             other_disonnect_1 = user_id;
         });
         
@@ -202,8 +203,8 @@ TEST_CASE("Server - Server", "[Server]")
         
         std::vector<uint64_t> connected_users_2;
         
-        auto m_cnx_2 = patcher_2.signal_receive_connected_users.connect([&connected_users_2](std::vector<uint64_t> users)
-        {
+        auto m_cnx_2 = patcher_2.getSignal<std::vector<uint64_t>>(model::Patcher::Signal_RECEIVE_CONNECTED_USERS)
+        .connect([&connected_users_2](std::vector<uint64_t> users) {
             connected_users_2 = users;
         });
         
