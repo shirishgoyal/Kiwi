@@ -43,7 +43,7 @@ namespace kiwi
             
         private: // members
             
-            struct Task final : public Scheduler<>::Task
+            struct Task final : public core::Scheduler<>::Task
             {
                 Task(Delay & object);
                 ~Task() = default;
@@ -54,7 +54,7 @@ namespace kiwi
             };
             
             std::shared_ptr<Task>           m_task;
-            Scheduler<>::clock_t::duration  m_delay;
+            core::Scheduler<>::clock_t::duration  m_delay;
         };
     }
 }

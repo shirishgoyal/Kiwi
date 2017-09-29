@@ -52,30 +52,30 @@ namespace kiwi
         
         void Instance::log(std::string const& text) const
         {
-            m_console.post({text, Console::Message::Type::Log});
+            m_console.post({text, core::Console::Message::Type::Log});
         }
         
         void Instance::post(std::string const& text) const
         {
-            m_console.post({text, Console::Message::Type::Normal});
+            m_console.post({text, core::Console::Message::Type::Normal});
         }
         
         void Instance::warning(std::string const& text) const
         {
-            m_console.post({text, Console::Message::Type::Warning});
+            m_console.post({text, core::Console::Message::Type::Warning});
         }
         
         void Instance::error(std::string const& text) const
         {
-            m_console.post({text, Console::Message::Type::Error});
+            m_console.post({text, core::Console::Message::Type::Error});
         }
 
-        void Instance::addConsoleListener(Console::Listener& listener)
+        void Instance::addConsoleListener(core::Console::Listener& listener)
         {
             m_console.addListener(listener);
         }
 
-        void Instance::removeConsoleListener(Console::Listener& listener)
+        void Instance::removeConsoleListener(core::Console::Listener& listener)
         {
             m_console.removeListener(listener);
         }
@@ -116,7 +116,7 @@ namespace kiwi
         //                                  SCHEDULER                                       //
         // ================================================================================ //
         
-        Scheduler<> & Instance::getScheduler()
+        core::Scheduler<> & Instance::getScheduler()
         {
             return m_scheduler;
         }

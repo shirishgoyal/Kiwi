@@ -21,7 +21,7 @@
 
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Bang.h>
 
-#include <KiwiEngine/KiwiEngine_Scheduler.h>
+#include <KiwiCore/Kiwi_Scheduler.h>
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Controller/KiwiEngine_Bang.h>
 
 namespace kiwi
@@ -32,7 +32,7 @@ namespace kiwi
         //                                  OBJECT BANG                                     //
         // ================================================================================ //
         
-        class Bang::Task : public Scheduler<>::Task
+        class Bang::Task : public core::Scheduler<>::Task
         {
         public: // methods
             

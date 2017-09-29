@@ -140,7 +140,7 @@ namespace kiwi
     
     void ConsoleContent::consoleHistoryChanged(ConsoleHistory const&)
     {
-        engine::Scheduler<> &scheduler = KiwiApp::useInstance().useScheduler();
+        core::Scheduler<> &scheduler = KiwiApp::useInstance().useScheduler();
         
         scheduler.defer([this]()
         {
@@ -234,11 +234,11 @@ namespace kiwi
             {
                 g.fillAll(juce::Colours::lightsteelblue);
             }
-            else if(msg->type == engine::Console::Message::Type::Error)
+            else if(msg->type == core::Console::Message::Type::Error)
             {
                 g.fillAll(juce::Colours::lightpink);
             }
-            else if(msg->type == engine::Console::Message::Type::Warning)
+            else if(msg->type == core::Console::Message::Type::Warning)
             {
                 g.fillAll(juce::Colours::lightgoldenrodyellow);
             }

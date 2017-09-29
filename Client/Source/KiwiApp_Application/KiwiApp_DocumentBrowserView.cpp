@@ -19,7 +19,7 @@
  ==============================================================================
  */
 
-#include <KiwiEngine/KiwiEngine_Console.h>
+#include <KiwiCore/Kiwi_Console.h>
 
 #include "KiwiApp_DocumentBrowserView.h"
 #include "KiwiApp_Instance.h"

@@ -33,12 +33,12 @@ namespace kiwi
         //                                  OBJECT BANG                                     //
         // ================================================================================ //
         
-        class Toggle::Task final : public Scheduler<>::Task
+        class Toggle::Task final : public core::Scheduler<>::Task
         {
         public: // methods
             
             Task(Toggle & object, model::Toggle::Request request, bool shall_output):
-            Scheduler<>::Task(),
+            core::Scheduler<>::Task(),
             m_object(object),
             m_request(request),
             m_shall_output(shall_output)

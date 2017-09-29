@@ -21,24 +21,10 @@
 
 #pragma once
 
-#include <cstddef>
-#include <vector>
-#include <set>
-#include <map>
-#include <queue>
-#include <exception>
-#include <functional>
-
 #include <KiwiModel/KiwiModel_Atom.h>
 
 #include <KiwiCore/Kiwi_Scheduler.h>
 
-namespace kiwi
-{
-    namespace model
-    {
-        class Link;
-        class Object;
-        class Patcher;
-    }
-}
+namespace kiwi { namespace kiwi {
+    
+}}

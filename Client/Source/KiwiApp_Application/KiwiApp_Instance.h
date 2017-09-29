@@ -22,7 +22,7 @@
 #pragma once
 
 #include <KiwiEngine/KiwiEngine_Instance.h>
-#include <KiwiEngine/KiwiEngine_Scheduler.h>
+#include <KiwiCore/Kiwi_Scheduler.h>
 
 #include <juce_events/timers/juce_Timer.h>
 
@@ -76,7 +76,7 @@ namespace kiwi
         engine::Instance const& useEngineInstance() const;
         
         //! @brief Returns the instance's scheduler
-        engine::Scheduler<> & useScheduler();
+        core::Scheduler<> & useScheduler();
         
         //! @brief Open a File.
         bool openFile(juce::File const& file);
@@ -146,7 +146,7 @@ namespace kiwi
         
     private: // variables
         
-        engine::Scheduler<>                         m_scheduler;
+        core::Scheduler<>                         m_scheduler;
         
         engine::Instance                            m_instance;
         

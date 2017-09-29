@@ -20,6 +20,7 @@
  */
 
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Message/KiwiEngine_Receive.h>
+#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Message/KiwiEngine_Receive.h>
 
 namespace kiwi
 {
@@ -29,12 +30,12 @@ namespace kiwi
         //                                  OBJECT RECEIVE                                  //
         // ================================================================================ //
         
-        class Receive::Task final : public Scheduler<>::Task
+        class Receive::Task final : public core::Scheduler<>::Task
         {
         public: // methods
             
             Task(Receive& object, std::vector<Atom> const& atoms):
-            Scheduler<>::Task(),
+            core::Scheduler<>::Task(),
             m_object(object),
             m_atoms(atoms)
             {
@@ -71,7 +72,7 @@ namespace kiwi
             
             if(!m_name.empty())
             {
-                Beacon& beacon = getBeacon(m_name);
+                core::Beacon& beacon = getBeacon(m_name);
                 beacon.bind(*this);
             }
         }
@@ -85,7 +86,7 @@ namespace kiwi
             
             if(!m_name.empty())
             {
-                Beacon& beacon = getBeacon(m_name);
+                core::Beacon& beacon = getBeacon(m_name);
                 beacon.unbind(*this);
             }
         }

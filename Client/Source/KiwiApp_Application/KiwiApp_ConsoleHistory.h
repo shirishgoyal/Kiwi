@@ -31,7 +31,7 @@ namespace kiwi
     
     //! @brief The Console History listen to the Console and keep an history of the messages.
     //! @details It expose methods to fetch messages sorted by date, message or by type.
-    class ConsoleHistory : public engine::Console::Listener
+    class ConsoleHistory : public core::Console::Listener
     {
     public:
         class Listener;
@@ -59,7 +59,7 @@ namespace kiwi
         size_t size();
         
         //! @brief Get a message from the history at a given index.
-        std::pair<engine::Console::Message const*, size_t> get(size_t index);
+        std::pair<core::Console::Message const*, size_t> get(size_t index);
         
         //! @brief Erase a message from the history.
         //! @param index The index of the message.
@@ -89,7 +89,7 @@ namespace kiwi
         
         struct MessageHolder
         {
-            engine::Console::Message    m_message;
+            core::Console::Message    m_message;
             size_t                      m_index;
             size_t                      m_repeat_times;
         };
@@ -99,7 +99,7 @@ namespace kiwi
         static bool compareType(MessageHolder const& i, MessageHolder const& j);
         
         //! @internal Receive the messages from the Console and dispatch changes to listeners.
-        void newConsoleMessage(engine::Console::Message const& message) final override;
+        void newConsoleMessage(core::Console::Message const& message) final override;
         
     private:
         
@@ -107,7 +107,7 @@ namespace kiwi
         std::mutex                  m_message_mutex;
         std::vector<MessageHolder>  m_messages;
         Sort                        m_sort;
-        engine::Listeners<Listener> m_listeners;
+        core::Listeners<Listener> m_listeners;
     };
     
     // ================================================================================ //

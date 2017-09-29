@@ -31,7 +31,7 @@ namespace kiwi
         //                                  OBJECT RECEIVE                                  //
         // ================================================================================ //
         
-        class Receive : public engine::Object, public Beacon::Castaway
+        class Receive : public engine::Object, public core::Beacon::Castaway
         {
         private: // classes
             

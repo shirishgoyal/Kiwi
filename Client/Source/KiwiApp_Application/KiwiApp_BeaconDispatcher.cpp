@@ -75,8 +75,8 @@ namespace kiwi
     //                               BEACON DISPATCHER ELEM                             //
     // ================================================================================ //
     
-    BeaconDispatcherElem::BeaconDispatcherElem(engine::Instance& instance) :
-    m_instance(instance),
+    BeaconDispatcherElem::BeaconDispatcherElem(core::Beacon::Factory& beacon_factory) :
+    m_beacon_factory(beacon_factory),
     m_beacon_name_editor("beacon_name_editor"),
     m_text_value(*this),
     m_message_slider("message_slider"),
@@ -204,7 +204,7 @@ namespace kiwi
     {
         if(!name.empty() && !args.empty())
         {
-            engine::Beacon& beacon = m_instance.getBeacon(name);
+            core::Beacon& beacon = m_beacon_factory.getBeacon(name);
             beacon.dispatch(args);
         }
     }
@@ -258,8 +258,8 @@ namespace kiwi
     //                                  BEACON DISPATCHER                               //
     // ================================================================================ //
     
-    BeaconDispatcher::BeaconDispatcher(engine::Instance& instance) :
-    m_instance(instance),
+    BeaconDispatcher::BeaconDispatcher(core::Beacon::Factory& beacon_factory) :
+    m_beacon_factory(beacon_factory),
     m_toolbar()
     {
         m_toolbar.setVertical(false);
@@ -286,7 +286,7 @@ namespace kiwi
     void BeaconDispatcher::addElem()
     {
         auto it = m_components.emplace(m_components.end(),
-                                       std::make_unique<BeaconDispatcherElem>(m_instance));
+                                       std::make_unique<BeaconDispatcherElem>(m_beacon_factory));
         
         addAndMakeVisible(it->get());
         updateLayout();

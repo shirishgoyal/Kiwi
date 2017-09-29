@@ -31,7 +31,7 @@ namespace kiwi
         
         Metro::Metro(model::Object const& model, Patcher& patcher, std::vector<Atom> const& args):
         engine::Object(model, patcher),
-        Scheduler<>::Timer(patcher.getScheduler()),
+        core::Scheduler<>::Timer(patcher.getScheduler()),
         m_period(std::chrono::milliseconds(0))
         {
             if(!args.empty())

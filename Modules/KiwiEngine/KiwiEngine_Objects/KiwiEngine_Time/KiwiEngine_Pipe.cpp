@@ -29,12 +29,12 @@ namespace kiwi
         //                                  OBJECT PIPE                                     //
         // ================================================================================ //
         
-        class Pipe::Task final : public Scheduler<>::Task
+        class Pipe::Task final : public core::Scheduler<>::Task
         {
         public: // methods
             
             Task(Pipe & object, std::vector<Atom> const& atoms):
-            Scheduler<>::Task(),
+            core::Scheduler<>::Task(),
             m_object(object),
             m_atoms(atoms)
             {

@@ -31,7 +31,7 @@ namespace kiwi
         //                                  OBJECT METRO                                    //
         // ================================================================================ //
         
-        class Metro final : public engine::Object, Scheduler<>::Timer
+        class Metro final : public engine::Object, core::Scheduler<>::Timer
         {
         public: // methods
             
@@ -45,7 +45,7 @@ namespace kiwi
             
         private: // members
             
-            Scheduler<>::duration_t m_period;
+            core::Scheduler<>::duration_t m_period;
         };
     }
 }

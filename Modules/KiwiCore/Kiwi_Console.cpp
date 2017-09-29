@@ -19,29 +19,26 @@
  ==============================================================================
  */
 
-#include "KiwiEngine_Console.h"
+#include <KiwiCore/Kiwi_Console.h>
 
-namespace kiwi
-{
-    namespace engine
+namespace kiwi { namespace core {
+    // ================================================================================ //
+    //                                      CONSOLE                                     //
+    // ================================================================================ //
+    
+    void Console::post(Message const& mess) const
     {
-        // ================================================================================ //
-        //                                      CONSOLE                                     //
-        // ================================================================================ //
-        
-        void Console::post(Message const& mess) const
-        {
-            m_listeners.call(&Listener::newConsoleMessage, mess);
-        }
-        
-        void Console::addListener(Listener& listener)
-        {
-            m_listeners.add(listener);
-        }
-        
-        void Console::removeListener(Listener& listener)
-        {
-            m_listeners.remove(listener);
-        }
+        m_listeners.call(&Listener::newConsoleMessage, mess);
     }
-}
+    
+    void Console::addListener(Listener& listener)
+    {
+        m_listeners.add(listener);
+    }
+    
+    void Console::removeListener(Listener& listener)
+    {
+        m_listeners.remove(listener);
+    }
+    
+}}

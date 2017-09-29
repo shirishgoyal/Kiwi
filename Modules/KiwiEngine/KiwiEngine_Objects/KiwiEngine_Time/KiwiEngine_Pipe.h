@@ -48,7 +48,7 @@ namespace kiwi
         private: // members
             
             std::set<std::shared_ptr<Task>>     m_tasks;
-            Scheduler<>::clock_t::duration      m_delay;
+            core::Scheduler<>::clock_t::duration      m_delay;
         };
     }
 }

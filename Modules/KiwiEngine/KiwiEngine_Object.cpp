@@ -81,7 +81,7 @@ namespace kiwi
             m_patcher.error(text);
         }
         
-        Scheduler<> & Object::getScheduler() const
+        core::Scheduler<> & Object::getScheduler() const
         {
             return m_patcher.getScheduler();
         }
@@ -90,7 +90,7 @@ namespace kiwi
         //                                      BEACON                                      //
         // ================================================================================ //
         
-        Beacon& Object::getBeacon(std::string const& name) const
+        core::Beacon& Object::getBeacon(std::string const& name) const
         {
             return m_patcher.getBeacon(name);
         }

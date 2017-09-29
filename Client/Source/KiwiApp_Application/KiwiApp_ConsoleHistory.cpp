@@ -41,7 +41,7 @@ namespace kiwi
         m_messages.clear();
     }
     
-    void ConsoleHistory::newConsoleMessage(engine::Console::Message const& message)
+    void ConsoleHistory::newConsoleMessage(core::Console::Message const& message)
     {
         if(!message.text.empty())
         {
@@ -90,7 +90,7 @@ namespace kiwi
         return m_messages.size();
     }
     
-    std::pair<engine::Console::Message const*, size_t> ConsoleHistory::get(size_t index)
+    std::pair<core::Console::Message const*, size_t> ConsoleHistory::get(size_t index)
     {
         std::lock_guard<std::mutex> guard(m_message_mutex);
         if(index < m_messages.size())
@@ -187,8 +187,8 @@ namespace kiwi
     
     bool ConsoleHistory::compareType(MessageHolder const& i, MessageHolder const& j)
     {
-        engine::Console::Message::Type first = i.m_message.type;
-        engine::Console::Message::Type second = j.m_message.type;
+        core::Console::Message::Type first = i.m_message.type;
+        core::Console::Message::Type second = j.m_message.type;
         
         return first < second;
     }

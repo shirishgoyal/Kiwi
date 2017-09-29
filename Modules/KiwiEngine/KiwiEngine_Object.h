@@ -22,7 +22,8 @@
 #pragma once
 
 #include "KiwiEngine_Def.h"
-#include "KiwiEngine_Scheduler.h"
+
+#include <KiwiCore/Kiwi_Scheduler.h>
 
 #include <KiwiEngine/KiwiEngine_Patcher.h>
 
@@ -84,14 +85,14 @@ namespace kiwi
             // ================================================================================ //
             
             //! @biref Returns the engine's scheduler.
-            Scheduler<> & getScheduler() const;
+            core::Scheduler<> & getScheduler() const;
             
             // ================================================================================ //
             //                                      BEACON                                      //
             // ================================================================================ //
             
             //! @brief Gets or creates a Beacon with a given name.
-            Beacon& getBeacon(std::string const& name) const;
+            core::Beacon& getBeacon(std::string const& name) const;
             
             // ================================================================================ //
             //                                       SEND                                       //

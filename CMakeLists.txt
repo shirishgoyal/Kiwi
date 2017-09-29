@@ -372,6 +372,19 @@ target_link_libraries(KiwiNetwork PUBLIC ${NETWORK_DEP})
 set_target_properties(KiwiNetwork PROPERTIES FOLDER Modules)
 source_group_rec("${KIWI_NETWORK_SRC}" ${ROOT_DIR}/Modules/KiwiNetwork)
 
+#----------------------------------
+# Core
+#----------------------------------
+
+file(GLOB_RECURSE KIWI_CORE_SRC ${ROOT_DIR}/Modules/KiwiCore/*.[c|h]pp
+${ROOT_DIR}/Modules/KiwiCore/*.h)
+add_library(KiwiCore STATIC ${KIWI_CORE_SRC})
+target_include_directories(KiwiCore PUBLIC ${ROOT_DIR}/ThirdParty/concurrentqueue)
+target_include_directories(KiwiCore PUBLIC ${ROOT_DIR}/Modules)
+target_add_dependency(KiwiCore KiwiModel)
+set_target_properties(KiwiCore PROPERTIES FOLDER Modules)
+source_group_rec("${KIWI_CORE_SRC}" ${ROOT_DIR}/Modules/KiwiCore)
+
 
 #----------------------------------
 # Engine
@@ -380,9 +393,9 @@ source_group_rec("${KIWI_NETWORK_SRC}" ${ROOT_DIR}/Modules/KiwiNetwork)
 file(GLOB_RECURSE KIWI_ENGINE_SRC ${ROOT_DIR}/Modules/KiwiEngine/*.[c|h]pp
                                   ${ROOT_DIR}/Modules/KiwiEngine/*.h)
 add_library(KiwiEngine STATIC ${KIWI_ENGINE_SRC})
-target_include_directories(KiwiEngine PUBLIC ${ROOT_DIR}/ThirdParty/concurrentqueue)
 target_include_directories(KiwiEngine PUBLIC ${ROOT_DIR}/Modules)
 target_add_dependency(KiwiEngine KiwiModel)
+target_add_dependency(KiwiEngine KiwiCore)
 target_add_dependency(KiwiEngine KiwiDsp)
 set_target_properties(KiwiEngine PROPERTIES FOLDER Modules)
 source_group_rec("${KIWI_ENGINE_SRC}" ${ROOT_DIR}/Modules/KiwiEngine)
@@ -414,8 +427,9 @@ file(GLOB_RECURSE KIWI_CLIENT_SRC ${ROOT_DIR}/Client/Source/*.[c|h]pp
                                   ${ROOT_DIR}/Client/Source/*.h)
 add_executable(Kiwi ${KIWI_CLIENT_SRC} "${KIWI_CLIENT_RESSOURCES}")
 target_add_dependency(Kiwi KiwiNetwork)
-target_add_dependency(Kiwi KiwiEngine)
 target_add_dependency(Kiwi KiwiModel)
+target_add_dependency(Kiwi KiwiCore)
+target_add_dependency(Kiwi KiwiEngine)
 target_add_dependency(Kiwi KiwiDsp)
 target_add_dependency(Kiwi Juce)
 target_include_directories(Kiwi PUBLIC ${JSON_INCLUDE_DIRS} ${ROOT_DIR}/Client/Source)

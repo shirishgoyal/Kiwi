@@ -30,7 +30,7 @@ namespace kiwi
         // ================================================================================ //
         
         Delay::Task::Task(Delay& object):
-        Scheduler<>::Task(),
+        core::Scheduler<>::Task(),
         m_object(object)
         {
         }

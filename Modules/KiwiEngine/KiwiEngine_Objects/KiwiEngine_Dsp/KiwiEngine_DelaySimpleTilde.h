@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <KiwiEngine/KiwiEngine_CircularBuffer.h>
+#include <KiwiCore/Kiwi_CircularBuffer.h>
 
 #include <KiwiEngine/KiwiEngine_Object.h>
 
@@ -57,7 +57,7 @@ namespace kiwi
             
         private: // members
             
-            std::unique_ptr<CircularBuffer<dsp::sample_t>>   m_circular_buffer;
+            std::unique_ptr<core::CircularBuffer<dsp::sample_t>>   m_circular_buffer;
             std::unique_ptr<dsp::Signal>                     m_reinject_signal;
             float                                            m_max_delay;
             std::atomic<float>                               m_delay;

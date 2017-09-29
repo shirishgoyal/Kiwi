@@ -25,8 +25,10 @@
 #include <set>
 
 #include "KiwiEngine_Def.h"
-#include "KiwiEngine_Beacon.h"
 #include "KiwiEngine_AudioControler.h"
+
+#include <KiwiCore/Kiwi_Beacon.h>
+#include <KiwiCore/Kiwi_Scheduler.h>
 
 #include <KiwiDsp/KiwiDsp_Chain.h>
 
@@ -34,6 +36,10 @@ namespace kiwi
 {    
     namespace engine
     {
+        class Instance;
+        class Object;
+        class Link;
+        
         // ================================================================================ //
         //                                      PATCHER                                     //
         // ================================================================================ //
@@ -112,14 +118,14 @@ namespace kiwi
             // ================================================================================ //
             
             //! @brief Returns the engine's scheduler.
-            Scheduler<> & getScheduler() const;
+            core::Scheduler<> & getScheduler() const;
             
             // ================================================================================ //
             //                                      BEACON                                      //
             // ================================================================================ //
             
             //! @brief Gets or creates a Beacon with a given name.
-            Beacon& getBeacon(std::string const& name) const;
+            core::Beacon& getBeacon(std::string const& name) const;
             
         private: // methods
             

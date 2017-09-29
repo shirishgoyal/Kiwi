@@ -24,7 +24,7 @@
 #include "KiwiEngine_Link.h"
 #include "KiwiEngine_Factory.h"
 #include "KiwiEngine_Instance.h"
-#include "KiwiEngine_Scheduler.h"
+#include <KiwiCore/Kiwi_Scheduler.h>
 
 #include <KiwiModel/KiwiModel_PatcherUser.h>
 
@@ -191,7 +191,7 @@ namespace kiwi
         //                                      SCHEDULER                                   //
         // ================================================================================ //
         
-        Scheduler<> & Patcher::getScheduler() const
+        core::Scheduler<> & Patcher::getScheduler() const
         {
             return m_instance.getScheduler();
         }
@@ -200,7 +200,7 @@ namespace kiwi
         //                                      BEACON                                      //
         // ================================================================================ //
         
-        Beacon& Patcher::getBeacon(std::string const& name) const
+        core::Beacon& Patcher::getBeacon(std::string const& name) const
         {
             return m_instance.getBeacon(name);
         }

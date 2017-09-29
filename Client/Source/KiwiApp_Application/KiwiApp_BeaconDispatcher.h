@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <KiwiEngine/KiwiEngine_Instance.h>
+#include <KiwiCore/Kiwi_Beacon.h>
 
 #include "../KiwiApp_Components/KiwiApp_Window.h"
 
@@ -39,7 +39,7 @@ namespace kiwi
     public: // methods
         
         //! @brief Constructor.
-        BeaconDispatcherElem(engine::Instance& instance);
+        BeaconDispatcherElem(core::Beacon::Factory& beacon_factory);
         
         //! @brief Destructor.
         ~BeaconDispatcherElem();
@@ -88,7 +88,7 @@ namespace kiwi
         
     private: // members
         
-        engine::Instance&       m_instance;
+        core::Beacon::Factory&  m_beacon_factory;
         juce::TextEditor        m_beacon_name_editor;
         TextValueComponent      m_text_value;
         juce::Slider            m_message_slider;
@@ -130,7 +130,7 @@ namespace kiwi
     public: // methods
         
         //! @brief Constructor.
-        BeaconDispatcher(engine::Instance& instance);
+        BeaconDispatcher(core::Beacon::Factory& beacon_factory);
         
         //! @brief Destructor.
         ~BeaconDispatcher();
@@ -159,7 +159,7 @@ namespace kiwi
         
         void updateLayout();
         
-        engine::Instance&                                   m_instance;
+        core::Beacon::Factory&                              m_beacon_factory;
         std::vector<std::unique_ptr<BeaconDispatcherElem>>  m_components;
         juce::Toolbar                                       m_toolbar;
         BeaconDispatcherToolbarFactory                      m_toolbar_factory;

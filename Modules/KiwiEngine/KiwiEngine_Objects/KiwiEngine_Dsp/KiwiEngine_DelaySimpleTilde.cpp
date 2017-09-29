@@ -138,7 +138,7 @@ namespace kiwi
                 
                 size_t buffer_size = std::ceil(m_max_delay * m_sr) + 1 + m_vector_size;
                 
-                m_circular_buffer.reset(new CircularBuffer<dsp::sample_t>(buffer_size, buffer_size, 0.));
+                m_circular_buffer.reset(new core::CircularBuffer<dsp::sample_t>(buffer_size, buffer_size, 0.));
                 m_reinject_signal.reset(new dsp::Signal(m_vector_size));
             }
             
