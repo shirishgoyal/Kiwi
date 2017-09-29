@@ -486,6 +486,18 @@ target_add_dependency(test_network KiwiNetwork)
 set_target_properties(test_network PROPERTIES FOLDER Test)
 source_group_rec("${TEST_NETWORK_SRC}" ${ROOT_DIR}/Test/Network)
 
+# Test Core
+
+file(GLOB TEST_CORE_SRC ${ROOT_DIR}/Test/Core/*.[c|h]pp
+${ROOT_DIR}/Test/Core/*.h)
+add_executable(test_core ${TEST_CORE_SRC})
+target_add_dependency(test_core KiwiCore)
+if (LINUX)
+  target_link_libraries(test_core PUBLIC ${PTHREAD})
+endif()
+set_target_properties(test_core PROPERTIES FOLDER Test)
+source_group_rec("${TEST_CORE_SRC}" ${ROOT_DIR}/Test/Core)
+
 # Test Engine
 
 file(GLOB TEST_ENGINE_SRC ${ROOT_DIR}/Test/Engine/*.[c|h]pp
@@ -517,6 +529,7 @@ if(${GCOV_SUPPORT} STREQUAL "On" AND DEBUG)
   set(CMAKE_EXE_LINKER_FLAGS="-fprofile-arcs -ftest-coverage")
   target_link_libraries(test_dsp PUBLIC gcov)
   target_link_libraries(test_model PUBLIC gcov)
+  target_link_libraries(test_core PUBLIC gcov)
   target_link_libraries(test_engine PUBLIC gcov)
   target_link_libraries(test_server PUBLIC gcov)
   target_link_libraries(test_network PUBLIC gcov)
@@ -524,12 +537,13 @@ endif()
 
 # Tests Target
 
-add_custom_target(Tests ALL DEPENDS test_dsp test_model test_engine test_server test_network)
+add_custom_target(Tests ALL DEPENDS test_dsp test_model test_core test_engine test_server test_network)
 set_target_properties(Tests PROPERTIES FOLDER Test)
 
 add_custom_command(TARGET Tests
                    POST_BUILD COMMAND test_dsp
                               COMMAND test_model
+                              COMMAND test_core
                               COMMAND test_engine
                               COMMAND test_server
                               COMMAND test_network
