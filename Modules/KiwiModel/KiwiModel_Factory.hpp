@@ -23,6 +23,8 @@
 
 #include "flip/Mold.h"
 
+#include <KiwiModel/KiwiModel_DataModel.h>
+
 namespace kiwi { namespace model {
     
     // ================================================================================ //
@@ -52,7 +54,7 @@ namespace kiwi { namespace model {
     };
     
     template<class TModel, class TInheritedObject>
-    Factory::ObjectClass<TModel, TInheritedObject>& Factory::add(std::string const& name)
+    ObjectClass<TModel, TInheritedObject>& Factory::add(std::string const& name)
     {
         static_assert(isValidInheritableObject<TInheritedObject>::value, "Not a valid inheritable Object");
         static_assert(isValidObject<TModel>::value, "Not a valid Object");
@@ -75,70 +77,4 @@ namespace kiwi { namespace model {
         return dynamic_cast<ObjectClass<TModel, TInheritedObject>&>(*(it->get()));
     }
     
-    template<class TModel>
-    auto Factory::getCtor() -> ctor_fn_t
-    {
-        return [](std::string const& name, std::vector<Atom> const& args)
-        {
-            return std::make_unique<TModel>(name, args);
-        };
-    }
-    
-    template<class TModel>
-    auto Factory::getMoldMaker() -> mold_maker_fn_t
-    {
-        return [](model::Object const& object, flip::Mold& mold)
-        {
-            // make a mold with container_flag active
-            mold.make(static_cast<TModel const&>(object), false);
-        };
-    }
-    
-    template<class TModel>
-    auto Factory::getMoldCaster() -> mold_caster_fn_t
-    {
-        return [](flip::Mold const& mold)
-        {
-            flip::Default d;
-            auto object_uptr = std::make_unique<TModel>(d);
-            mold.cast<TModel>(static_cast<TModel&>(*(object_uptr.get())));
-            return object_uptr;
-        };
-    }
-    
-    // ================================================================================ //
-    //                             FACTORY OBJECT CLASS BASE                            //
-    // ================================================================================ //
-    
-    template<class TObject, class ...Args>
-    std::unique_ptr<TObject> Factory::ObjectClassBase::create(Args&& ...args) const
-    {
-        auto object = std::make_unique<TObject>(std::forward<Args>(args)...);
-        object->m_class = this;
-        return object;
-    }
-    
-    // ================================================================================ //
-    //                               FACTORY OBJECT CLASS                               //
-    // ================================================================================ //
-    
-    template<class TObjectClass, class TInheritedObject>
-    Factory::ObjectClass<TObjectClass, TInheritedObject>::ObjectClass(std::string const& name)
-    : Factory::ObjectClassBase(name,
-                               Factory::sanitizeName(name),
-                               getCtor<class_t>(),
-                               getMoldMaker<class_t>(),
-                               getMoldCaster<class_t>())
-    , m_flip_class(DataModel::declare<class_t>())
-    {
-        m_flip_class.name(getDataModelName().c_str())
-        .template inherit<TInheritedObject>();
-    }
-    
-    template<class TObjectClass, class TInheritedObject>
-    template<class U, U TObjectClass::*ptr_to_member>
-    void Factory::ObjectClass<TObjectClass, TInheritedObject>::addMember(char const* name)
-    {
-        m_flip_class.template member(name);
-    }
 }}

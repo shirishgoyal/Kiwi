@@ -22,7 +22,8 @@
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Basic/KiwiModel_ErrorBox.h>
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Basic/KiwiModel_NewBox.h>
 
-#include "KiwiModel_Factory.h"
+#include <KiwiModel/KiwiModel_Factory.h>
+#include <KiwiModel/KiwiModel_ObjectClass.h>
 
 namespace kiwi { namespace model {
     
@@ -104,7 +105,7 @@ namespace kiwi { namespace model {
         return false;
     }
     
-    Factory::ObjectClassBase* Factory::getClassByName(std::string const& name,
+    ObjectClassBase* Factory::getClassByName(std::string const& name,
                                                       const bool ignore_aliases)
     {
         const auto& object_classes = getClasses();
@@ -117,7 +118,7 @@ namespace kiwi { namespace model {
         return nullptr;
     }
     
-    Factory::ObjectClassBase* Factory::getClassByModelName(std::string const& data_model_name,
+    ObjectClassBase* Factory::getClassByModelName(std::string const& data_model_name,
                                                            const bool ignore_aliases)
     {
         const auto& object_classes = getClasses();
@@ -153,115 +154,10 @@ namespace kiwi { namespace model {
         return names;
     }
     
-    std::string Factory::sanitizeName(std::string const& name)
-    {
-        std::string model_name = "cicm.kiwi.object.";
-        
-        static const std::string valid_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_.");
-        
-        for(auto const& c : name)
-        {
-            if(c == '~')
-            {
-                model_name.append("_tilde");
-                continue;
-            }
-            
-            model_name += (valid_chars.find(c) != std::string::npos) ? c : '_';
-        }
-        
-        return model_name;
-    }
-    
     auto Factory::getClasses() -> object_classes_t&
     {
         static object_classes_t static_object_classes;
         return static_object_classes;
     }
     
-    // ================================================================================ //
-    //                             FACTORY OBJECT CLASS BASE                            //
-    // ================================================================================ //
-    
-    Factory::ObjectClassBase::ObjectClassBase(std::string const& name,
-                                              std::string const& model_name,
-                                              const ctor_fn_t ctor,
-                                              const mold_maker_fn_t mold_maker,
-                                              const mold_caster_fn_t  mold_caster)
-    : m_name(name)
-    , m_model_name(model_name)
-    , m_ctor(ctor)
-    , m_mold_maker(mold_maker)
-    , m_mold_caster(mold_caster)
-    {
-        ;
-    }
-    
-    std::string const& Factory::ObjectClassBase::getClassName() const
-    {
-        return m_name;
-    }
-    
-    std::string const& Factory::ObjectClassBase::getDataModelName() const
-    {
-        return m_model_name;
-    }
-    
-    bool Factory::ObjectClassBase::isInternal() const noexcept
-    {
-        return m_internal;
-    }
-    
-    void Factory::ObjectClassBase::setInternal(const bool is_internal) noexcept
-    {
-        m_internal = is_internal;
-    }
-    
-    bool Factory::ObjectClassBase::hasAlias() const noexcept
-    {
-        return !m_aliases.empty();
-    }
-    
-    std::set<std::string> const& Factory::ObjectClassBase::getAliases() const noexcept
-    {
-        return m_aliases;
-    }
-    
-    bool Factory::ObjectClassBase::hasAlias(std::string const& alias) const noexcept
-    {
-        return (m_aliases.count(alias) != 0);
-    }
-    
-    void Factory::ObjectClassBase::addAlias(std::string alias)
-    {
-        if(!Factory::has(alias))
-        {
-            m_aliases.emplace(std::move(alias));
-        }
-    }
-    
-    std::unique_ptr<model::Object> Factory::ObjectClassBase::create(std::vector<Atom> const& args) const
-    {
-        return create(getClassName(), args);
-    }
-    
-    std::unique_ptr<model::Object> Factory::ObjectClassBase::create(std::string const& typed_name,
-                                                                    std::vector<Atom> const& args) const
-    {
-        auto object = m_ctor(typed_name, args);
-        object->m_class = this;
-        return object;
-    }
-    
-    void Factory::ObjectClassBase::moldMake(model::Object const& object, flip::Mold& mold) const
-    {
-        m_mold_maker(object, mold);
-    }
-    
-    std::unique_ptr<model::Object> Factory::ObjectClassBase::moldCast(flip::Mold const& mold) const
-    {
-        auto object = m_mold_caster(mold);
-        object->m_class = this;
-        return object;
-    }
 }}

@@ -181,7 +181,7 @@ namespace kiwi
             ;
         }
         
-        Factory::ObjectClassBase const* Object::getClass() const
+        ObjectClassBase const* Object::getClass() const
         {
             if(m_class == nullptr)
             {

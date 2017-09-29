@@ -35,14 +35,13 @@
 #include "flip/Enum.h"
 #include "flip/Signal.h"
 
-#include "KiwiModel_Atom.h"
+#include <KiwiModel/KiwiModel_Atom.h>
+#include <KiwiModel/KiwiModel_Factory.h>
 
 #include <mutex>
 #include <algorithm>
 #include <exception>
 #include <set>
-
-#include <KiwiModel/KiwiModel_Factory.h>
 
 namespace kiwi
 {
@@ -171,7 +170,7 @@ namespace kiwi
             
             //! @brief Returns the model::Factory::ObjectClassBase.
             //! @details This method will assert if this object was not created by flip or via the object's Factory.
-            Factory::ObjectClassBase const* getClass() const;
+            ObjectClassBase const* getClass() const;
             
             //! @brief Returns the class name of the object.
             //! @brief the classname is the name of the object as declared in the object Factory for this object class.
@@ -306,7 +305,7 @@ namespace kiwi
             
             std::map<SignalKey, std::unique_ptr<flip::SignalBase>> m_signals;
 
-            mutable Factory::ObjectClassBase const* m_class = nullptr;
+            mutable ObjectClassBase const* m_class = nullptr;
             
             flip::String        m_typed_name;
             flip::String        m_additional_text;
@@ -319,7 +318,7 @@ namespace kiwi
             flip::Float         m_width;
             flip::Float         m_height;
             
-            friend class Factory;
+            friend class ObjectClassBase;
         
         private: // deleted methods
             
