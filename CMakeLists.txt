@@ -510,7 +510,7 @@ endif()
 
 # Tests Target
 
-add_custom_target(Tests ALL DEPENDS test_dsp test_model test_engine test_network)
+add_custom_target(Tests ALL DEPENDS test_dsp test_model test_engine test_server test_network)
 set_target_properties(Tests PROPERTIES FOLDER Test)
 
 add_custom_command(TARGET Tests
