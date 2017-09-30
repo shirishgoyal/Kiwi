@@ -42,7 +42,7 @@ namespace kiwi { namespace core {
     }
     
     template <class TElem>
-    void ConcurrentQueue<TElem>::ConcurrentQueue<TElem>::push(TElem const& value)
+    void ConcurrentQueue<TElem>::push(TElem const& value)
     {
         if(m_queue.enqueue(value))
         {
