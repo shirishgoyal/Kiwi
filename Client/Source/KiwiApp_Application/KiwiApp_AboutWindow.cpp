@@ -21,7 +21,7 @@
 
 #include "KiwiApp_AboutWindow.h"
 
-#include <KiwiModel/KiwiModel_DataModel.h>
+#include <KiwiModel/Kiwi_DataModel.h>
 
 #include "../KiwiApp.h"
 

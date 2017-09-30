@@ -24,8 +24,8 @@
 #include "flip/Document.h"
 #include "flip/DocumentObserver.h"
 
-#include <KiwiModel/KiwiModel_PatcherUser.h>
-#include <KiwiModel/KiwiModel_PatcherValidator.h>
+#include <KiwiModel/Kiwi_PatcherUser.h>
+#include <KiwiModel/Kiwi_PatcherValidator.h>
 
 #include <juce_gui_extra/juce_gui_extra.h>
 

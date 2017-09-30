@@ -21,7 +21,7 @@
 
 #include <functional>
 
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Toggle.h>
+#include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Toggle.h>
 
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Controller/KiwiEngine_Toggle.h>
 

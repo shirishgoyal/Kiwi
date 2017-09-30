@@ -23,7 +23,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include <KiwiModel/KiwiModel_Patcher.h>
+#include <KiwiModel/Kiwi_Patcher.h>
 
 #include "KiwiApp_PatcherViewport.h"
 #include "KiwiApp_PatcherViewHitTester.h"

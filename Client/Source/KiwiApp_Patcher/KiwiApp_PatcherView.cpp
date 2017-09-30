@@ -19,9 +19,9 @@
  ==============================================================================
  */
 
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Objects.h>
-#include <KiwiModel/KiwiModel_DataModel.h>
-#include <KiwiModel/KiwiModel_Factory.h>
+#include <KiwiModel/Kiwi_Objects/Kiwi_Objects.h>
+#include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_Factory.h>
 
 #include "KiwiApp_PatcherView.h"
 

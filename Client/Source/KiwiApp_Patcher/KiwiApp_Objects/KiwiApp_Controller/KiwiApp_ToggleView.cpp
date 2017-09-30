@@ -24,7 +24,7 @@
 
 #include <KiwiApp.h>
 
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Toggle.h>
+#include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Toggle.h>
 
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_Controller/KiwiApp_ToggleView.h>
 

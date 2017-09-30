@@ -29,7 +29,7 @@
 
 #include <KiwiCore/Kiwi_Scheduler.h>
 
-#include <KiwiModel/KiwiModel_Object.h>
+#include <KiwiModel/Kiwi_Object.h>
 
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_ObjectView.h>
 

@@ -26,7 +26,7 @@
 
 #include <flip/Signal.h>
 
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Toggle.h>
+#include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Toggle.h>
 
 #include <KiwiCore/Kiwi_ConcurrentQueue.h>
 #include <KiwiCore/Kiwi_Scheduler.h>

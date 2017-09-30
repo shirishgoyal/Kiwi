@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <KiwiModel/KiwiModel_Link.h>
+#include <KiwiModel/Kiwi_Link.h>
 
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_ObjectFrame.h>
 

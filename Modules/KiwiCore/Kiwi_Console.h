@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <KiwiModel/KiwiModel_Atom.h>
+#include <KiwiModel/Kiwi_Atom.h>
 #include <KiwiCore/Kiwi_Listeners.h>
 
 namespace kiwi { namespace core {

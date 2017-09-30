@@ -19,7 +19,7 @@
  ==============================================================================
  */
 
-#include <KiwiModel/KiwiModel_DataModel.h>
+#include <KiwiModel/Kiwi_DataModel.h>
 #include <KiwiServer/KiwiServer_Server.h>
 #include "KiwiServer_CommandLineParser.h"
 

@@ -19,7 +19,7 @@
  ==============================================================================
  */
 
-#include <KiwiModel/KiwiModel_DataModel.h>
+#include <KiwiModel/Kiwi_DataModel.h>
 
 #include <KiwiEngine/KiwiEngine_Patcher.h>
 #include <KiwiEngine/KiwiEngine_Instance.h>

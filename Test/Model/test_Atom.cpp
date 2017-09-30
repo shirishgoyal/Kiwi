@@ -23,7 +23,7 @@
 
 #include "../catch.hpp"
 
-#include <KiwiModel/KiwiModel_Atom.h>
+#include <KiwiModel/Kiwi_Atom.h>
 
 using namespace kiwi;
 

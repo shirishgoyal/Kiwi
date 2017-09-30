@@ -26,8 +26,8 @@
 #include <flip/contrib/transport_tcp/PortTransportServerTcp.h>
 #include <flip/DocumentServer.h>
 
-#include <KiwiModel/KiwiModel_PatcherUser.h>
-#include <KiwiModel/KiwiModel_PatcherValidator.h>
+#include <KiwiModel/Kiwi_PatcherUser.h>
+#include <KiwiModel/Kiwi_PatcherValidator.h>
 
 #include <juce_core/juce_core.h>
 

@@ -24,8 +24,8 @@
 #include <memory>
 #include <vector>
 
-#include <KiwiModel/KiwiModel_Object.h>
-#include <KiwiModel/KiwiModel_Atom.h>
+#include <KiwiModel/Kiwi_Object.h>
+#include <KiwiModel/Kiwi_Atom.h>
 
 #include <KiwiEngine/KiwiEngine_Object.h>
 

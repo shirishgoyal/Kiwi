@@ -27,7 +27,7 @@
 #include <flip/contrib/DataConsumerFile.h>
 #include <flip/contrib/RunLoopTimer.h>
 
-#include <KiwiModel/KiwiModel_DataModel.h>
+#include <KiwiModel/Kiwi_DataModel.h>
 
 namespace kiwi
 {

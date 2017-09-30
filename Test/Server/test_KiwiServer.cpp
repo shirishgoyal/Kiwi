@@ -23,7 +23,7 @@
 
 #include "../catch.hpp"
 
-#include <KiwiModel/KiwiModel_DataModel.h>
+#include <KiwiModel/Kiwi_DataModel.h>
 
 int main( int argc, char* const argv[] )
 {

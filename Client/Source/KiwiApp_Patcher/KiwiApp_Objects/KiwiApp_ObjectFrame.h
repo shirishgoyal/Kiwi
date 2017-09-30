@@ -26,7 +26,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include <KiwiModel/KiwiModel_Patcher.h>
+#include <KiwiModel/Kiwi_Patcher.h>
 
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_Basic/KiwiApp_ClassicView.h>
 #include <KiwiApp_Patcher/KiwiApp_PatcherView.h>

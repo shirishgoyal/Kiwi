@@ -23,7 +23,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include <KiwiModel/KiwiModel_Object.h>
+#include <KiwiModel/Kiwi_Object.h>
 
 namespace kiwi
 {

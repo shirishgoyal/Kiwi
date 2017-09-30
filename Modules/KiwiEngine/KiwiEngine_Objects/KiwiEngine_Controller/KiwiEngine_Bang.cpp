@@ -19,7 +19,7 @@
  ==============================================================================
  */
 
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Bang.h>
+#include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Bang.h>
 
 #include <KiwiCore/Kiwi_Scheduler.h>
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Controller/KiwiEngine_Bang.h>

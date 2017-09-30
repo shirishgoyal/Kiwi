@@ -19,8 +19,8 @@
  ==============================================================================
  */
 
-#include <KiwiModel/KiwiModel_Factory.h>
-#include <KiwiModel/KiwiModel_Object.h>
+#include <KiwiModel/Kiwi_Factory.h>
+#include <KiwiModel/Kiwi_Object.h>
 
 #include "KiwiEngine_Factory.h"
 

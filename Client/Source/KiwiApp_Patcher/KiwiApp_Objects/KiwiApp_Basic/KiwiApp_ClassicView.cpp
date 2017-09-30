@@ -19,7 +19,7 @@
  ==============================================================================
  */
 
-#include <KiwiModel/KiwiModel_Factory.h>
+#include <KiwiModel/Kiwi_Factory.h>
 
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_Basic/KiwiApp_ClassicView.h>
 

@@ -29,7 +29,7 @@
 #include <exception>
 #include <functional>
 
-#include <KiwiModel/KiwiModel_Atom.h>
+#include <KiwiModel/Kiwi_Atom.h>
 
 #include <KiwiCore/Kiwi_Scheduler.h>
 

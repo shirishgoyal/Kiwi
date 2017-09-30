@@ -29,8 +29,8 @@
 #include <KiwiCore/Kiwi_Scheduler.h>
 #include <KiwiCore/Kiwi_ConcurrentQueue.h>
 
-#include <KiwiModel/KiwiModel_Object.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Toggle.h>
+#include <KiwiModel/Kiwi_Object.h>
+#include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Toggle.h>
 
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_ObjectView.h>
 

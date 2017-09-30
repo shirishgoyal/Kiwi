@@ -23,7 +23,7 @@
 
 #include "KiwiApp_CarrierSocket.h"
 
-#include <KiwiModel/KiwiModel_PatcherUser.h>
+#include <KiwiModel/Kiwi_PatcherUser.h>
 
 namespace kiwi
 {

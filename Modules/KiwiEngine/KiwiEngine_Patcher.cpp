@@ -26,7 +26,7 @@
 #include "KiwiEngine_Instance.h"
 #include <KiwiCore/Kiwi_Scheduler.h>
 
-#include <KiwiModel/KiwiModel_PatcherUser.h>
+#include <KiwiModel/Kiwi_PatcherUser.h>
 
 namespace kiwi
 {
