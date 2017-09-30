@@ -23,55 +23,53 @@
 
 #include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Toggle.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT TOGGLE                                   //
+    // ================================================================================ //
+    
+    Toggle::Toggle(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT TOGGLE                                   //
-        // ================================================================================ //
-        
-        Toggle::Toggle(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if (!args.empty())
         {
-            if (!args.empty())
-            {
-                throw std::runtime_error("wrong arguments for object bang");
-            }
-            
-            setFlag(Flag::DefinedSize);
-            addSignal<Toggle::Request, bool>(Signal::Switch, *this);
-            setWidth(20);
-            setHeight(20);
-            pushInlet({PinType::IType::Control});
-            pushOutlet(PinType::IType::Control);
+            throw std::runtime_error("wrong arguments for object bang");
         }
         
-        Toggle::Toggle(flip::Default& d):
-        Object(d)
+        setFlag(Flag::DefinedSize);
+        addSignal<Toggle::Request, bool>(Signal::Switch, *this);
+        setWidth(20);
+        setHeight(20);
+        pushInlet({PinType::IType::Control});
+        pushOutlet(PinType::IType::Control);
+    }
+    
+    Toggle::Toggle(flip::Default& d):
+    Object(d)
+    {
+        addSignal<Toggle::Request, bool>(Signal::Switch, *this);
+    }
+    
+    void Toggle::declare()
+    {
+        Factory::add<Toggle>("toggle");
+    }
+    
+    std::string Toggle::getIODescription(bool is_inlet, size_t index) const
+    {
+        if (is_inlet && index == 0)
         {
-            addSignal<Toggle::Request, bool>(Signal::Switch, *this);
+            return "Switches the toggle on or of";
         }
-        
-        void Toggle::declare()
+        else if(!is_inlet && index == 0)
         {
-            Factory::add<Toggle>("toggle");
+            return "Sends 0 or 1 when toggle is switched on or off";
         }
-        
-        std::string Toggle::getIODescription(bool is_inlet, size_t index) const
+        else
         {
-            if (is_inlet && index == 0)
-            {
-                return "Switches the toggle on or of";
-            }
-            else if(!is_inlet && index == 0)
-            {
-                return "Sends 0 or 1 when toggle is switched on or off";
-            }
-            else
-            {
-                return "";
-            }
+            return "";
         }
     }
-}
+    
+}}

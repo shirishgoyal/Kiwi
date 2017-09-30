@@ -107,7 +107,7 @@ namespace kiwi { namespace model {
         //! @return A new model::Object.
         std::unique_ptr<model::Object> moldCast(flip::Mold const& mold) const;
         
-    private: // methods
+    protected: // methods
         
         //! @internal Returns a sanitized version of the string.
         static std::string sanitizeName(std::string const& name);

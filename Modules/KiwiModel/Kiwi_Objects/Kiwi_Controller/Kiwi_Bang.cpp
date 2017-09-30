@@ -23,55 +23,53 @@
 
 #include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Bang.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT BANG                                     //
+    // ================================================================================ //
+    
+    Bang::Bang(std::string const& name, std::vector<Atom> const& args):
+    Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT BANG                                     //
-        // ================================================================================ //
-        
-        Bang::Bang(std::string const& name, std::vector<Atom> const& args):
-        Object(name, args)
+        if (!args.empty())
         {
-            if (!args.empty())
-            {
-                throw std::runtime_error("wrong arguments for object bang");
-            }
-            
-            setFlag(Flag::DefinedSize);
-            addSignal<>(Signal::TriggerBang, *this);
-            setWidth(20);
-            setHeight(20);
-            pushInlet({PinType::IType::Control});
-            pushOutlet(PinType::IType::Control);
+            throw std::runtime_error("wrong arguments for object bang");
         }
         
-        Bang::Bang(flip::Default& d):
-        Object(d)
+        setFlag(Flag::DefinedSize);
+        addSignal<>(Signal::TriggerBang, *this);
+        setWidth(20);
+        setHeight(20);
+        pushInlet({PinType::IType::Control});
+        pushOutlet(PinType::IType::Control);
+    }
+    
+    Bang::Bang(flip::Default& d):
+    Object(d)
+    {
+        addSignal<>(Signal::TriggerBang, *this);
+    }
+    
+    void Bang::declare()
+    {
+        Factory::add<Bang>("bang");
+    }
+    
+    std::string Bang::getIODescription(bool is_inlet, size_t index) const
+    {
+        if (is_inlet && index == 0)
         {
-            addSignal<>(Signal::TriggerBang, *this);
+            return "Makes the object flash and sends bang through first outlet";
         }
-        
-        void Bang::declare()
+        else if(!is_inlet && index == 0)
         {
-            Factory::add<Bang>("bang");
+            return "Sends bang";
         }
-        
-        std::string Bang::getIODescription(bool is_inlet, size_t index) const
+        else
         {
-            if (is_inlet && index == 0)
-            {
-                return "Makes the object flash and sends bang through first outlet";
-            }
-            else if(!is_inlet && index == 0)
-            {
-                return "Sends bang";
-            }
-            else
-            {
-                return "";
-            }
+            return "";
         }
     }
-}
+    
+}}

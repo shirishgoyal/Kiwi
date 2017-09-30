@@ -19,62 +19,60 @@
  ==============================================================================
  */
 
-#include "Kiwi_PatcherValidator.h"
+#include <KiwiModel/Kiwi_PatcherValidator.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                   PATCHER VALIDATOR                              //
+    // ================================================================================ //
+    
+    void PatcherValidator::validate(Patcher & patcher)
     {
-        // ================================================================================ //
-        //                                   PATCHER VALIDATOR                              //
-        // ================================================================================ //
-        
-        void PatcherValidator::validate(Patcher & patcher)
+        if (patcher.changed())
         {
-            if (patcher.changed())
+            if (patcher.objectsChanged())
             {
-                if (patcher.objectsChanged())
+                for(Object const& object : patcher.getObjects())
                 {
-                    for(Object const& object : patcher.getObjects())
+                    if(object.removed())
                     {
-                        if(object.removed())
-                        {
-                            objectRemoved(object, patcher);
-                        }
-                    }
-                }
-                
-                if (patcher.linksChanged())
-                {
-                    for(Link const& link : patcher.getLinks())
-                    {
-                        if(link.added())
-                        {
-                            linkAdded(link);
-                        }
+                        objectRemoved(object, patcher);
                     }
                 }
             }
-        }
-        
-        void PatcherValidator::objectRemoved(Object const& object, Patcher const& patcher) const
-        {
-            for(Link const& link : patcher.getLinks())
+            
+            if (patcher.linksChanged())
             {
-                if((link.getSenderObject().ref() == object.ref() || link.getReceiverObject().ref() == object.ref())
-                   && !link.removed())
+                for(Link const& link : patcher.getLinks())
                 {
-                    flip_VALIDATION_FAILED ("Removing object without removing its links");
+                    if(link.added())
+                    {
+                        linkAdded(link);
+                    }
                 }
-            }
-        }
-        
-        void PatcherValidator::linkAdded(Link const& link) const
-        {
-            if(!link.isSenderValid() || !link.isReceiverValid())
-            {
-                flip_VALIDATION_FAILED ("Creating link to non existing object");
             }
         }
     }
-}
+    
+    void PatcherValidator::objectRemoved(Object const& object, Patcher const& patcher) const
+    {
+        for(Link const& link : patcher.getLinks())
+        {
+            if((link.getSenderObject().ref() == object.ref() || link.getReceiverObject().ref() == object.ref())
+               && !link.removed())
+            {
+                flip_VALIDATION_FAILED ("Removing object without removing its links");
+            }
+        }
+    }
+    
+    void PatcherValidator::linkAdded(Link const& link) const
+    {
+        if(!link.isSenderValid() || !link.isReceiverValid())
+        {
+            flip_VALIDATION_FAILED ("Creating link to non existing object");
+        }
+    }
+    
+}}

@@ -23,28 +23,26 @@
 
 #include <KiwiModel/Kiwi_Object.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                    OBJECT PRINT                                  //
+    // ================================================================================ //
+    
+    class Print : public model::Object
     {
-        // ================================================================================ //
-        //                                    OBJECT PRINT                                  //
-        // ================================================================================ //
+    public:
         
-        class Print : public model::Object
-        {
-        public:
-            
-            //! @brief flip Default Constructor
-            Print(flip::Default& d) : model::Object(d) {}
-            
-            //! @brief Constructor
-            Print(std::string const& name, std::vector<Atom> const& args);
-            
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            //! @internal flip static declare method
-            static void declare();
-        };
-    }
-}
+        //! @brief flip Default Constructor
+        Print(flip::Default& d) : model::Object(d) {}
+        
+        //! @brief Constructor
+        Print(std::string const& name, std::vector<Atom> const& args);
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        //! @internal flip static declare method
+        static void declare();
+    };
+    
+}}

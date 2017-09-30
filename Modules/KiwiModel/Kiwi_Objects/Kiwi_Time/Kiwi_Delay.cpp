@@ -23,56 +23,54 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT DELAY                                    //
+    // ================================================================================ //
+    
+    Delay::Delay(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT DELAY                                    //
-        // ================================================================================ //
-        
-        Delay::Delay(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if (args.size() > 1 || (args.size() == 1 && !args[0].isNumber()))
         {
-            if (args.size() > 1 || (args.size() == 1 && !args[0].isNumber()))
-            {
-                throw std::runtime_error("wrong argument for object Delay");
-            }
-            
+            throw std::runtime_error("wrong argument for object Delay");
+        }
+        
+        pushInlet({PinType::IType::Control});
+        
+        if (args.empty())
+        {
             pushInlet({PinType::IType::Control});
-            
-            if (args.empty())
-            {
-                pushInlet({PinType::IType::Control});
-            }
-            
-            pushOutlet(PinType::IType::Control);
         }
         
-        void Delay::declare()
-        {
-            Factory::add<Delay>("delay");
-        }
-        
-        std::string Delay::getIODescription(bool is_inlet, size_t index) const
-        {
-            if(is_inlet)
-            {
-                if(index == 0)
-                {
-                    return "bang gets delayed, message \"stop\" cancels";
-                }
-                else if(index == 1)
-                {
-                    return "Set delay time";
-                }
-            }
-            else
-            {
-                return "Delayed bang";
-            }
-            
-            return {};
-        }
+        pushOutlet(PinType::IType::Control);
     }
-}
+    
+    void Delay::declare()
+    {
+        Factory::add<Delay>("delay");
+    }
+    
+    std::string Delay::getIODescription(bool is_inlet, size_t index) const
+    {
+        if(is_inlet)
+        {
+            if(index == 0)
+            {
+                return "bang gets delayed, message \"stop\" cancels";
+            }
+            else if(index == 1)
+            {
+                return "Set delay time";
+            }
+        }
+        else
+        {
+            return "Delayed bang";
+        }
+        
+        return {};
+    }
+    
+}}

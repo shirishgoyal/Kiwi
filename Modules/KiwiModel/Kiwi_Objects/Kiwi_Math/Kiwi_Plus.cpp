@@ -23,35 +23,33 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                    OBJECT PLUS                                   //
+    // ================================================================================ //
+    
+    void Plus::declare()
     {
-        // ================================================================================ //
-        //                                    OBJECT PLUS                                   //
-        // ================================================================================ //
+        Factory::add<Plus>("plus").addAlias("+");
+    }
+    
+    Plus::Plus(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
+    {
+        pushInlet({PinType::IType::Control});
         
-        void Plus::declare()
-        {
-            Factory::add<Plus>("plus").addAlias("+");
-        }
-        
-        Plus::Plus(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if (args.empty() || !args[0].isNumber())
         {
             pushInlet({PinType::IType::Control});
-            
-            if (args.empty() || !args[0].isNumber())
-            {
-                pushInlet({PinType::IType::Control});
-            }
-            
-            pushOutlet(PinType::IType::Control);
         }
         
-        std::string Plus::getIODescription(bool is_inlet, size_t index) const
-        {
-            return is_inlet ? (index == 0) ? "Left operand" : "Right operand" : "Result";
-        }
+        pushOutlet(PinType::IType::Control);
     }
-}
+    
+    std::string Plus::getIODescription(bool is_inlet, size_t index) const
+    {
+        return is_inlet ? (index == 0) ? "Left operand" : "Right operand" : "Result";
+    }
+    
+}}

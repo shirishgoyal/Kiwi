@@ -23,47 +23,45 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT OSC~                                     //
+    // ================================================================================ //
+    
+    OscTilde::OscTilde(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT OSC~                                     //
-        // ================================================================================ //
+        pushInlet({PinType::IType::Control, PinType::IType::Signal});
+        pushInlet({PinType::IType::Control, PinType::IType::Signal});
         
-        OscTilde::OscTilde(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
-        {
-            pushInlet({PinType::IType::Control, PinType::IType::Signal});
-            pushInlet({PinType::IType::Control, PinType::IType::Signal});
-            
-            pushOutlet(PinType::IType::Signal);
-        }
-        
-        void OscTilde::declare()
-        {
-            Factory::add<OscTilde>("osc~");
-        }
-        
-        std::string OscTilde::getIODescription(bool is_inlet, size_t index) const
-        {
-            if(is_inlet)
-            {
-                if(index == 0)
-                {
-                    return "(signal/float) Set frequency";
-                }
-                else if(index == 1)
-                {
-                    return "(signal/float) Set phase (0-1)";
-                }
-            }
-            else
-            {
-                return "(signal) Output";
-            }
-            
-            return {};
-        }
+        pushOutlet(PinType::IType::Signal);
     }
-}
+    
+    void OscTilde::declare()
+    {
+        Factory::add<OscTilde>("osc~");
+    }
+    
+    std::string OscTilde::getIODescription(bool is_inlet, size_t index) const
+    {
+        if(is_inlet)
+        {
+            if(index == 0)
+            {
+                return "(signal/float) Set frequency";
+            }
+            else if(index == 1)
+            {
+                return "(signal/float) Set phase (0-1)";
+            }
+        }
+        else
+        {
+            return "(signal) Output";
+        }
+        
+        return {};
+    }
+    
+}}

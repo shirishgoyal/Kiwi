@@ -23,36 +23,34 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                       NEWBOX                                     //
+    // ================================================================================ //
+    
+    void NewBox::declare()
     {
-        // ================================================================================ //
-        //                                       NEWBOX                                     //
-        // ================================================================================ //
-        
-        void NewBox::declare()
-        {
-            Factory::add<NewBox>("newbox").setInternal(true);
-        }
-        
-        NewBox::NewBox() : model::Object("", std::vector<Atom>())
-        {
-            setFlag(Flag::DefinedSize);
-            setWidth(80);
-            setHeight(20);
-            pushInlet({PinType::IType::Control});
-        }
-        
-        NewBox::NewBox(std::string const& name, std::vector<Atom> const& args)
-        : NewBox()
-        {
-            ;
-        }
-        
-        std::string NewBox::getIODescription(bool is_inlet, size_t index) const
-        {
-            return "(nothing here)";
-        }
+        Factory::add<NewBox>("newbox").setInternal(true);
     }
-}
+    
+    NewBox::NewBox() : model::Object("", std::vector<Atom>())
+    {
+        setFlag(Flag::DefinedSize);
+        setWidth(80);
+        setHeight(20);
+        pushInlet({PinType::IType::Control});
+    }
+    
+    NewBox::NewBox(std::string const& name, std::vector<Atom> const& args)
+    : NewBox()
+    {
+        ;
+    }
+    
+    std::string NewBox::getIODescription(bool is_inlet, size_t index) const
+    {
+        return "(nothing here)";
+    }
+    
+}}

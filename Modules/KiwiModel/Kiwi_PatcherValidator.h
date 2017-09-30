@@ -23,39 +23,37 @@
 
 #include "flip/DocumentValidator.h"
 
-#include "Kiwi_PatcherUser.h"
+#include <KiwiModel/Kiwi_PatcherUser.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                      PATCHERVALIDATOR                            //
+    // ================================================================================ //
+    
+    class PatcherValidator : public flip::DocumentValidator<Patcher>
     {
-        // ================================================================================ //
-        //                                      PATCHERVALIDATOR                            //
-        // ================================================================================ //
+    public: // methods
         
-        class PatcherValidator : public flip::DocumentValidator<Patcher>
-        {
-        public: // methods
-            
-            PatcherValidator() = default;
-            ~PatcherValidator() = default;
-            
-            // @brief Validate the model before a transaction can be executed.
-            virtual void validate (Patcher& patcher) override;
-            
-        private: // methods
-            
-            //! @brief Carry out checks once a object is removed.
-            void objectRemoved(Object const& object, Patcher const& patcher) const;
-            
-            //! @brief Carry out checks once a link is created.
-            void linkAdded(Link const& link) const;
-            
-        private: // deleted methods
-            PatcherValidator(PatcherValidator const& other) = delete;
-            PatcherValidator(PatcherValidator && other) = delete;
-            PatcherValidator& operator=(PatcherValidator const& other) = delete;
-            PatcherValidator& operator=(PatcherValidator && other) = delete;
-        };
-    }
-}
+        PatcherValidator() = default;
+        ~PatcherValidator() = default;
+        
+        // @brief Validate the model before a transaction can be executed.
+        virtual void validate (Patcher& patcher) override;
+        
+    private: // methods
+        
+        //! @brief Carry out checks once a object is removed.
+        void objectRemoved(Object const& object, Patcher const& patcher) const;
+        
+        //! @brief Carry out checks once a link is created.
+        void linkAdded(Link const& link) const;
+        
+    private: // deleted methods
+        PatcherValidator(PatcherValidator const& other) = delete;
+        PatcherValidator(PatcherValidator && other) = delete;
+        PatcherValidator& operator=(PatcherValidator const& other) = delete;
+        PatcherValidator& operator=(PatcherValidator && other) = delete;
+    };
+    
+}}

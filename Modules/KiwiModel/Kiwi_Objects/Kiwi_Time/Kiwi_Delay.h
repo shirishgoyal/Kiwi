@@ -23,28 +23,26 @@
 
 #include <KiwiModel/Kiwi_Object.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                      OBJECT DELAY                                //
+    // ================================================================================ //
+    
+    class Delay : public model::Object
     {
-        // ================================================================================ //
-        //                                      OBJECT DELAY                                //
-        // ================================================================================ //
+    public: // methods
         
-        class Delay : public model::Object
-        {
-        public: // methods
-            
-            //! @brief flip Default Constructor
-            Delay(flip::Default& d) : model::Object(d) {};
-            
-            //! @brief Constructor
-            Delay(std::string const& name, std::vector<Atom> const& args);
-            
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            //! @internal flip static declare method
-            static void declare();
-        };
-    }
-}
+        //! @brief flip Default Constructor
+        Delay(flip::Default& d) : model::Object(d) {};
+        
+        //! @brief Constructor
+        Delay(std::string const& name, std::vector<Atom> const& args);
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        //! @internal flip static declare method
+        static void declare();
+    };
+    
+}}

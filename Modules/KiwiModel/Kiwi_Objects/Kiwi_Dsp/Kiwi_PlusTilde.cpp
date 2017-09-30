@@ -23,35 +23,33 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT PLUS~                                    //
+    // ================================================================================ //
+    
+    PlusTilde::PlusTilde(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT PLUS~                                    //
-        // ================================================================================ //
+        pushInlet({PinType::IType::Signal});
         
-        PlusTilde::PlusTilde(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if (args.empty() || !args[0].isNumber())
         {
-            pushInlet({PinType::IType::Signal});
-            
-            if (args.empty() || !args[0].isNumber())
-            {
-                pushInlet({PinType::IType::Signal, PinType::IType::Control});
-            }
-            
-            pushOutlet(PinType::IType::Signal);
+            pushInlet({PinType::IType::Signal, PinType::IType::Control});
         }
         
-        void PlusTilde::declare()
-        {
-            Factory::add<PlusTilde>("plus~").addAlias("+~");
-        }
-        
-        std::string PlusTilde::getIODescription(bool is_inlet, size_t index) const
-        {
-            return is_inlet ? (index == 0) ? "(signal) Left operand" : "(signal) Right operand" : "(signal) Output";
-        }
+        pushOutlet(PinType::IType::Signal);
     }
-}
+    
+    void PlusTilde::declare()
+    {
+        Factory::add<PlusTilde>("plus~").addAlias("+~");
+    }
+    
+    std::string PlusTilde::getIODescription(bool is_inlet, size_t index) const
+    {
+        return is_inlet ? (index == 0) ? "(signal) Left operand" : "(signal) Right operand" : "(signal) Output";
+    }
+    
+}}

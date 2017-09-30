@@ -23,28 +23,26 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                    OBJECT PRINT                                  //
+    // ================================================================================ //
+    
+    Print::Print(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                    OBJECT PRINT                                  //
-        // ================================================================================ //
-        
-        Print::Print(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
-        {
-            pushInlet({PinType::IType::Control});
-        }
-        
-        void Print::declare()
-        {
-            Factory::add<Print>("print");
-        }
-        
-        std::string Print::getIODescription(bool is_inlet, size_t index) const
-        {
-            return "Message to post in the Kiwi console";
-        }
+        pushInlet({PinType::IType::Control});
     }
-}
+    
+    void Print::declare()
+    {
+        Factory::add<Print>("print");
+    }
+    
+    std::string Print::getIODescription(bool is_inlet, size_t index) const
+    {
+        return "Message to post in the Kiwi console";
+    }
+    
+}}

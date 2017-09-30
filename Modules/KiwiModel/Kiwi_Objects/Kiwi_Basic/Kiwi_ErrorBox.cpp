@@ -23,57 +23,55 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                      ERRORBOX                                    //
+    // ================================================================================ //
+    
+    void ErrorBox::declare()
     {
-        // ================================================================================ //
-        //                                      ERRORBOX                                    //
-        // ================================================================================ //
+        //DataModel::declare<ErrorBox>()
+        //.name("cicm.kiwi.patch.boxes.ErrorBox")
+        //.inherit<model::Object>();
         
-        void ErrorBox::declare()
-        {
-            DataModel::declare<ErrorBox>()
-            .name("cicm.kiwi.patch.boxes.ErrorBox")
-            .inherit<model::Object>();
-            
-            Factory::add<ErrorBox>("errorbox").setInternal(true);
-        }
-        
-        ErrorBox::ErrorBox(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
-        {
-        }
-        
-        ErrorBox::ErrorBox(std::string const& name, std::vector<Atom> const& args, std::string const& err_message)
-        : model::Object(name, args)
-        , m_error(err_message)
-        {
-        }
-        
-        void ErrorBox::setInlets(flip::Array<Inlet> const& inlets)
-        {
-            model::Object::setInlets(inlets);
-        }
-        
-        void ErrorBox::setOutlets(flip::Array<Outlet> const& outlets)
-        {
-            model::Object::setOutlets(outlets);
-        }
-        
-        std::string ErrorBox::getIODescription(bool is_inlet, size_t index) const
-        {
-            return "(nothing here)";
-        }
-        
-        void ErrorBox::setError(std::string const& error_message)
-        {
-            m_error = error_message;
-        }
-        
-        std::string ErrorBox::getError() const
-        {
-            return m_error;
-        }
+        Factory::add<ErrorBox>("errorbox").setInternal(true);
     }
-}
+    
+    ErrorBox::ErrorBox(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
+    {
+    }
+    
+    ErrorBox::ErrorBox(std::string const& name, std::vector<Atom> const& args, std::string const& err_message)
+    : model::Object(name, args)
+    , m_error(err_message)
+    {
+    }
+    
+    void ErrorBox::setInlets(flip::Array<Inlet> const& inlets)
+    {
+        model::Object::setInlets(inlets);
+    }
+    
+    void ErrorBox::setOutlets(flip::Array<Outlet> const& outlets)
+    {
+        model::Object::setOutlets(outlets);
+    }
+    
+    std::string ErrorBox::getIODescription(bool is_inlet, size_t index) const
+    {
+        return "(nothing here)";
+    }
+    
+    void ErrorBox::setError(std::string const& error_message)
+    {
+        m_error = error_message;
+    }
+    
+    std::string ErrorBox::getError() const
+    {
+        return m_error;
+    }
+    
+}}

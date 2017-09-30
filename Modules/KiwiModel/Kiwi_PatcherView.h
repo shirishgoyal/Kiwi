@@ -21,150 +21,148 @@
 
 #pragma once
 
-#include "Kiwi_PatcherUser.h"
+#include <KiwiModel/Kiwi_PatcherUser.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                   PATCHER VIEW                                   //
+    // ================================================================================ //
+    
+    //! @brief The Patcher::View class holds the informations about a view of a Patcher.
+    class Patcher::View : public flip::Object
     {
+    public: // methods
+        
+        //! @brief Constructor.
+        View();
+        
+        //! @brief Destructor.
+        ~View();
+        
+        //! @brief Return the parent Patcher object
+        Patcher& getPatcher();
+        
+        //! @brief Set the lock status.
+        void setLock(bool locked);
+        
+        //! @brief Returns true if the view is locked.
+        bool getLock() const noexcept;
+        
+        //! @brief Returns true if the lock status changed.
+        bool lockChanged() const noexcept;
+        
+        //! @brief Set zoom factor.
+        void setZoomFactor(double zoom_factor);
+        
+        //! @brief Returns the current zoom factor.
+        double getZoomFactor() const noexcept;
+        
+        //! @brief Returns true if the zoom factor changed.
+        bool zoomFactorChanged() const noexcept;
+        
         // ================================================================================ //
-        //                                   PATCHER VIEW                                   //
+        //                                   SELECTION                                      //
         // ================================================================================ //
         
-        //! @brief The Patcher::View class holds the informations about a view of a Patcher.
-        class Patcher::View : public flip::Object
+        //! @brief Return the selected Objects.
+        std::vector<model::Object*> getSelectedObjects();
+        
+        //! @brief Return the selected Links.
+        std::vector<model::Link*> getSelectedLinks();
+        
+        //! @brief Return true if the given Object is selected in this view.
+        bool isSelected(model::Object const& object) const;
+        
+        //! @brief Return true if the given Link is selected in this view.
+        bool isSelected(model::Link const& link) const;
+        
+        //! @brief Returns true if selection has changed.
+        bool selectionChanged() const;
+        
+        //! @brief Select an Object.
+        void selectObject(model::Object& object);
+        
+        //! @brief Select a Link.
+        void selectLink(model::Link& object);
+        
+        //! @brief Unselect an Object.
+        void unselectObject(model::Object& object);
+        
+        //! @brief Unselect a Link.
+        void unselectLink(model::Link& object);
+        
+        //! @brief Unselect all objects and links
+        void unselectAll();
+        
+        //! @brief Select all objects and links
+        void selectAll();
+        
+    public: // internal methods
+        
+        //! @internal flip Default constructor.
+        View(flip::Default&) {};
+        
+        //! @internal flip declare method
+        static void declare();
+        
+    private: // nested classes
+        
+        // ================================================================================ //
+        //                                PATCHER VIEW OBJECT                               //
+        // ================================================================================ //
+        
+        //! @internal A model::Object reference wrapper.
+        struct Object : public flip::Object
         {
         public: // methods
             
-            //! @brief Constructor.
-            View();
-            
-            //! @brief Destructor.
-            ~View();
-            
-            //! @brief Return the parent Patcher object
-            Patcher& getPatcher();
-            
-            //! @brief Set the lock status.
-            void setLock(bool locked);
-            
-            //! @brief Returns true if the view is locked.
-            bool getLock() const noexcept;
-            
-            //! @brief Returns true if the lock status changed.
-            bool lockChanged() const noexcept;
-            
-            //! @brief Set zoom factor.
-            void setZoomFactor(double zoom_factor);
-            
-            //! @brief Returns the current zoom factor.
-            double getZoomFactor() const noexcept;
-            
-            //! @brief Returns true if the zoom factor changed.
-            bool zoomFactorChanged() const noexcept;
-            
-            // ================================================================================ //
-            //                                   SELECTION                                      //
-            // ================================================================================ //
-            
-            //! @brief Return the selected Objects.
-            std::vector<model::Object*> getSelectedObjects();
-            
-            //! @brief Return the selected Links.
-            std::vector<model::Link*> getSelectedLinks();
-            
-            //! @brief Return true if the given Object is selected in this view.
-            bool isSelected(model::Object const& object) const;
-            
-            //! @brief Return true if the given Link is selected in this view.
-            bool isSelected(model::Link const& link) const;
-            
-            //! @brief Returns true if selection has changed.
-            bool selectionChanged() const;
-            
-            //! @brief Select an Object.
-            void selectObject(model::Object& object);
-            
-            //! @brief Select a Link.
-            void selectLink(model::Link& object);
-            
-            //! @brief Unselect an Object.
-            void unselectObject(model::Object& object);
-            
-            //! @brief Unselect a Link.
-            void unselectLink(model::Link& object);
-            
-            //! @brief Unselect all objects and links
-            void unselectAll();
-            
-            //! @brief Select all objects and links
-            void selectAll();
+            Object() = default;
+            ~Object() = default;
+            Object(model::Object& object);
+            model::Object* get() const;
             
         public: // internal methods
-            
-            //! @internal flip Default constructor.
-            View(flip::Default&) {};
             
             //! @internal flip declare method
             static void declare();
             
-        private: // nested classes
-            
-            // ================================================================================ //
-            //                                PATCHER VIEW OBJECT                               //
-            // ================================================================================ //
- 
-            //! @internal A model::Object reference wrapper.
-            struct Object : public flip::Object
-            {
-            public: // methods
-                
-                Object() = default;
-                ~Object() = default;
-                Object(model::Object& object);
-                model::Object* get() const;
-                
-            public: // internal methods
-                
-                //! @internal flip declare method
-                static void declare();
-                
-            private: // members
-                
-                flip::ObjectRef<model::Object> m_ref;
-            };
-            
-            // ================================================================================ //
-            //                                 PATCHER VIEW LINK                                //
-            // ================================================================================ //
-            
-            //! @internal A model::Link reference wrapper.
-            struct Link : public flip::Object
-            {
-            public: // methods
-                
-                Link() = default;
-                ~Link() = default;
-                Link(model::Link& link);
-                model::Link* get() const;
-                
-            public: // internal methods
-                
-                //! @internal flip declare method
-                static void declare();
-                
-            private: // members
-                
-                flip::ObjectRef<model::Link> m_ref;
-            };
-
         private: // members
             
-            flip::Collection<View::Object>  m_selected_objects;
-            flip::Collection<View::Link>    m_selected_links;
-            
-            flip::Bool                      m_is_locked;
-            flip::Float                     m_zoom_factor;
+            flip::ObjectRef<model::Object> m_ref;
         };
-    }
-}
+        
+        // ================================================================================ //
+        //                                 PATCHER VIEW LINK                                //
+        // ================================================================================ //
+        
+        //! @internal A model::Link reference wrapper.
+        struct Link : public flip::Object
+        {
+        public: // methods
+            
+            Link() = default;
+            ~Link() = default;
+            Link(model::Link& link);
+            model::Link* get() const;
+            
+        public: // internal methods
+            
+            //! @internal flip declare method
+            static void declare();
+            
+        private: // members
+            
+            flip::ObjectRef<model::Link> m_ref;
+        };
+        
+    private: // members
+        
+        flip::Collection<View::Object>  m_selected_objects;
+        flip::Collection<View::Link>    m_selected_links;
+        
+        flip::Bool                      m_is_locked;
+        flip::Float                     m_zoom_factor;
+    };
+    
+}}

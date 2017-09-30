@@ -23,33 +23,31 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT RECEIVE                                  //
+    // ================================================================================ //
+    
+    Receive::Receive(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT RECEIVE                                  //
-        // ================================================================================ //
-        
-        Receive::Receive(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
-        {
-            pushOutlet(PinType::IType::Control);
-        }
-        
-        void Receive::declare()
-        {
-            Factory::add<Receive>("receive").addAlias("r");
-        }
-        
-        std::string Receive::getIODescription(bool is_inlet, size_t index) const
-        {
-            if(!is_inlet)
-            {
-                return "Receive messages";
-            }
-            
-            return {};
-        }
+        pushOutlet(PinType::IType::Control);
     }
-}
+    
+    void Receive::declare()
+    {
+        Factory::add<Receive>("receive").addAlias("r");
+    }
+    
+    std::string Receive::getIODescription(bool is_inlet, size_t index) const
+    {
+        if(!is_inlet)
+        {
+            return "Receive messages";
+        }
+        
+        return {};
+    }
+    
+}}

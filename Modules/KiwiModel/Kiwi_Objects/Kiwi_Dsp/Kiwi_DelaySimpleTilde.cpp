@@ -23,57 +23,55 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                      OBJECT DELAYSIMPLE~                         //
+    // ================================================================================ //
+    
+    DelaySimpleTilde::DelaySimpleTilde(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                      OBJECT DELAYSIMPLE~                         //
-        // ================================================================================ //
-        
-        DelaySimpleTilde::DelaySimpleTilde(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if (args.size() > 0)
         {
-            if (args.size() > 0)
-            {
-                throw ("wrong argument for object delay~");
-            }
-            
-            pushInlet({PinType::IType::Control, PinType::IType::Signal});
-            pushInlet({PinType::IType::Control, PinType::IType::Signal});
-            pushInlet({PinType::IType::Control});
-            
-            pushOutlet(PinType::IType::Signal);
+            throw ("wrong argument for object delay~");
         }
         
-        void DelaySimpleTilde::declare()
-        {
-            Factory::add<DelaySimpleTilde>("delaysimple~");
-        }
+        pushInlet({PinType::IType::Control, PinType::IType::Signal});
+        pushInlet({PinType::IType::Control, PinType::IType::Signal});
+        pushInlet({PinType::IType::Control});
         
-        std::string DelaySimpleTilde::getIODescription(bool is_inlet, size_t index) const
-        {
-            if(is_inlet)
-            {
-                if(index == 0)
-                {
-                    return "(signal) Input to be delayed";
-                }
-                else if(index == 1)
-                {
-                    return "(signal/float) Delay time (ms)";
-                }
-                else if(index == 2)
-                {
-                    return "(float) Feedback (0-1)";
-                }
-            }
-            else
-            {
-                return "(signal) Delayed output signal";
-            }
-            
-            return {};
-        }
+        pushOutlet(PinType::IType::Signal);
     }
-}
+    
+    void DelaySimpleTilde::declare()
+    {
+        Factory::add<DelaySimpleTilde>("delaysimple~");
+    }
+    
+    std::string DelaySimpleTilde::getIODescription(bool is_inlet, size_t index) const
+    {
+        if(is_inlet)
+        {
+            if(index == 0)
+            {
+                return "(signal) Input to be delayed";
+            }
+            else if(index == 1)
+            {
+                return "(signal/float) Delay time (ms)";
+            }
+            else if(index == 2)
+            {
+                return "(float) Feedback (0-1)";
+            }
+        }
+        else
+        {
+            return "(signal) Delayed output signal";
+        }
+        
+        return {};
+    }
+    
+}}

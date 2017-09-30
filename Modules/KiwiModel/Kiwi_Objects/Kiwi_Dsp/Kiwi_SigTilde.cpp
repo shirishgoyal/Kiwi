@@ -23,33 +23,31 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT SIG~                                     //
+    // ================================================================================ //
+    
+    SigTilde::SigTilde(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT SIG~                                     //
-        // ================================================================================ //
-        
-        SigTilde::SigTilde(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if (args.empty() || !args[0].isNumber())
         {
-            if (args.empty() || !args[0].isNumber())
-            {
-                pushInlet({PinType::IType::Control});
-            }
-            
-            pushOutlet(PinType::IType::Signal);
+            pushInlet({PinType::IType::Control});
         }
         
-        void SigTilde::declare()
-        {
-            Factory::add<SigTilde>("sig~");
-        }
-        
-        std::string SigTilde::getIODescription(bool is_inlet, size_t index) const
-        {
-            return is_inlet ? "(float/int) Set signal value" : "(signal) Output value";
-        }
+        pushOutlet(PinType::IType::Signal);
     }
-}
+    
+    void SigTilde::declare()
+    {
+        Factory::add<SigTilde>("sig~");
+    }
+    
+    std::string SigTilde::getIODescription(bool is_inlet, size_t index) const
+    {
+        return is_inlet ? "(float/int) Set signal value" : "(signal) Output value";
+    }
+    
+}}

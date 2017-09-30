@@ -23,40 +23,38 @@
 
 #include <KiwiModel/Kiwi_Object.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT TOGGLE                                   //
+    // ================================================================================ //
+    
+    
+    class Toggle : public model::Object
     {
-        // ================================================================================ //
-        //                                  OBJECT TOGGLE                                   //
-        // ================================================================================ //
+    public: // enum
         
-        
-        class Toggle : public model::Object
+        enum Signal : SignalKey
         {
-        public: // enum
-
-            enum Signal : SignalKey
-            {
-                Switch
-            };
-            
-            enum class Request
-            {
-                Switch, // Switch state.
-                SwitchOn, // Explicitly switch on.
-                SwitchOff // Explicitly switch off.
-            };
-            
-        public: // methods
-            
-            Toggle(flip::Default& d);
-
-            Toggle(std::string const& name, std::vector<Atom> const& args);
-            
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            static void declare();
+            Switch
         };
-    }
-}
+        
+        enum class Request
+        {
+            Switch, // Switch state.
+            SwitchOn, // Explicitly switch on.
+            SwitchOff // Explicitly switch off.
+        };
+        
+    public: // methods
+        
+        Toggle(flip::Default& d);
+        
+        Toggle(std::string const& name, std::vector<Atom> const& args);
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        static void declare();
+    };
+    
+}}

@@ -24,12 +24,11 @@
 #include "flip/Mold.h"
 
 #include <KiwiModel/Kiwi_Atom.h>
+#include <KiwiModel/Kiwi_ObjectClass.h>
 
 #include <functional>
 #include <set>
 #include <vector>
-
-#include <KiwiModel/Kiwi_ObjectClass.h>
 
 namespace kiwi { namespace model {
     

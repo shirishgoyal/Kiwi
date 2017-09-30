@@ -23,56 +23,54 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                   OBJECT METRO                                   //
+    // ================================================================================ //
+    
+    Metro::Metro(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                   OBJECT METRO                                   //
-        // ================================================================================ //
-        
-        Metro::Metro(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if(!args.empty() && !args[0].isNumber())
         {
-            if(!args.empty() && !args[0].isNumber())
-            {
-                throw std::runtime_error("metro needs a number as first argument to set the interval time");
-            }
-            
+            throw std::runtime_error("metro needs a number as first argument to set the interval time");
+        }
+        
+        pushInlet({PinType::IType::Control});
+        
+        if (args.empty())
+        {
             pushInlet({PinType::IType::Control});
-            
-            if (args.empty())
-            {
-                pushInlet({PinType::IType::Control});
-            }
-            
-            pushOutlet(PinType::IType::Control);
         }
         
-        void Metro::declare()
-        {
-            Factory::add<Metro>("metro");
-        }
-        
-        std::string Metro::getIODescription(bool is_inlet, size_t index) const
-        {
-            if(is_inlet)
-            {
-                if(index == 0)
-                {
-                    return "Start/Stop metronome";
-                }
-                else if(index == 1)
-                {
-                    return "Set time interval";
-                }
-            }
-            else
-            {
-                return "Outputs metronome ticks as bang";
-            }
-            
-            return {};
-        }
+        pushOutlet(PinType::IType::Control);
     }
-}
+    
+    void Metro::declare()
+    {
+        Factory::add<Metro>("metro");
+    }
+    
+    std::string Metro::getIODescription(bool is_inlet, size_t index) const
+    {
+        if(is_inlet)
+        {
+            if(index == 0)
+            {
+                return "Start/Stop metronome";
+            }
+            else if(index == 1)
+            {
+                return "Set time interval";
+            }
+        }
+        else
+        {
+            return "Outputs metronome ticks as bang";
+        }
+        
+        return {};
+    }
+    
+}}

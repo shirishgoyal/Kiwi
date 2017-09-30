@@ -23,27 +23,25 @@
 
 #include "flip/DataModel.h"
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    //! @brief The Patcher data model.
+    class DataModel : public flip::DataModel<DataModel>
     {
-        //! @brief The Patcher data model.
-        class DataModel : public flip::DataModel<DataModel>
-        {
-        public: // methods
-            
-            //! @brief Initializes the model.
-            //! @details Declares all flip classes.
-            static void init();
-            
-        private: // methods
-            
-            //! @brief Declare all kiwi objects.
-            static void declareObjects();
-            
-        public: // members
-            
-            static bool initialised;
-        };
-    }
-}
+    public: // methods
+        
+        //! @brief Initializes the model.
+        //! @details Declares all flip classes.
+        static void init();
+        
+    private: // methods
+        
+        //! @brief Declare all kiwi objects.
+        static void declareObjects();
+        
+    public: // members
+        
+        static bool initialised;
+    };
+    
+}}

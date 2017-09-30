@@ -23,28 +23,26 @@
 
 #include <KiwiModel/Kiwi_Object.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                    OBJECT *~                                   //
+    // ================================================================================ //
+    
+    class TimesTilde : public model::Object
     {
-        // ================================================================================ //
-        //                                    OBJECT *~                                   //
-        // ================================================================================ //
+    public:
         
-        class TimesTilde : public model::Object
-        {
-        public:
-            
-            //! @brief flip Default Constructor
-            TimesTilde(flip::Default& d): model::Object(d){};
-            
-            //! @brief Constructor
-            TimesTilde(std::string const& name, std::vector<Atom> const& args);
-            
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            //! @internal flip static declare method
-            static void declare();
-        };
-    }
-}
+        //! @brief flip Default Constructor
+        TimesTilde(flip::Default& d): model::Object(d){};
+        
+        //! @brief Constructor
+        TimesTilde(std::string const& name, std::vector<Atom> const& args);
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        //! @internal flip static declare method
+        static void declare();
+    };
+    
+}}

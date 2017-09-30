@@ -24,31 +24,29 @@
 #include <KiwiModel/Kiwi_Object.h>
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                       NEWBOX                                     //
+    // ================================================================================ //
+    
+    class NewBox : public model::Object
     {
-        // ================================================================================ //
-        //                                       NEWBOX                                     //
-        // ================================================================================ //
+    public:
         
-        class NewBox : public model::Object
-        {
-        public:
-            
-            //! @brief flip Default Constructor
-            NewBox(flip::Default& d) : model::Object(d) {}
-            
-            //! @brief Constructor
-            NewBox();
-            
-            //! @brief Constructor
-            NewBox(std::string const& name, std::vector<Atom> const& args);
-            
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            //! @internal flip static declare method
-            static void declare();
-        };
-    }
-}
+        //! @brief flip Default Constructor
+        NewBox(flip::Default& d) : model::Object(d) {}
+        
+        //! @brief Constructor
+        NewBox();
+        
+        //! @brief Constructor
+        NewBox(std::string const& name, std::vector<Atom> const& args);
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        //! @internal flip static declare method
+        static void declare();
+    };
+    
+}}

@@ -23,56 +23,54 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                      OBJECT PIPE                                 //
+    // ================================================================================ //
+    
+    Pipe::Pipe(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                      OBJECT PIPE                                 //
-        // ================================================================================ //
-        
-        Pipe::Pipe(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
+        if (args.size() > 1 || (args.size() == 1 && !args[0].isNumber()))
         {
-            if (args.size() > 1 || (args.size() == 1 && !args[0].isNumber()))
-            {
-                throw std::runtime_error("wrong argument for object Pipe");
-            }
-            
+            throw std::runtime_error("wrong argument for object Pipe");
+        }
+        
+        pushInlet({PinType::IType::Control});
+        
+        if (args.empty())
+        {
             pushInlet({PinType::IType::Control});
-            
-            if (args.empty())
-            {
-                pushInlet({PinType::IType::Control});
-            }
-            
-            pushOutlet(PinType::IType::Control);
         }
         
-        void Pipe::declare()
-        {
-            Factory::add<Pipe>("pipe");
-        }
-        
-        std::string Pipe::getIODescription(bool is_inlet, size_t index) const
-        {
-            if(is_inlet)
-            {
-                if(index == 0)
-                {
-                    return "Anything to be delayed";
-                }
-                else if(index == 1)
-                {
-                    return "Set delay time";
-                }
-            }
-            else
-            {
-                return "Delayed messages";
-            }
-            
-            return {};
-        }
+        pushOutlet(PinType::IType::Control);
     }
-}
+    
+    void Pipe::declare()
+    {
+        Factory::add<Pipe>("pipe");
+    }
+    
+    std::string Pipe::getIODescription(bool is_inlet, size_t index) const
+    {
+        if(is_inlet)
+        {
+            if(index == 0)
+            {
+                return "Anything to be delayed";
+            }
+            else if(index == 1)
+            {
+                return "Set delay time";
+            }
+        }
+        else
+        {
+            return "Delayed messages";
+        }
+        
+        return {};
+    }
+    
+}}

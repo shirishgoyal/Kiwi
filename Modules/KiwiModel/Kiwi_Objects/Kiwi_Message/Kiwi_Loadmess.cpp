@@ -23,33 +23,31 @@
 
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT LOADMESS                                 //
+    // ================================================================================ //
+    
+    Loadmess::Loadmess(std::string const& name, std::vector<Atom> const& args)
+    : model::Object(name, args)
     {
-        // ================================================================================ //
-        //                                  OBJECT LOADMESS                                 //
-        // ================================================================================ //
-        
-        Loadmess::Loadmess(std::string const& name, std::vector<Atom> const& args)
-        : model::Object(name, args)
-        {
-            pushOutlet(PinType::IType::Control);
-        }
-        
-        void Loadmess::declare()
-        {
-            Factory::add<Loadmess>("loadmess");
-        }
-        
-        std::string Loadmess::getIODescription(bool is_inlet, size_t index) const
-        {
-            if(is_inlet)
-            {
-                return "Receive messages when the patch is loaded";
-            }
-            
-            return {};
-        }
+        pushOutlet(PinType::IType::Control);
     }
-}
+    
+    void Loadmess::declare()
+    {
+        Factory::add<Loadmess>("loadmess");
+    }
+    
+    std::string Loadmess::getIODescription(bool is_inlet, size_t index) const
+    {
+        if(is_inlet)
+        {
+            return "Receive messages when the patch is loaded";
+        }
+        
+        return {};
+    }
+    
+}}

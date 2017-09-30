@@ -24,49 +24,47 @@
 #include <KiwiModel/Kiwi_Object.h>
 #include <KiwiModel/Kiwi_Factory.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                      ERRORBOX                                    //
+    // ================================================================================ //
+    
+    class ErrorBox : public model::Object
     {
-        // ================================================================================ //
-        //                                      ERRORBOX                                    //
-        // ================================================================================ //
+    public:
         
-        class ErrorBox : public model::Object
-        {
-        public:
-            
-            //! @brief flip Default Constructor
-            ErrorBox(flip::Default& d) : model::Object(d) {}
-            
-            //! @brief Constructor
-            ErrorBox(std::string const& name, std::vector<Atom> const& args);
-            
-            //! @brief Constructor
-            ErrorBox(std::string const& name, std::vector<Atom> const& args, std::string const& err_message);
-            
-            //! @brief Set the number of inlets.
-            //! @param inlets The number of inlets.
-            void setInlets(flip::Array<Inlet> const& inlets);
-            
-            //! @brief Set the number of inlets.
-            //! @param inlets The number of inlets.
-            void setOutlets(flip::Array<Outlet> const& outlets);
-            
-            //! @brief Sets the message error that caused the errorbox construction.
-            void setError(std::string const& error);
-            
-            //! @brief Returns the error that caused the errorbox construction.
-            std::string getError() const;
-
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            //! @internal flip static declare method
-            static void declare();
-            
-        private: // members
-            
-            std::string m_error;
-        };
-    }
-}
+        //! @brief flip Default Constructor
+        ErrorBox(flip::Default& d) : model::Object(d) {}
+        
+        //! @brief Constructor
+        ErrorBox(std::string const& name, std::vector<Atom> const& args);
+        
+        //! @brief Constructor
+        ErrorBox(std::string const& name, std::vector<Atom> const& args, std::string const& err_message);
+        
+        //! @brief Set the number of inlets.
+        //! @param inlets The number of inlets.
+        void setInlets(flip::Array<Inlet> const& inlets);
+        
+        //! @brief Set the number of inlets.
+        //! @param inlets The number of inlets.
+        void setOutlets(flip::Array<Outlet> const& outlets);
+        
+        //! @brief Sets the message error that caused the errorbox construction.
+        void setError(std::string const& error);
+        
+        //! @brief Returns the error that caused the errorbox construction.
+        std::string getError() const;
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        //! @internal flip static declare method
+        static void declare();
+        
+    private: // members
+        
+        std::string m_error;
+    };
+    
+}}

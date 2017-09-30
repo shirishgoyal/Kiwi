@@ -25,33 +25,31 @@
 
 #include <KiwiModel/Kiwi_Object.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  OBJECT BANG                                     //
+    // ================================================================================ //
+    
+    
+    class Bang : public model::Object
     {
-        // ================================================================================ //
-        //                                  OBJECT BANG                                     //
-        // ================================================================================ //
+    public: // enum
         
-        
-        class Bang : public model::Object
+        enum Signal : SignalKey
         {
-        public: // enum
-
-            enum Signal : SignalKey
-            {
-                TriggerBang
-            };
-            
-        public: // methods
-            
-            Bang(flip::Default& d);
-
-            Bang(std::string const& name, std::vector<Atom> const& args);
-            
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            static void declare();
+            TriggerBang
         };
-    }
-}
+        
+    public: // methods
+        
+        Bang(flip::Default& d);
+        
+        Bang(std::string const& name, std::vector<Atom> const& args);
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        static void declare();
+    };
+    
+}}

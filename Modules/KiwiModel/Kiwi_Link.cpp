@@ -19,80 +19,75 @@
  ==============================================================================
  */
 
-#include "Kiwi_DataModel.h"
+#include <KiwiModel/Kiwi_Link.h>
+#include <KiwiModel/Kiwi_DataModel.h>
 
-#include "Kiwi_Object.h"
-#include "Kiwi_Link.h"
-#include "Kiwi_PatcherUser.h"
-
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                  LINK::declare                                   //
+    // ================================================================================ //
+    
+    void Link::declare()
     {
-        // ================================================================================ //
-        //                                  LINK::declare                                   //
-        // ================================================================================ //
+        if(DataModel::has<Link>()) return;
         
-        void Link::declare()
-        {
-            if(DataModel::has<Link>()) return;
-            
-            DataModel::declare<Link>()
-            .name("cicm.kiwi.Link")
-            .member<flip::ObjectRef<model::Object>, &Link::m_sender>("sender_obj")
-            .member<flip::ObjectRef<model::Object>, &Link::m_receiver>("receiver_obj")
-            .member<flip::Int, &Link::m_index_outlet>("outlet_index")
-            .member<flip::Int, &Link::m_index_inlet>("inlet_index");
-        }
-        
-        // ================================================================================ //
-        //                                      LINK                                        //
-        // ================================================================================ //
-        
-        Link::Link(model::Object const& from, const size_t outlet, model::Object const& to, const size_t inlet) :
-        m_sender(from.ref()),
-        m_receiver(to.ref()),
-        m_index_outlet(outlet),
-        m_index_inlet(inlet)
-        {
-            ;
-        }
-        
-        model::Object const& Link::getSenderObject() const
-        {
-            return !removed() ? *m_sender.value() : *m_sender.before();
-        }
-        
-        model::Object const& Link::getReceiverObject() const
-        {
-            return !removed() ? *m_receiver.value() : *m_receiver.before();
-        }
-        
-        bool Link::isSenderValid() const
-        {
-            return m_sender.value() != nullptr;
-        }
-        
-        bool Link::isReceiverValid() const
-        {
-            return m_receiver.value() != nullptr;
-        }
-        
-        size_t Link::getSenderIndex() const
-        {
-            int64_t value = !removed() ? m_index_outlet.value() : m_index_outlet.before();
-            return static_cast<size_t>(value);
-        }
-        
-        size_t Link::getReceiverIndex() const
-        {
-            int64_t value = !removed() ? m_index_inlet.value() : m_index_inlet.before();
-            return static_cast<size_t>(value);
-        }
-        
-        bool Link::isSignal() const
-        {
-            return getSenderObject().getOutlet(getSenderIndex()).getType() == PinType(PinType::IType::Signal);
-        }
+        DataModel::declare<Link>()
+        .name("cicm.kiwi.Link")
+        .member<flip::ObjectRef<model::Object>, &Link::m_sender>("sender_obj")
+        .member<flip::ObjectRef<model::Object>, &Link::m_receiver>("receiver_obj")
+        .member<flip::Int, &Link::m_index_outlet>("outlet_index")
+        .member<flip::Int, &Link::m_index_inlet>("inlet_index");
     }
-}
+    
+    // ================================================================================ //
+    //                                      LINK                                        //
+    // ================================================================================ //
+    
+    Link::Link(model::Object const& from, const size_t outlet, model::Object const& to, const size_t inlet) :
+    m_sender(from.ref()),
+    m_receiver(to.ref()),
+    m_index_outlet(outlet),
+    m_index_inlet(inlet)
+    {
+        ;
+    }
+    
+    model::Object const& Link::getSenderObject() const
+    {
+        return !removed() ? *m_sender.value() : *m_sender.before();
+    }
+    
+    model::Object const& Link::getReceiverObject() const
+    {
+        return !removed() ? *m_receiver.value() : *m_receiver.before();
+    }
+    
+    bool Link::isSenderValid() const
+    {
+        return m_sender.value() != nullptr;
+    }
+    
+    bool Link::isReceiverValid() const
+    {
+        return m_receiver.value() != nullptr;
+    }
+    
+    size_t Link::getSenderIndex() const
+    {
+        int64_t value = !removed() ? m_index_outlet.value() : m_index_outlet.before();
+        return static_cast<size_t>(value);
+    }
+    
+    size_t Link::getReceiverIndex() const
+    {
+        int64_t value = !removed() ? m_index_inlet.value() : m_index_inlet.before();
+        return static_cast<size_t>(value);
+    }
+    
+    bool Link::isSignal() const
+    {
+        return getSenderObject().getOutlet(getSenderIndex()).getType() == PinType(PinType::IType::Signal);
+    }
+    
+}}

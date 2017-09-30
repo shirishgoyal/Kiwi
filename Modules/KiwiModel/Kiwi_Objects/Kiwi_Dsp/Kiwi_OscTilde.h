@@ -23,27 +23,25 @@
 
 #include <KiwiModel/Kiwi_Object.h>
 
-namespace kiwi
-{
-    namespace model
+namespace kiwi { namespace model {
+    
+    // ================================================================================ //
+    //                                    OBJECT OSC~                                   //
+    // ================================================================================ //
+    
+    class OscTilde : public model::Object
     {
-        // ================================================================================ //
-        //                                    OBJECT OSC~                                   //
-        // ================================================================================ //
+    public:
+        //! @brief flip Default Constructor
+        OscTilde(flip::Default& d): model::Object(d){};
         
-        class OscTilde : public model::Object
-        {
-        public:
-            //! @brief flip Default Constructor
-            OscTilde(flip::Default& d): model::Object(d){};
-            
-            //! @brief Constructor
-            OscTilde(std::string const& name, std::vector<Atom> const& args);
-            
-            std::string getIODescription(bool is_inlet, size_t index) const override;
-            
-            //! @internal flip static declare method
-            static void declare();
-        };
-    }
-}
+        //! @brief Constructor
+        OscTilde(std::string const& name, std::vector<Atom> const& args);
+        
+        std::string getIODescription(bool is_inlet, size_t index) const override;
+        
+        //! @internal flip static declare method
+        static void declare();
+    };
+    
+}}
