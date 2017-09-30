@@ -62,7 +62,7 @@ namespace kiwi
         ~ObjectFrame();
         
         //! @brief Called whenever an object's model has changed.
-        void objectChanged(model::Patcher::View& view, model::Object& object);
+        void objectChanged(model::PatcherView& view, model::Object& object);
         
         //! @brief Called whenever the client wants to edit an object.
         //! @details Will only edit the object if its a textual object.

@@ -19,14 +19,15 @@
  ==============================================================================
  */
 
+#include <KiwiModel/Kiwi_Patcher.h>
+
+#include <KiwiCore/Kiwi_Scheduler.h>
+
 #include "KiwiEngine_Patcher.h"
 #include "KiwiEngine_Object.h"
 #include "KiwiEngine_Link.h"
 #include "KiwiEngine_Factory.h"
 #include "KiwiEngine_Instance.h"
-#include <KiwiCore/Kiwi_Scheduler.h>
-
-#include <KiwiModel/Kiwi_PatcherUser.h>
 
 namespace kiwi
 {

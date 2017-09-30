@@ -55,7 +55,7 @@ namespace kiwi
         PatcherView(PatcherManager& manager,
                     Instance& instance,
                     model::Patcher& patcher,
-                    model::Patcher::View& view);
+                    model::PatcherView& view);
         
         //! @brief Destructor
         ~PatcherView();
@@ -67,10 +67,10 @@ namespace kiwi
         PatcherManager& usePatcherManager();
         
         //! @internal flip::DocumentObserver<model::Patcher>::document_changed
-        void patcherChanged(model::Patcher& patcher, model::Patcher::View& view);
+        void patcherChanged(model::Patcher& patcher, model::PatcherView& view);
         
         //! @brief Returns the patcher view model.
-        model::Patcher::View& getPatcherViewModel();
+        model::PatcherView& getPatcherViewModel();
         
         //! @brief Returns the Objects' frames.
         ObjectFrames const& getObjects() const;
@@ -169,7 +169,7 @@ namespace kiwi
         void loadPatcher();
         
         //! @brief Check patcher view information changes (lock_status...).
-        void checkViewInfos(model::Patcher::View& view);
+        void checkViewInfos(model::PatcherView& view);
         
         //! @brief Check the patcher objects selection changes.
         void checkObjectsSelectionChanges(model::Patcher& patcher);
@@ -181,7 +181,7 @@ namespace kiwi
         void addObjectView(model::Object& object, int zorder = -1);
         
         //! @internal Object model is resident and internal value changed.
-        void objectChanged(model::Patcher::View& view, model::Object& object);
+        void objectChanged(model::PatcherView& view, model::Object& object);
         
         //! @internal Object model will be removed from the document.
         void removeObjectView(model::Object& object);
@@ -383,7 +383,7 @@ namespace kiwi
         PatcherManager&                             m_manager;
         Instance&                                   m_instance;
         model::Patcher&                             m_patcher_model;
-        model::Patcher::View&                       m_view_model;
+        model::PatcherView&                         m_view_model;
         
         ObjectFrames                                m_objects;
         LinkViews                                   m_links;

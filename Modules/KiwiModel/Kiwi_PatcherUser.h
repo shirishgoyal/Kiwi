@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <KiwiModel/Kiwi_Patcher.h>
 #include <KiwiModel/Kiwi_PatcherView.h>
 
 namespace kiwi { namespace model {
@@ -31,27 +30,27 @@ namespace kiwi { namespace model {
     // ================================================================================ //
     
     //! @brief Represents and stores informations about a user of a patcher document.
-    class Patcher::User : public flip::Object
+    class PatcherUser : public flip::Object
     {
     public: // methods
         
         //! @brief Constructor.
-        User();
+        PatcherUser();
         
         //! @brief Destructor.
-        ~User() = default;
+        ~PatcherUser() = default;
         
         //! @brief Add a new View.
-        View& addView();
+        PatcherView& addView();
         
         //! @brief Remove a View.
-        flip::Collection<Patcher::View>::iterator removeView(View const& view);
+        flip::Collection<PatcherView>::iterator removeView(PatcherView const& view);
         
         //! @brief Get views.
-        flip::Collection<Patcher::View> const& getViews() const noexcept;
+        flip::Collection<PatcherView> const& getViews() const noexcept;
         
         //! @brief Get views.
-        flip::Collection<Patcher::View>& getViews() noexcept;
+        flip::Collection<PatcherView>& getViews() noexcept;
         
         //! @brief Get the number of active views.
         size_t getNumberOfViews() const noexcept;
@@ -66,7 +65,7 @@ namespace kiwi { namespace model {
         
     private: // members
         
-        flip::Collection<Patcher::View> m_views;
+        flip::Collection<PatcherView> m_views;
         
         friend Patcher;
     };

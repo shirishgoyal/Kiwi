@@ -142,18 +142,18 @@ namespace kiwi
         //! @internal React to the fact that a View has just been added to the document.
         //! @details create a PatcherViewWindow.
         void createPatcherWindow(model::Patcher& patcher,
-                                 model::Patcher::User const& user,
-                                 model::Patcher::View& view);
+                                 model::PatcherUser const& user,
+                                 model::PatcherView& view);
         
         //! @internal View is resident and internal value changed.
         void notifyPatcherView(model::Patcher& patcher,
-                               model::Patcher::User const& user,
-                               model::Patcher::View& view);
+                               model::PatcherUser const& user,
+                               model::PatcherView& view);
         
         //! @internal Vser will be removed from the document.
         void removePatcherWindow(model::Patcher& patcher,
-                                 model::Patcher::User const& user,
-                                 model::Patcher::View& view);
+                                 model::PatcherUser const& user,
+                                 model::PatcherView& view);
         
         //! @internal Save document if needed and if user agrees.
         juce::FileBasedDocument::SaveResult saveIfNeededAndUserAgrees();

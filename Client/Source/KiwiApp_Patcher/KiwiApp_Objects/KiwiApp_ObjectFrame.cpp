@@ -313,7 +313,7 @@ namespace kiwi
         return getPatcherView().isLocked();
     }
     
-    void ObjectFrame::objectChanged(model::Patcher::View& view, model::Object& object)
+    void ObjectFrame::objectChanged(model::PatcherView& view, model::Object& object)
     {
         if(object.inletsChanged())
         {

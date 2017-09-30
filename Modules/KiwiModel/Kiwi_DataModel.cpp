@@ -23,6 +23,8 @@
 
 #include <KiwiModel/Kiwi_Version.h>
 #include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_Patcher.h>
+#include <KiwiModel/Kiwi_PatcherView.h>
 #include <KiwiModel/Kiwi_PatcherUser.h>
 #include <KiwiModel/Kiwi_Objects/Kiwi_Objects.h>
 

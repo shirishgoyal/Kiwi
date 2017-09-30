@@ -25,6 +25,7 @@
 
 #include <KiwiServer/KiwiServer_Server.h>
 #include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_Patcher.h>
 
 #include <flip/Document.h>
 #include <flip/contrib/transport_tcp/CarrierTransportSocketTcp.h>

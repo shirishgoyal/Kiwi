@@ -20,6 +20,9 @@
  */
 
 #include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_Patcher.h>
+#include <KiwiModel/Kiwi_PatcherUser.h>
+#include <KiwiModel/Kiwi_PatcherView.h>
 
 #include <KiwiEngine/KiwiEngine_Patcher.h>
 #include <KiwiEngine/KiwiEngine_Instance.h>
@@ -185,7 +188,7 @@ namespace kiwi
         auto& user = patcher.useSelfUser();
         auto& views = user.getViews();
         
-        return std::count_if(views.begin(), views.end(), [](model::Patcher::View const& view){
+        return std::count_if(views.begin(), views.end(), [](model::PatcherView const& view){
             return !view.removed();
         });
     }
@@ -281,7 +284,7 @@ namespace kiwi
         auto& user = patcher.useSelfUser();
         auto& views = user.getViews();
         
-        size_t number_of_views = std::count_if(views.begin(), views.end(), [](model::Patcher::View& view){
+        size_t number_of_views = std::count_if(views.begin(), views.end(), [](model::PatcherView& view){
             return !view.removed();
         });
         
@@ -315,7 +318,7 @@ namespace kiwi
         
         auto& views = user.getViews();
         
-        size_t number_of_views = std::count_if(views.begin(), views.end(), [](model::Patcher::View& view){
+        size_t number_of_views = std::count_if(views.begin(), views.end(), [](model::PatcherView& view){
             return !view.removed();
         });
         
@@ -348,7 +351,7 @@ namespace kiwi
         
         if(view_it != views.end())
         {
-            model::Patcher::View& view = *view_it;
+            model::PatcherView& view = *view_it;
             if(view.entity().has<PatcherViewWindow>())
             {
                 view.entity().use<PatcherViewWindow>().toFront(true);
@@ -451,8 +454,8 @@ namespace kiwi
     }
 
     void PatcherManager::createPatcherWindow(model::Patcher& patcher,
-                                             model::Patcher::User const& user,
-                                             model::Patcher::View& view)
+                                             model::PatcherUser const& user,
+                                             model::PatcherView& view)
     {
         if(user.getId() == m_document.user())
         {
@@ -463,8 +466,8 @@ namespace kiwi
     }
 
     void PatcherManager::notifyPatcherView(model::Patcher& patcher,
-                                           model::Patcher::User const& user,
-                                           model::Patcher::View& view)
+                                           model::PatcherUser const& user,
+                                           model::PatcherView& view)
     {
         if(user.getId() == m_document.user())
         {
@@ -475,8 +478,8 @@ namespace kiwi
     }
 
     void PatcherManager::removePatcherWindow(model::Patcher& patcher,
-                                             model::Patcher::User const& user,
-                                             model::Patcher::View& view)
+                                             model::PatcherUser const& user,
+                                             model::PatcherView& view)
     {
         if(user.getId() == m_document.user())
         {

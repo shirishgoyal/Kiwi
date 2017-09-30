@@ -28,32 +28,32 @@ namespace kiwi { namespace model {
     //                                  PATCHER::declare                                //
     // ================================================================================ //
     
-    void Patcher::User::declare()
+    void PatcherUser::declare()
     {
-        assert(! DataModel::has<Patcher::User>());
+        assert(! DataModel::has<PatcherUser>());
         
-        DataModel::declare<Patcher::User>()
+        DataModel::declare<PatcherUser>()
         .name("cicm.kiwi.Patcher.User")
-        .member<flip::Collection<Patcher::View>, &Patcher::User::m_views>("views");
+        .member<flip::Collection<PatcherView>, &PatcherUser::m_views>("views");
     }
     
     // ================================================================================ //
     //                                   PATCHER USER                                   //
     // ================================================================================ //
     
-    Patcher::User::User()
+    PatcherUser::PatcherUser()
     {
         
     }
     
-    Patcher::View& Patcher::User::addView()
+    PatcherView& PatcherUser::addView()
     {
         return *m_views.emplace();
     }
     
-    flip::Collection<Patcher::View>::iterator Patcher::User::removeView(View const& view)
+    flip::Collection<PatcherView>::iterator PatcherUser::removeView(PatcherView const& view)
     {
-        auto it = m_views.find_if([&view](View const& patcher_view) {
+        auto it = m_views.find_if([&view](auto const& patcher_view) {
             return (&view == &patcher_view);
         });
         
@@ -65,22 +65,22 @@ namespace kiwi { namespace model {
         return m_views.end();
     }
     
-    uint64_t Patcher::User::getId() const
+    uint64_t PatcherUser::getId() const
     {
         return ref().user();
     }
     
-    flip::Collection<Patcher::View> const& Patcher::User::getViews() const noexcept
+    flip::Collection<PatcherView> const& PatcherUser::getViews() const noexcept
     {
         return m_views;
     }
     
-    flip::Collection<Patcher::View>& Patcher::User::getViews() noexcept
+    flip::Collection<PatcherView>& PatcherUser::getViews() noexcept
     {
         return m_views;
     }
     
-    size_t Patcher::User::getNumberOfViews() const noexcept
+    size_t PatcherUser::getNumberOfViews() const noexcept
     {
         return std::count_if(m_views.begin(), m_views.end(), [](auto){return true;});
     }

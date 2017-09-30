@@ -21,24 +21,27 @@
 
 #pragma once
 
-#include <KiwiModel/Kiwi_PatcherUser.h>
+#include <KiwiModel/Kiwi_Object.h>
+#include <KiwiModel/Kiwi_Link.h>
 
 namespace kiwi { namespace model {
+    
+    class Patcher;
     
     // ================================================================================ //
     //                                   PATCHER VIEW                                   //
     // ================================================================================ //
     
-    //! @brief The Patcher::View class holds the informations about a view of a Patcher.
-    class Patcher::View : public flip::Object
+    //! @brief The PatcherView class holds the informations about a view of a Patcher.
+    class PatcherView : public flip::Object
     {
     public: // methods
         
         //! @brief Constructor.
-        View();
+        PatcherView();
         
         //! @brief Destructor.
-        ~View();
+        ~PatcherView();
         
         //! @brief Return the parent Patcher object
         Patcher& getPatcher();
@@ -101,7 +104,7 @@ namespace kiwi { namespace model {
     public: // internal methods
         
         //! @internal flip Default constructor.
-        View(flip::Default&) {};
+        PatcherView(flip::Default&) {};
         
         //! @internal flip declare method
         static void declare();
@@ -158,11 +161,11 @@ namespace kiwi { namespace model {
         
     private: // members
         
-        flip::Collection<View::Object>  m_selected_objects;
-        flip::Collection<View::Link>    m_selected_links;
+        flip::Collection<PatcherView::Object>  m_selected_objects;
+        flip::Collection<PatcherView::Link>    m_selected_links;
         
-        flip::Bool                      m_is_locked;
-        flip::Float                     m_zoom_factor;
+        flip::Bool  m_is_locked;
+        flip::Float m_zoom_factor;
     };
     
 }}

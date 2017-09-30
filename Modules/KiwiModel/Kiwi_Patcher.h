@@ -21,9 +21,13 @@
 
 #pragma once
 
+#include <KiwiModel/Kiwi_Object.h>
 #include <KiwiModel/Kiwi_Link.h>
+#include <KiwiModel/Kiwi_PatcherUser.h>
 
 namespace kiwi { namespace model {
+    
+    class PatcherView;
     
     // ================================================================================ //
     //                                      PATCHER                                     //
@@ -34,12 +38,9 @@ namespace kiwi { namespace model {
     {
     public: // methods
         
-        class User;
-        class View;
-        
         using Objects = flip::Array<model::Object>;
         using Links = flip::Array<model::Link>;
-        using Users = flip::Collection<User>;
+        using Users = flip::Collection<PatcherUser>;
         
         //! @brief Default constructor.
         Patcher();
@@ -76,11 +77,11 @@ namespace kiwi { namespace model {
         //! @brief Removes an object from the Patcher.
         //! @details This will also remove all links connected to this object.
         //! @param object The Object to remove.
-        void removeObject(model::Object const& object, Patcher::View* view = nullptr);
+        void removeObject(model::Object const& object, PatcherView* view = nullptr);
         
         //! @brief Removes a link from the Patcher.
         //! @param link The Link to remove.
-        void removeLink(model::Link const& link, Patcher::View* view = nullptr);
+        void removeLink(model::Link const& link, PatcherView* view = nullptr);
         
         //! @brief Returns true if an Object has been added, removed or changed.
         bool objectsChanged() const noexcept;
@@ -123,7 +124,7 @@ namespace kiwi { namespace model {
         //! the current user id of the document, if it's not found, the User will be created,
         //! therefore, do not use this method while observing the model.
         //! @return The current User.
-        User& useSelfUser();
+        PatcherUser& useSelfUser();
         
     public: // signals
         

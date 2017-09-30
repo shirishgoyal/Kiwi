@@ -27,7 +27,7 @@
 #include "flip/CarrierDirect.h"
 
 #include <KiwiModel/Kiwi_DataModel.h>
-#include <KiwiModel/Kiwi_PatcherUser.h>
+#include <KiwiModel/Kiwi_Patcher.h>
 #include <KiwiModel/Kiwi_Atom.h>
 #include <KiwiModel/Kiwi_PatcherValidator.h>
 #include <KiwiModel/Kiwi_Factory.h>

@@ -19,8 +19,8 @@
  ==============================================================================
  */
 
+#include <KiwiModel/Kiwi_Patcher.h>
 #include <KiwiModel/Kiwi_DataModel.h>
-#include <KiwiModel/Kiwi_PatcherUser.h>
 #include <KiwiModel/Kiwi_Factory.h>
 
 namespace kiwi { namespace model {
@@ -33,8 +33,8 @@ namespace kiwi { namespace model {
     {
         assert(! DataModel::has<Patcher>());
         
-        Patcher::View::declare();
-        Patcher::User::declare();
+        PatcherView::declare();
+        PatcherUser::declare();
         
         DataModel::declare<Patcher>()
         .name("cicm.kiwi.Patcher")
@@ -162,7 +162,7 @@ namespace kiwi { namespace model {
         return false;
     }
     
-    void Patcher::removeObject(model::Object const& object, Patcher::View* view)
+    void Patcher::removeObject(model::Object const& object, PatcherView* view)
     {
         auto object_it = findObject(object);
         if(object_it != m_objects.end())
@@ -202,7 +202,7 @@ namespace kiwi { namespace model {
         }
     }
     
-    void Patcher::removeLink(model::Link const& link, Patcher::View* view)
+    void Patcher::removeLink(model::Link const& link, PatcherView* view)
     {
         const auto link_it = findLink(link);
         if(link_it != m_links.end())
@@ -279,10 +279,10 @@ namespace kiwi { namespace model {
         return m_users;
     }
     
-    Patcher::User& Patcher::useSelfUser()
+    PatcherUser& Patcher::useSelfUser()
     {
         auto it = std::find_if(m_users.begin(), m_users.end(),
-                               [self_id = document().user()](User const& user) {
+                               [self_id = document().user()](auto const& user) {
                                    return (user.getId() == self_id);
                                });
         

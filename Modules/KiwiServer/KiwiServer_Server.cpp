@@ -28,6 +28,7 @@
 #include <flip/contrib/RunLoopTimer.h>
 
 #include <KiwiModel/Kiwi_DataModel.h>
+#include <KiwiModel/Kiwi_Patcher.h>
 
 namespace kiwi
 {

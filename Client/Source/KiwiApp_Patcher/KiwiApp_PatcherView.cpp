@@ -44,7 +44,7 @@ namespace kiwi
     PatcherView::PatcherView(PatcherManager& manager,
                        Instance& instance,
                        model::Patcher& patcher,
-                       model::Patcher::View& view) :
+                       model::PatcherView& view) :
     m_manager(manager),
     m_instance(instance),
     m_patcher_model(patcher),
@@ -1390,7 +1390,7 @@ namespace kiwi
     //                                     OBSERVER                                     //
     // ================================================================================ //
     
-    void PatcherView::patcherChanged(model::Patcher& patcher, model::Patcher::View& view)
+    void PatcherView::patcherChanged(model::Patcher& patcher, model::PatcherView& view)
     {
         if(! patcher.changed()) return; // abort
         
@@ -1531,7 +1531,7 @@ namespace kiwi
         }
     }
     
-    void PatcherView::checkViewInfos(model::Patcher::View& view)
+    void PatcherView::checkViewInfos(model::PatcherView& view)
     {
         if(&view == &m_view_model && !view.removed())
         {
@@ -1812,7 +1812,7 @@ namespace kiwi
         }
     }
     
-    void PatcherView::objectChanged(model::Patcher::View& view, model::Object& object)
+    void PatcherView::objectChanged(model::PatcherView& view, model::Object& object)
     {
         const auto it = findObject(object);
         
@@ -1900,7 +1900,7 @@ namespace kiwi
         return std::find_if(m_links.begin(), m_links.end(), find_link_view);
     }
     
-    model::Patcher::View& PatcherView::getPatcherViewModel()
+    model::PatcherView& PatcherView::getPatcherViewModel()
     {
         return m_view_model;
     }
