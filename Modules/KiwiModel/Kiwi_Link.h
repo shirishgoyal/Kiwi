@@ -69,7 +69,6 @@ namespace kiwi { namespace model {
         //! Returns true if it is a signal link.
         bool isSignal() const;
         
-        
     public: // internal methods
         
         //! @internal flip Default constructor
@@ -82,8 +81,8 @@ namespace kiwi { namespace model {
         
         flip::ObjectRef<model::Object>  m_sender;
         flip::ObjectRef<model::Object>  m_receiver;
-        flip::Int                       m_index_outlet;
-        flip::Int                       m_index_inlet;
+        flip::Int                       m_outlet_index;
+        flip::Int                       m_inlet_index;
         
     private: // deleted methods
         

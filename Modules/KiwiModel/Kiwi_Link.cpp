@@ -33,22 +33,22 @@ namespace kiwi { namespace model {
         if(DataModel::has<Link>()) return;
         
         DataModel::declare<Link>()
-        .name("cicm.kiwi.Link")
-        .member<flip::ObjectRef<model::Object>, &Link::m_sender>("sender_obj")
-        .member<flip::ObjectRef<model::Object>, &Link::m_receiver>("receiver_obj")
-        .member<flip::Int, &Link::m_index_outlet>("outlet_index")
-        .member<flip::Int, &Link::m_index_inlet>("inlet_index");
+        .name("cicm.kiwi.patch.Link")
+        .member<flip::ObjectRef<model::Object>, &Link::m_sender>("sender_ref")
+        .member<flip::ObjectRef<model::Object>, &Link::m_receiver>("receiver_ref")
+        .member<flip::Int, &Link::m_outlet_index>("outlet_index")
+        .member<flip::Int, &Link::m_inlet_index>("inlet_index");
     }
     
     // ================================================================================ //
     //                                      LINK                                        //
     // ================================================================================ //
     
-    Link::Link(model::Object const& from, const size_t outlet, model::Object const& to, const size_t inlet) :
-    m_sender(from.ref()),
-    m_receiver(to.ref()),
-    m_index_outlet(outlet),
-    m_index_inlet(inlet)
+    Link::Link(model::Object const& from, const size_t outlet, model::Object const& to, const size_t inlet)
+    : m_sender(from.ref())
+    , m_receiver(to.ref())
+    , m_outlet_index(outlet)
+    , m_inlet_index(inlet)
     {
         ;
     }
@@ -75,13 +75,13 @@ namespace kiwi { namespace model {
     
     size_t Link::getSenderIndex() const
     {
-        int64_t value = !removed() ? m_index_outlet.value() : m_index_outlet.before();
+        int64_t value = !removed() ? m_outlet_index.value() : m_outlet_index.before();
         return static_cast<size_t>(value);
     }
     
     size_t Link::getReceiverIndex() const
     {
-        int64_t value = !removed() ? m_index_inlet.value() : m_index_inlet.before();
+        int64_t value = !removed() ? m_inlet_index.value() : m_inlet_index.before();
         return static_cast<size_t>(value);
     }
     

@@ -34,7 +34,7 @@ namespace kiwi { namespace model {
         assert(! DataModel::has<PatcherView::Object>());
         
         DataModel::declare<PatcherView::Object>()
-        .name("cicm.kiwi.Patcher.View.Object")
+        .name("cicm.kiwi.patch.PatcherView.ObjectRef")
         .member<flip::ObjectRef<model::Object>, &PatcherView::Object::m_ref>("ref");
     }
     
@@ -43,7 +43,7 @@ namespace kiwi { namespace model {
         assert(! DataModel::has<PatcherView::Link>());
         
         DataModel::declare<PatcherView::Link>()
-        .name("cicm.kiwi.Patcher.View.Link")
+        .name("cicm.kiwi.patch.PatcherView.LinkRef")
         .member<flip::ObjectRef<model::Link>, &PatcherView::Link::m_ref>("ref");
     }
     
@@ -55,7 +55,7 @@ namespace kiwi { namespace model {
         PatcherView::Link::declare();
         
         DataModel::declare<PatcherView>()
-        .name("cicm.kiwi.Patcher.View")
+        .name("cicm.kiwi.patch.PatcherView")
         .member<flip::Collection<PatcherView::Object>, &PatcherView::m_selected_objects>("selected_objects")
         .member<flip::Collection<PatcherView::Link>, &PatcherView::m_selected_links>("selected_links")
         .member<flip::Bool, &PatcherView::m_is_locked>("locked")

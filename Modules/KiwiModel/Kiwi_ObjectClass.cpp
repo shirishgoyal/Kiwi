@@ -114,9 +114,9 @@ namespace kiwi { namespace model {
     
     std::string ObjectClassBase::sanitizeName(std::string const& name)
     {
-        std::string model_name = "cicm.kiwi.object.";
+        std::string model_name = "cicm.kiwi.patch.boxes.";
         
-        static const std::string valid_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_.");
+        static const std::string valid_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.");
         
         for(auto const& c : name)
         {

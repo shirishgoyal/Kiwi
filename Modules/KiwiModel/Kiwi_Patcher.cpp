@@ -37,7 +37,7 @@ namespace kiwi { namespace model {
         PatcherUser::declare();
         
         DataModel::declare<Patcher>()
-        .name("cicm.kiwi.Patcher")
+        .name("cicm.kiwi.patch.Patcher")
         .member<Objects, &Patcher::m_objects>("objects")
         .member<Links, &Patcher::m_links>("links")
         .member<Users, &Patcher::m_users>("users")

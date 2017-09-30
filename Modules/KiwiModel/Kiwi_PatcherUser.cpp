@@ -33,7 +33,7 @@ namespace kiwi { namespace model {
         assert(! DataModel::has<PatcherUser>());
         
         DataModel::declare<PatcherUser>()
-        .name("cicm.kiwi.Patcher.User")
+        .name("cicm.kiwi.patch.PatcherUser")
         .member<flip::Collection<PatcherView>, &PatcherUser::m_views>("views");
     }
     

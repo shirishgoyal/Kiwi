@@ -59,12 +59,12 @@ namespace kiwi { namespace model {
         if(DataModel::has<model::PinType>()) return;
         
         DataModel::declare<PinType::IType>()
-        .name("cicm.kiwi.Type")
+        .name("cicm.kiwi.patch.Object.PinType.TypeEnum")
         .enumerator<PinType::IType::Control>("Control")
         .enumerator<PinType::IType::Signal>("Signal");
         
         DataModel::declare<model::PinType>()
-        .name("cicm.kiwi.PinType")
+        .name("cicm.kiwi.patch.Object.PinType")
         .member<flip::Enum<IType>, &PinType::m_type>("type");
     }
     
@@ -91,7 +91,7 @@ namespace kiwi { namespace model {
         PinType::declare();
         
         DataModel::declare<model::Inlet>()
-        .name("cicm.kiwi.Inlet")
+        .name("cicm.kiwi.patch.Object.Inlet")
         .member<flip::Array<PinType>, &Inlet::m_types>("types");
     };
     
@@ -118,7 +118,7 @@ namespace kiwi { namespace model {
         PinType::declare();
         
         DataModel::declare<model::Outlet>()
-        .name("cicm.kiwi.Outlet")
+        .name("cicm.kiwi.patch.Object.Outlet")
         .member<PinType, &Outlet::m_type>("type");
     };
     
@@ -134,7 +134,7 @@ namespace kiwi { namespace model {
         Inlet::declare();
         
         DataModel::declare<model::Object>()
-        .name("cicm.kiwi.Object")
+        .name("cicm.kiwi.patch.Object")
         .member<flip::String, &Object::m_typed_name>("typed_name")
         .member<flip::String, &Object::m_additional_text>("additional_text")
         .member<flip::Array<Inlet>, &Object::m_inlets>("inlets")
