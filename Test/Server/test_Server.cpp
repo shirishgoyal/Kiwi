@@ -169,7 +169,7 @@ TEST_CASE("Server - Server", "[Server, Server]")
         flip::Document document_1 (kiwi::model::DataModel::use (), 1, 'appl', 'gui ');
         flip::CarrierTransportSocketTcp carrier_1 (document_1, 1234, "localhost", 9191);
         
-        kiwi::model::Patcher& patcher_1 = document_1.root<kiwi::model::Patcher>();
+        kiwi::model::Patcher& patcher_1 = document_1.root<kiwi::model::PatcherRoot>().usePatcher();
         
         uint64_t other_connect_1 = 0;
         
@@ -189,7 +189,7 @@ TEST_CASE("Server - Server", "[Server, Server]")
         flip::Document document_2 (kiwi::model::DataModel::use (), 2, 'appl', 'gui ');
         flip::CarrierTransportSocketTcp carrier_2 (document_2, 1234, "localhost", 9191);
         
-        kiwi::model::Patcher& patcher_2 = document_2.root<kiwi::model::Patcher>();
+        kiwi::model::Patcher& patcher_2 = document_2.root<kiwi::model::PatcherRoot>().usePatcher();
         
         std::vector<uint64_t> connected_users_2;
         

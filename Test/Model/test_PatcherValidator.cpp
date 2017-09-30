@@ -45,8 +45,10 @@ TEST_CASE("Model Validator", "[Validator]")
         model::PatcherValidator validator;
         flip::DocumentServer server (model::DataModel::use(), validator, 123456789ULL);
         
-        server.root<model::Patcher>().addObject(model::Factory::create(AtomHelper::parse("+")));
-        server.root<model::Patcher>().addObject(model::Factory::create(AtomHelper::parse("+")));
+        auto& server_patcher = server.root<model::PatcherRoot>().usePatcher();
+        
+        server_patcher.addObject(model::Factory::create(AtomHelper::parse("+")));
+        server_patcher.addObject(model::Factory::create(AtomHelper::parse("+")));
         
         server.commit();
         
@@ -69,25 +71,25 @@ TEST_CASE("Model Validator", "[Validator]")
         document_02.pull();
         
         // client 1 delete objects
-        model::Patcher& patcher_01 = document_01.root<model::Patcher>();
+        model::Patcher& patcher_01 = document_01.root<model::PatcherRoot>().usePatcher();
         patcher_01.removeObject(*patcher_01.getObjects().begin());
         patcher_01.removeObject(*(++patcher_01.getObjects().begin()));
         
         // client 2 create link
-        model::Patcher& patcher_02 = document_02.root<model::Patcher>();
+        model::Patcher& patcher_02 = document_02.root<model::PatcherRoot>().usePatcher();
         patcher_02.addLink(*patcher_02.getObjects().begin(), 0, *(++patcher_02.getObjects().begin()), 0);
         
         // client 1 commit and push
         document_01.commit();
         document_01.push();
         
-        CHECK(server.root<model::Patcher>().getObjects().count_if([](model::Object &){return true;}) == 0);
+        CHECK(server_patcher.getObjects().count_if([](model::Object &){return true;}) == 0);
         
         // client 2 commit and push (server reject link creation)
         document_02.commit();
         document_02.push();
         
-        CHECK(server.root<model::Patcher>().getLinks().count_if([](model::Link &){return true;}) == 0);
+        CHECK(server_patcher.getLinks().count_if([](model::Link &){return true;}) == 0);
         
         // client 1 pull
         document_01.pull();
@@ -108,8 +110,10 @@ TEST_CASE("Model Validator", "[Validator]")
         model::PatcherValidator validator;
         flip::DocumentServer server (model::DataModel::use(), validator, 123456789ULL);
         
-        server.root<model::Patcher>().addObject(model::Factory::create(AtomHelper::parse("+")));
-        server.root<model::Patcher>().addObject(model::Factory::create(AtomHelper::parse("+")));
+        auto& server_patcher = server.root<model::PatcherRoot>().usePatcher();
+        
+        server_patcher.addObject(model::Factory::create(AtomHelper::parse("+")));
+        server_patcher.addObject(model::Factory::create(AtomHelper::parse("+")));
         
         server.commit();
         
@@ -132,25 +136,25 @@ TEST_CASE("Model Validator", "[Validator]")
         document_02.pull();
         
         // client 1 delete objects
-        model::Patcher& patcher_01 = document_01.root<model::Patcher>();
+        model::Patcher& patcher_01 = document_01.root<model::PatcherRoot>().usePatcher();;
         patcher_01.removeObject(*patcher_01.getObjects().begin());
         patcher_01.removeObject(*(++patcher_01.getObjects().begin()));
         
         // client 2 create link
-        model::Patcher& patcher_02 = document_02.root<model::Patcher>();
+        model::Patcher& patcher_02 = document_02.root<model::PatcherRoot>().usePatcher();;
         patcher_02.addLink(*patcher_02.getObjects().begin(), 0, *(++patcher_02.getObjects().begin()), 0);
         
         // client 2 commit and push
         document_02.commit();
         document_02.push();
         
-        CHECK(server.root<model::Patcher>().getLinks().count_if([](model::Link &){return true;}) == 1);
+        CHECK(server_patcher.getLinks().count_if([](auto&){return true;}) == 1);
         
         // client 1 commit and push (transaction rejected)
         document_01.commit();
         document_01.push();
         
-        CHECK(server.root<model::Patcher>().getObjects().count_if([](model::Object &){return true;}) == 2);
+        CHECK(server_patcher.getObjects().count_if([](auto&){return true;}) == 2);
         
         // client 1 pull (stack unwind plus deletion rejected)
         document_01.pull();

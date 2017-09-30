@@ -21,39 +21,48 @@
 
 #pragma once
 
-#include "flip/DocumentValidator.h"
-
-#include <KiwiModel/Kiwi_PatcherRoot.h>
+#include <KiwiModel/Kiwi_Patcher.h>
 
 namespace kiwi { namespace model {
     
+    class Patcher;
+    
     // ================================================================================ //
-    //                                      PATCHERVALIDATOR                            //
+    //                                   PATCHER ROOT                                   //
     // ================================================================================ //
     
-    class PatcherValidator : public flip::DocumentValidator<PatcherRoot>
+    //! @brief The Patcher root is the document root.
+    //! @details The PatcherRoot contains a single "top-patcher" that can have multiple "sub-patchers".
+    class PatcherRoot : public flip::Object
     {
     public: // methods
         
-        PatcherValidator() = default;
-        ~PatcherValidator() = default;
+        //! @brief Default constructor.
+        PatcherRoot();
         
-        // @brief Validate the model before a transaction can be executed.
-        void validate(PatcherRoot& patcher) override;
+        //! @brief Destructor.
+        ~PatcherRoot() = default;
         
-    private: // methods
+        //! @brief Returns the Patcher.
+        Patcher& usePatcher();
         
-        //! @brief Carry out checks once a object is removed.
-        void objectRemoved(Object const& object, Patcher const& patcher) const;
+        //! @brief Returns the Patcher (const version).
+        Patcher const& usePatcher() const;
         
-        //! @brief Carry out checks once a link is created.
-        void linkAdded(Link const& link) const;
+    public: // internal methods
+        
+        //! @brief flip class declaration
+        static void declare();
+        
+    private: // members
+        
+        Patcher m_patcher;
         
     private: // deleted methods
-        PatcherValidator(PatcherValidator const& other) = delete;
-        PatcherValidator(PatcherValidator && other) = delete;
-        PatcherValidator& operator=(PatcherValidator const& other) = delete;
-        PatcherValidator& operator=(PatcherValidator && other) = delete;
+        
+        PatcherRoot(PatcherRoot const&) = delete;
+        PatcherRoot(PatcherRoot&&) = delete;
+        PatcherRoot& operator=(PatcherRoot const&) = delete;
+        PatcherRoot& operator=(PatcherRoot&&) = delete;
     };
-    
 }}

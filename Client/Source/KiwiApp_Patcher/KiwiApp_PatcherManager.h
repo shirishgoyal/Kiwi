@@ -24,7 +24,7 @@
 #include "flip/Document.h"
 #include "flip/DocumentObserver.h"
 
-#include <KiwiModel/Kiwi_PatcherUser.h>
+#include <KiwiModel/Kiwi_Patcher.h>
 #include <KiwiModel/Kiwi_PatcherValidator.h>
 
 #include <juce_gui_extra/juce_gui_extra.h>
@@ -44,7 +44,7 @@ namespace kiwi
     
     //! @brief The main DocumentObserver.
     //! @details The Instance dispatch changes to all other DocumentObserver objects
-    class PatcherManager :  public flip::DocumentObserver<model::Patcher>,
+    class PatcherManager :  public flip::DocumentObserver<model::PatcherRoot>,
                             public DocumentBrowser::Drive::Listener
     {
     public: // nested classes
@@ -134,7 +134,7 @@ namespace kiwi
     private:
         
         //! @internal flip::DocumentObserver<model::Patcher>::document_changed
-        void document_changed(model::Patcher& patcher) override final;
+        void document_changed(model::PatcherRoot& root) override final;
         
         //! @internal Notify and create PatcherViews.
         void notifyPatcherViews(model::Patcher& patcher);

@@ -139,12 +139,12 @@ namespace kiwi
     
     model::Patcher& PatcherManager::getPatcher()
     {
-        return m_document.root<model::Patcher>();
+        return m_document.root<model::PatcherRoot>().usePatcher();
     }
     
     model::Patcher const& PatcherManager::getPatcher() const
     {
-        return m_document.root<model::Patcher>();
+        return m_document.root<model::PatcherRoot>().usePatcher();
     }
     
     bool PatcherManager::isRemote() const noexcept
@@ -394,8 +394,10 @@ namespace kiwi
         }
     }
     
-    void PatcherManager::document_changed(model::Patcher& patcher)
+    void PatcherManager::document_changed(model::PatcherRoot& root)
     {
+        auto& patcher = root.usePatcher();
+        
         if(patcher.added())
         {
             std::unique_lock<std::mutex> lock(m_instance.useEngineInstance().getScheduler().lock());

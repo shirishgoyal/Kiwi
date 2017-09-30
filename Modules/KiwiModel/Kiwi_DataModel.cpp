@@ -27,6 +27,7 @@
 #include <KiwiModel/Kiwi_PatcherView.h>
 #include <KiwiModel/Kiwi_PatcherUser.h>
 #include <KiwiModel/Kiwi_Objects/Kiwi_Objects.h>
+#include <KiwiModel/Kiwi_PatcherRoot.h>
 
 namespace kiwi { namespace model {
     
@@ -37,6 +38,8 @@ namespace kiwi { namespace model {
         assert(!initialised);
         if(initialised) return; // abort
         
+        initialised = true;
+        
         const std::string model_version = KIWI_MODEL_VERSION_STRING;
         
         #ifdef DEBUG
@@ -45,18 +48,15 @@ namespace kiwi { namespace model {
         
         DataModel::version(model_version);
         
-        // patcher elements declaration :
         model::Object::declare();
         
         declareObjects();
         
-        // Links
         Link::declare();
         
-        // Patcher
         Patcher::declare();
         
-        initialised = true;
+        PatcherRoot::declare();
     }
     
     void DataModel::declareObjects()

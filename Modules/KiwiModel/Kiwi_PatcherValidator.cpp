@@ -20,7 +20,6 @@
  */
 
 #include <KiwiModel/Kiwi_PatcherValidator.h>
-#include <KiwiModel/Kiwi_Patcher.h>
 
 namespace kiwi { namespace model {
     
@@ -28,8 +27,10 @@ namespace kiwi { namespace model {
     //                                   PATCHER VALIDATOR                              //
     // ================================================================================ //
     
-    void PatcherValidator::validate(Patcher& patcher)
+    void PatcherValidator::validate(PatcherRoot& root)
     {
+        auto& patcher = root.usePatcher();
+        
         if (patcher.changed())
         {
             if (patcher.objectsChanged())

@@ -19,41 +19,36 @@
  ==============================================================================
  */
 
-#pragma once
-
-#include "flip/DocumentValidator.h"
-
 #include <KiwiModel/Kiwi_PatcherRoot.h>
 
 namespace kiwi { namespace model {
     
     // ================================================================================ //
-    //                                      PATCHERVALIDATOR                            //
+    //                                  PATCHER MODEL                                   //
     // ================================================================================ //
     
-    class PatcherValidator : public flip::DocumentValidator<PatcherRoot>
+    void PatcherRoot::declare()
     {
-    public: // methods
+        flip::Class<PatcherRoot>::declare()
+        .name("cicm.kiwi.patch.PatcherRoot")
+        .member<Patcher, &PatcherRoot::m_patcher> ("patcher");
         
-        PatcherValidator() = default;
-        ~PatcherValidator() = default;
-        
-        // @brief Validate the model before a transaction can be executed.
-        void validate(PatcherRoot& patcher) override;
-        
-    private: // methods
-        
-        //! @brief Carry out checks once a object is removed.
-        void objectRemoved(Object const& object, Patcher const& patcher) const;
-        
-        //! @brief Carry out checks once a link is created.
-        void linkAdded(Link const& link) const;
-        
-    private: // deleted methods
-        PatcherValidator(PatcherValidator const& other) = delete;
-        PatcherValidator(PatcherValidator && other) = delete;
-        PatcherValidator& operator=(PatcherValidator const& other) = delete;
-        PatcherValidator& operator=(PatcherValidator && other) = delete;
-    };
+        DataModel::add<PatcherRoot>();
+    }
+    
+    PatcherRoot::PatcherRoot()
+    {
+        ;
+    }
+    
+    Patcher& PatcherRoot::usePatcher()
+    {
+        return m_patcher;
+    }
+    
+    Patcher const& PatcherRoot::usePatcher() const
+    {
+        return m_patcher;
+    }
     
 }}
