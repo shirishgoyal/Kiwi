@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <KiwiCore/Kiwi_ConcurrentQueue.h>
+
 #include <cstdint>
 #include <map>
 #include <list>
@@ -31,8 +33,7 @@
 #include <memory>
 #include <mutex>
 #include <thread>
-
-#include <KiwiCore/Kiwi_ConcurrentQueue.h>
+#include <vector>
 
 namespace kiwi { namespace core {
     
