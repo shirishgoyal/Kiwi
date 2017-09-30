@@ -21,8 +21,6 @@
 
 #include <chrono>
 
-#include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Bang.h>
-
 #include <KiwiCore/Kiwi_Scheduler.h>
 
 #include <KiwiApp.h>
@@ -30,7 +28,7 @@
 
 namespace kiwi
 {
-    BangView::BangView(model::Object & model):
+    BangView::BangView(model::Bang& model):
     ObjectView(model),
     m_signal(model.getSignal<>(model::Bang::Signal::TriggerBang)),
     m_connection(m_signal.connect(std::bind(&BangView::signalTriggered, this))),

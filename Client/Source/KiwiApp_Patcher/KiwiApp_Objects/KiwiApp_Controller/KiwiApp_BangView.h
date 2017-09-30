@@ -30,6 +30,7 @@
 #include <KiwiCore/Kiwi_Scheduler.h>
 
 #include <KiwiModel/Kiwi_Object.h>
+#include <KiwiModel/Kiwi_Objects/Kiwi_Controller/Kiwi_Bang.h>
 
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_ObjectView.h>
 
@@ -44,7 +45,7 @@ namespace kiwi
     public: // methods
         
         //! @brief Constructor.
-        BangView(model::Object & object_model);
+        BangView(model::Bang & object_model);
         
         //! @brief Destructor.
         ~BangView();

@@ -21,17 +21,18 @@
 
 #include <functional>
 
+#include <KiwiModel/Kiwi_Objects/Kiwi_Objects.h>
 #include <KiwiApp_Patcher/KiwiApp_Objects/KiwiApp_Objects.h>
 #include <KiwiApp_Patcher/KiwiApp_Factory.h>
 
 namespace kiwi
 {
-    std::map<std::string, Factory::factory_func> Factory::m_creator_map;
+    std::map<flip::ClassBase const* const, Factory::factory_func> Factory::m_creator_map {};
     
     std::unique_ptr<ObjectView> Factory::createObjectView(model::Object& object_model)
     {
-        const auto object_name = object_model.getClassName();
-        const auto it = m_creator_map.find(object_name);
+        const auto flip_class = &object_model.get_class();
+        const auto it = m_creator_map.find(flip_class);
         
         if(it != m_creator_map.end())
         {
@@ -43,7 +44,7 @@ namespace kiwi
     
     void Factory::initialise()
     {
-        add<BangView>("bang");
-        add<ToggleView>("toggle");
+        add<model::Bang, BangView>();
+        add<model::Toggle, ToggleView>();
     }
 }

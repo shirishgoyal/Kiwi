@@ -19,6 +19,9 @@
  ==============================================================================
  */
 
+
+#include <KiwiModel/Kiwi_Objects/Kiwi_Objects.h>
+
 #include "KiwiEngine_Factory.h"
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Objects.h>
 #include "KiwiEngine_Instance.h"
@@ -82,25 +85,25 @@ namespace kiwi
         
         void Instance::addObjectsToFactory()
         {
-            engine::Factory::add<NewBox>("newbox");
-            engine::Factory::add<ErrorBox>("errorbox");
-            engine::Factory::add<Plus>("plus");
-            engine::Factory::add<Times>("times");
-            engine::Factory::add<Print>("print");
-            engine::Factory::add<Receive>("receive");
-            engine::Factory::add<Loadmess>("loadmess");
-            engine::Factory::add<Delay>("delay");
-            engine::Factory::add<Pipe>("pipe");
-            engine::Factory::add<Metro>("metro");
-            engine::Factory::add<OscTilde>("osc~");
-            engine::Factory::add<AdcTilde>("adc~");
-            engine::Factory::add<DacTilde>("dac~");
-            engine::Factory::add<TimesTilde>("times~");
-            engine::Factory::add<PlusTilde>("plus~");
-            engine::Factory::add<SigTilde>("sig~");
-            engine::Factory::add<DelaySimpleTilde>("delaysimple~");
-            engine::Factory::add<Bang>("bang");
-            engine::Factory::add<Toggle>("toggle");
+            engine::Factory::add<model::NewBox, NewBox>();
+            engine::Factory::add<model::ErrorBox, ErrorBox>();
+            engine::Factory::add<model::Plus, Plus>();
+            engine::Factory::add<model::Times, Times>();
+            engine::Factory::add<model::Print, Print>();
+            engine::Factory::add<model::Receive, Receive>();
+            engine::Factory::add<model::Loadmess, Loadmess>();
+            engine::Factory::add<model::Delay, Delay>();
+            engine::Factory::add<model::Pipe, Pipe>();
+            engine::Factory::add<model::Metro, Metro>();
+            engine::Factory::add<model::OscTilde, OscTilde>();
+            engine::Factory::add<model::AdcTilde, AdcTilde>();
+            engine::Factory::add<model::DacTilde, DacTilde>();
+            engine::Factory::add<model::TimesTilde, TimesTilde>();
+            engine::Factory::add<model::PlusTilde, PlusTilde>();
+            engine::Factory::add<model::SigTilde, SigTilde>();
+            engine::Factory::add<model::DelaySimpleTilde, DelaySimpleTilde>();
+            engine::Factory::add<model::Bang, Bang>();
+            engine::Factory::add<model::Toggle, Toggle>();
         }
         
         // ================================================================================ //

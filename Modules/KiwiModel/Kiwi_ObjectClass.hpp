@@ -28,7 +28,7 @@
 namespace kiwi { namespace model {
     
     // ================================================================================ //
-    //                             FACTORY OBJECT CLASS BASE                            //
+    //                                  OBJECT CLASS BASE                               //
     // ================================================================================ //
     
     template<class TModel>
@@ -71,7 +71,7 @@ namespace kiwi { namespace model {
     }
     
     // ================================================================================ //
-    //                               FACTORY OBJECT CLASS                               //
+    //                                  OBJECT CLASS                                    //
     // ================================================================================ //
     
     template<class TObjectClass, class TInheritedObject>

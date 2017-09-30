@@ -22,7 +22,7 @@
 #include <KiwiModel/Kiwi_Factory.h>
 #include <KiwiModel/Kiwi_Object.h>
 
-#include "KiwiEngine_Factory.h"
+#include <KiwiEngine/KiwiEngine_Factory.h>
 
 namespace kiwi
 {
@@ -35,30 +35,20 @@ namespace kiwi
         std::unique_ptr<Object> Factory::create(Patcher& patcher, model::Object const& object)
         {
             auto& creators = getCreators();
-            const auto classname = object.getClassName();
+            auto const* const flip_class = &object.get_class();
             
-            assert(creators.count(classname) != 0 && "The object has not been registered.");
+            assert(creators.count(flip_class) != 0 && "The object has not been registered.");
             
             const auto args = AtomHelper::parse(object.getAdditionalText());
-            return std::unique_ptr<Object>(creators[classname](object, patcher, args));
+            return std::unique_ptr<Object>(creators[flip_class](object, patcher, args));
             
             return nullptr;
-        }
-        
-        bool Factory::has(std::string const& name)
-        {
-            return static_cast<bool>(getCreators().count(name));
         }
         
         auto Factory::getCreators() -> creator_map_t&
         {
             static creator_map_t static_creators;
             return static_creators;
-        }
-        
-        bool Factory::modelHasObject(std::string const& name)
-        {
-            return model::Factory::has(name);
         }
     }
 }

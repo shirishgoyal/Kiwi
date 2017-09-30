@@ -106,7 +106,7 @@ namespace kiwi { namespace model {
     }
     
     ObjectClassBase* Factory::getClassByName(std::string const& name,
-                                                      const bool ignore_aliases)
+                                             const bool ignore_aliases)
     {
         const auto& object_classes = getClasses();
         for(const auto& object_class : object_classes)
@@ -119,7 +119,7 @@ namespace kiwi { namespace model {
     }
     
     ObjectClassBase* Factory::getClassByModelName(std::string const& data_model_name,
-                                                           const bool ignore_aliases)
+                                                  const bool ignore_aliases)
     {
         const auto& object_classes = getClasses();
         for(const auto& object_class : object_classes)

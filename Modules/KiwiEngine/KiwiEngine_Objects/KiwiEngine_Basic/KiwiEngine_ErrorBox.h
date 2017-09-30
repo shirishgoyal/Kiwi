@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <KiwiModel/Kiwi_Objects/Kiwi_Basic/Kiwi_ErrorBox.h>
+
 #include <KiwiEngine/KiwiEngine_Object.h>
 
 namespace kiwi
@@ -34,7 +36,7 @@ namespace kiwi
         class ErrorBox : public AudioObject
         {
         public:
-            ErrorBox(model::Object const& model, Patcher& patcher, std::vector<Atom> const& args);
+            ErrorBox(model::ErrorBox const& model, Patcher& patcher, std::vector<Atom> const& args);
             
             void receive(size_t index, std::vector<Atom> const& args) override;
             

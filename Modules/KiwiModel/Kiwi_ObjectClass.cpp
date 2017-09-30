@@ -28,7 +28,7 @@
 namespace kiwi { namespace model {
     
     // ================================================================================ //
-    //                             FACTORY OBJECT CLASS BASE                            //
+    //                                  OBJECT CLASS BASE                               //
     // ================================================================================ //
     
     ObjectClassBase::ObjectClassBase(std::string const& name,

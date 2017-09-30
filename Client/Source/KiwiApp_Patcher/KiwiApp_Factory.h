@@ -55,18 +55,21 @@ namespace kiwi
     private: // members
         
         //! @brief Adds a object to the factory.
-        template<class TObject>
-        static void add(std::string const& name)
+        template<class TModel, class TObject>
+        static void add()
         {
-            assert(model::Factory::has(name) && "Adding an engine object that has no corresponding model");
+            static_assert(std::is_constructible<TObject, TModel&>::value,
+                          "The gui object must have a valid constructor.");
             
-            m_creator_map[name] = [](model::Object & object_model)
+            auto const* const flip_class = &flip::Class<TModel>::use();
+            
+            m_creator_map[flip_class] = [](model::Object& object_model)
             {
-                return std::make_unique<TObject>(object_model);
+                return std::make_unique<TObject>(dynamic_cast<TModel&>(object_model));
             };
         };
         
-        static std::map<std::string, factory_func> m_creator_map;
+        static std::map<flip::ClassBase const* const, factory_func> m_creator_map;
 
     private: // deleted methods
         

@@ -55,7 +55,7 @@ namespace kiwi { namespace model {
         //! @brief Destructor.
         virtual ~ObjectClassBase() = default;
         
-        //! @brief Returns the name of the object.
+        //! @brief Returns the name of the object class.
         std::string const& getClassName() const;
         
         //! @brief Returns the name used into the data model of kiwi.

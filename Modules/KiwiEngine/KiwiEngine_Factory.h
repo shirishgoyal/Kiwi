@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "flip/Class.h"
+
 #include <KiwiEngine/KiwiEngine_Object.h>
 
 namespace kiwi
@@ -41,29 +43,32 @@ namespace kiwi
             //! If the name of the object already exists, the function does nothing,
             //! otherwise the object is added to the factory.
             //! @param name The name of the object.
-            template <class TEngine,
-            typename std::enable_if<std::is_base_of<Object, TEngine>::value,
-            Object>::type* = nullptr>
-            static void add(std::string const& name)
+            template <class TModel, class TEngine>
+            static void add()
             {
+                static_assert(std::is_base_of<model::Object, TModel>::value,
+                              "TModel class must be a model::Object child class.");
+                
+                static_assert(std::is_base_of<Object, TEngine>::value,
+                              "TEngine class must be an engine::Object child class.");
+                
                 static_assert(!std::is_abstract<TEngine>::value,
                               "The engine object must not be abstract.");
-            
+                
                 static_assert(std::is_constructible<TEngine,
-                              model::Object const&, Patcher&, std::vector<Atom> const&>::value,
+                              TModel const&, Patcher&, std::vector<Atom> const&>::value,
                               "The engine object must have a valid constructor.");
                 
-                assert(!name.empty());
-                assert(modelHasObject(name) && "The model counterpart does not exist");
+                auto const* const flip_class = &flip::Class<TModel>::use();
                 
                 auto& creators = getCreators();
-                assert(creators.count(name) == 0 && "The object already exists");
+                assert(creators.count(flip_class) == 0 && "The object already exists");
                 
-                creators[name] = [](model::Object const& model,
-                                    Patcher& patcher,
-                                    std::vector<Atom> const& args) -> TEngine*
+                creators[flip_class] = [](model::Object const& model,
+                                         Patcher& patcher,
+                                         std::vector<Atom> const& args) -> TEngine*
                 {
-                    return new TEngine(model, patcher, args);
+                    return new TEngine(dynamic_cast<TModel const&>(model), patcher, args);
                 };
             }
             
@@ -72,21 +77,14 @@ namespace kiwi
             //! @return An engine object.
             static std::unique_ptr<Object> create(Patcher& patcher, model::Object const& model);
             
-            //! @brief Returns true if a given string match a registered Object name.
-            //! @param name The name of the object engine to find.
-            //! @return true if the object has been added, otherwise false.
-            static bool has(std::string const& name);
-            
         private: // methods
-            
-            static bool modelHasObject(std::string const& name);
             
             using ctor_fn_t = std::function<Object*(model::Object const& model,
                                                     Patcher& patcher,
                                                     std::vector<Atom> const&)>;
             
-            using creator_map_t = std::map<std::string, ctor_fn_t>;
-        
+            using creator_map_t = std::map<flip::ClassBase const* const, ctor_fn_t>;
+            
             //! @internal Returns the static map of creators.
             static creator_map_t& getCreators();
             
