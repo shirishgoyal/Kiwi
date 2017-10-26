@@ -21,6 +21,7 @@
 
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Basic/KiwiModel_NewBox.h>
 
+#include <KiwiModel/KiwiModel_ObjectClass.h>
 #include <KiwiModel/KiwiModel_Factory.h>
 
 namespace kiwi
@@ -33,13 +34,19 @@ namespace kiwi
         
         void NewBox::declare()
         {
-            Factory::add<NewBox>("newbox").setInternal(true);
+            std::unique_ptr<ObjectClass> object_class(new ObjectClass("newbox",
+                                                                      &NewBox::create));
             
+            object_class->setFlag(ObjectClass::Flag::DefinedSize);
+            object_class->setFlag(ObjectClass::Flag::Internal);
+            
+            flip::Class<NewBox> & data_model = DataModel::declare<NewBox>().inherit<Object>();
+            
+            Factory::add<NewBox>(std::move(object_class), data_model);
         }
         
-        NewBox::NewBox(std::string const& name, std::vector<tool::Atom> const& args)
+        NewBox::NewBox()
         {
-            setFlag(Flag::IFlag::DefinedSize);
             setWidth(80);
             setHeight(20);
             pushInlet({PinType::IType::Control});

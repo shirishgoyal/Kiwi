@@ -39,7 +39,7 @@ namespace kiwi
             ErrorBox(flip::Default& d) : model::Object(d) {}
             
             //! @brief Constructor
-            ErrorBox(std::string const& name, std::vector<tool::Atom> const& args);
+            ErrorBox();
             
             //! @brief Set the number of inlets.
             //! @param inlets The number of inlets.
@@ -59,6 +59,9 @@ namespace kiwi
             
             //! @internal flip static declare method
             static void declare();
+            
+            //! @brief The error box construction method.
+            static std::unique_ptr<Object> create(std::vector<tool::Atom> const& args);
             
         private: // members
             

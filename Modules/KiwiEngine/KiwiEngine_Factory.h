@@ -60,10 +60,9 @@ namespace kiwi
                 assert(creators.count(name) == 0 && "The object already exists");
                 
                 creators[name] = [](model::Object const& model,
-                                    Patcher& patcher,
-                                    std::vector<tool::Atom> const& args) -> TEngine*
+                                    Patcher& patcher) -> TEngine*
                 {
-                    return new TEngine(model, patcher, args);
+                    return new TEngine(model, patcher);
                 };
             }
             
@@ -82,8 +81,7 @@ namespace kiwi
             static bool modelHasObject(std::string const& name);
             
             using ctor_fn_t = std::function<Object*(model::Object const& model,
-                                                    Patcher& patcher,
-                                                    std::vector<tool::Atom> const&)>;
+                                                    Patcher& patcher)>;
             
             using creator_map_t = std::map<std::string, ctor_fn_t>;
         

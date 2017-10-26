@@ -19,9 +19,11 @@
  ==============================================================================
  */
 
-#include "KiwiModel_Object.h"
+#include <KiwiModel/KiwiModel_Factory.h>
 
-#include "KiwiModel_DataModel.h"
+#include <KiwiModel/KiwiModel_Object.h>
+
+#include <KiwiModel/KiwiModel_DataModel.h>
 
 namespace kiwi
 {
@@ -126,46 +128,6 @@ namespace kiwi
         };
         
         // ================================================================================ //
-        //                                  FLAG                                            //
-        // ================================================================================ //
-        
-        Flag::Flag(Flag::IFlag flag):
-        flip::Object(),
-        m_flag(flag)
-        {
-        }
-        
-        Flag::Flag(flip::Default& d):
-        flip::Object()
-        {
-        }
-        
-        void Flag::declare()
-        {
-            if(DataModel::has<model::Flag>()) return;
-            
-            DataModel::declare<Flag::IFlag>()
-            .name("cicm.kiwi.iflag")
-            .enumerator<Flag::IFlag::DefinedSize>("DefinedSize")
-            .enumerator<Flag::IFlag::ResizeWidth>("ResizeWidth")
-            .enumerator<Flag::IFlag::ResizeHeight>("ResizeHeight");
-            
-            DataModel::declare<model::Flag>()
-            .name("cicm.kiwi.flag")
-            .member<flip::Enum<IFlag>, &Flag::m_flag>("flag");
-        }
-        
-        bool Flag::operator==(Flag const& other) const
-        {
-            return m_flag.value() == other.m_flag.value();
-        }
-        
-        bool Flag::operator!=(Flag const& other) const
-        {
-            return !this->operator==(other);
-        }
-        
-        // ================================================================================ //
         //                                  OBJECT::declare                                 //
         // ================================================================================ //
         
@@ -175,15 +137,12 @@ namespace kiwi
             
             Outlet::declare();
             Inlet::declare();
-            Flag::declare();
             
             DataModel::declare<model::Object>()
             .name("cicm.kiwi.Object")
-            .member<flip::String, &Object::m_name>("name")
             .member<flip::String, &Object::m_text>("text")
             .member<flip::Array<Inlet>, &Object::m_inlets>("inlets")
             .member<flip::Array<Outlet>, &Object::m_outlets>("outlets")
-            .member<flip::Collection<Flag>, &Object::m_flags>("flags")
             .member<flip::Float, &Object::m_position_x>("pos_x")
             .member<flip::Float, &Object::m_position_y>("pos_y")
             .member<flip::Float, &Object::m_width>("width")
@@ -203,10 +162,8 @@ namespace kiwi
         }
         
         Object::Object() :
-        m_name("noobj"),
         m_inlets(),
         m_outlets(),
-        m_flags(),
         m_position_x(0.),
         m_position_y(0.),
         m_width(60.),
@@ -220,7 +177,13 @@ namespace kiwi
         
         std::string Object::getName() const
         {
-            return m_name;
+            return getClass().getName();
+        }
+        
+        ObjectClass const& Object::getClass() const
+        {
+            std::string model_name(get_class().name());
+            return *Factory::getClassByModelName(model_name);
         }
         
         std::string Object::getText() const
@@ -413,17 +376,9 @@ namespace kiwi
             return (is_inlet ? "inlet " : "outlet ") + std::to_string(index);
         }
         
-        bool Object::hasFlag(Flag flag) const
+        bool Object::hasFlag(ObjectClass::Flag flag) const
         {
-            return m_flags.count_if([&flag](Flag const& internal_flag) { return internal_flag == flag;}) != 0;
-        }
-        
-        void Object::setFlag(Flag flag)
-        {
-            if (!hasFlag(flag))
-            {
-                m_flags.insert(flag);
-            }
+            return getClass().hasFlag(flag);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace kiwi
         class ErrorBox : public AudioObject
         {
         public:
-            ErrorBox(model::Object const& model, Patcher& patcher, std::vector<tool::Atom> const& args);
+            ErrorBox(model::Object const& model, Patcher& patcher);
             
             void receive(size_t index, std::vector<tool::Atom> const& args) override;
             

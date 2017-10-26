@@ -107,10 +107,10 @@ namespace kiwi
             
             using Outlet = std::set<Link>;
 
-            Patcher&                m_patcher;
-            size_t                  m_inlets;
-            std::vector<Outlet>     m_outlets;
-            size_t                  m_stack_count = 0ul;
+            Patcher&                                        m_patcher;
+            size_t                                          m_inlets;
+            std::vector<Outlet>                             m_outlets;
+            size_t                                          m_stack_count = 0ul;
             
         private: // deleted methods
             

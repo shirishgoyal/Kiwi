@@ -30,13 +30,8 @@ namespace kiwi
 {
     namespace model
     {
-        bool DataModel::initialised = false;
-        
         void DataModel::init()
         {
-            assert(!initialised);
-            if(initialised) return; // abort
-                
             const std::string model_version = KIWI_MODEL_VERSION_STRING;
             
             #ifdef DEBUG
@@ -48,40 +43,11 @@ namespace kiwi
             // patcher elements declaration :
             model::Object::declare();
             
-            declareObjects();
-            
             // Links
             Link::declare();
             
             // Patcher
             Patcher::declare();
-            
-            initialised = true;
-        }
-        
-        void DataModel::declareObjects()
-        {
-            NewBox::declare();
-            ErrorBox::declare();
-            Plus::declare();
-            Times::declare();
-            Print::declare();
-            Receive::declare();
-            Loadmess::declare();
-            Delay::declare();
-            Pipe::declare();
-            Metro::declare();
-            DacTilde::declare();
-            AdcTilde::declare();
-            OscTilde::declare();
-            TimesTilde::declare();
-            PlusTilde::declare();
-            SigTilde::declare();
-            DelaySimpleTilde::declare();
-            Bang::declare();
-            Toggle::declare();
-            Slider::declare();
-            MeterTilde::declare();
         }
     }
 }

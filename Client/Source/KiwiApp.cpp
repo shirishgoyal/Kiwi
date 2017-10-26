@@ -93,8 +93,6 @@ namespace kiwi
    
         model::DataModel::init();
         
-        Factory::initialise();
-        
         juce::Desktop::getInstance().setGlobalScaleFactor(1.);
         
         juce::LookAndFeel::setDefaultLookAndFeel(&m_looknfeel);
@@ -120,12 +118,30 @@ namespace kiwi
         #endif
     }
     
+    void KiwiApp::initialiseObject
+    
     void KiwiApp::anotherInstanceStarted(juce::String const& command_line)
     {
         if(m_instance)
         {
             m_instance->openFile(juce::File(command_line.unquoted()));
         }
+    }
+    
+    void KiwiApp::initialiseObjects()
+    {
+        // ErrorBox.
+        model::ErrorBox::declare();
+        engine::Factory::add<engine::ErrorBox>();
+        
+        // NewBox.
+        model::NewBox::declare();
+        engine::Factory::add<engine::NewBox>();
+
+        // Slider
+        model::Slider::declare();
+        engine::Factory::add<engine::NewBox>();
+        
     }
     
     void KiwiApp::shutdown()

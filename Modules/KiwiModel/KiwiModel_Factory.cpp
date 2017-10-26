@@ -60,7 +60,6 @@ namespace kiwi
                 }
             }
             
-            object->m_name = object_class->getName();
             object->m_text = tool::AtomHelper::toString(atoms);
             
             return object;
@@ -69,6 +68,7 @@ namespace kiwi
         std::unique_ptr<model::Object> Factory::create(std::string const& name, flip::Mold const& mold)
         {
             auto const* class_ptr = getClassByName(name);
+            
             if(class_ptr != nullptr)
             {
                 return class_ptr->moldCast(mold);
@@ -95,8 +95,7 @@ namespace kiwi
         
         bool Factory::has(std::string const& name)
         {
-            const auto& object_classes = getClasses();
-            for(const auto& object_class : object_classes)
+            for(const auto& object_class : m_object_classes)
             {
                 if(object_class->getName() == name || object_class->hasAlias(name))
                     return true;
@@ -105,11 +104,10 @@ namespace kiwi
             return false;
         }
         
-        Factory::ObjectClassBase* Factory::getClassByName(std::string const& name,
-                                                          const bool ignore_aliases)
+        ObjectClass const* Factory::getClassByName(std::string const& name,
+                                             const bool ignore_aliases)
         {
-            const auto& object_classes = getClasses();
-            for(const auto& object_class : object_classes)
+            for(const auto& object_class : m_object_classes)
             {
                 if(object_class->getName() == name || (!ignore_aliases && object_class->hasAlias(name)))
                     return object_class.get();
@@ -118,15 +116,26 @@ namespace kiwi
             return nullptr;
         }
         
+        ObjectClass const* Factory::getClassByModelName(std::string const& model_name)
+        {
+            auto found_class = std::find_if(m_object_classes.begin(),
+                                            m_object_classes.end(),
+                                            [&model_name](std::unique_ptr<ObjectClass> const& object_class)
+            {
+                return object_class->getModelName() == model_name;
+            });
+            
+            return found_class != m_object_classes.end() ? (*found_class).get() : nullptr;
+        }
+        
         std::vector<std::string> Factory::getNames(const bool ignore_aliases, const bool ignore_internals)
         {
-            auto const& object_classes = getClasses();
             std::vector<std::string> names;
-            names.reserve(object_classes.size());
+            names.reserve(m_object_classes.size());
             
-            for(const auto& object_class : object_classes)
+            for(const auto& object_class : m_object_classes)
             {
-                if(!object_class->isInternal() || !ignore_internals)
+                if(!object_class->hasFlag(ObjectClass::Flag::Internal) || !ignore_internals)
                 {
                     names.emplace_back(object_class->getName());
                     
@@ -159,12 +168,6 @@ namespace kiwi
             }
             
             return model_name;
-        }
-        
-        auto Factory::getClasses() -> object_classes_t&
-        {
-            static object_classes_t static_object_classes;
-            return static_object_classes;
         }
     }
 }

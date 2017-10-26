@@ -29,7 +29,7 @@ namespace kiwi
         //                                       NEWBOX                                     //
         // ================================================================================ //
         
-        NewBox::NewBox(model::Object const& model, Patcher& patcher, std::vector<tool::Atom> const& args)
+        NewBox::NewBox(model::Object const& model, Patcher& patcher)
         : Object(model, patcher)
         {
             ;

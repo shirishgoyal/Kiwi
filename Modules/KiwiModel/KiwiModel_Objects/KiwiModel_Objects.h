@@ -29,46 +29,8 @@
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Basic/KiwiModel_ErrorBox.h>
 
 // ================================================================================ //
-//                                  DSP OBJECTS                                     //
-// ================================================================================ //
-
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_SigTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_PlusTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_TimesTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_OscTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_DelaySimpleTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_AdcTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_DacTilde.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Dsp/KiwiModel_MeterTilde.h>
-
-// ================================================================================ //
-//                                  MATH OBJECTS                                    //
-// ================================================================================ //
-
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Math/KiwiModel_Plus.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Math/KiwiModel_Times.h>
-
-// ================================================================================ //
-//                                  MESSAGE OBJECTS                                 //
-// ================================================================================ //
-
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Message/KiwiModel_Print.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Message/KiwiModel_Loadmess.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Message/KiwiModel_Receive.h>
-
-// ================================================================================ //
-//                                  TIME OBJECTS                                    //
-// ================================================================================ //
-
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Time/KiwiModel_Metro.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Time/KiwiModel_Pipe.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Time/KiwiModel_Delay.h>
-
-// ================================================================================ //
 //                                 CONTROLLER OBJECTS                               //
 // ================================================================================ //
 
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Bang.h>
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Toggle.h>
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Slider.h>
 

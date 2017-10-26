@@ -19,8 +19,11 @@
  ==============================================================================
  */
 
+#include <memory>
+
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Basic/KiwiModel_ErrorBox.h>
 
+#include <KiwiModel/KiwiModel_ObjectClass.h>
 #include <KiwiModel/KiwiModel_Factory.h>
 
 namespace kiwi
@@ -33,10 +36,21 @@ namespace kiwi
         
         void ErrorBox::declare()
         {
-            Factory::add<ErrorBox>("errorbox").setInternal(true);
+            std::unique_ptr<ObjectClass> object_class(new ObjectClass("errorbox",
+                                                                      &ErrorBox::create));
+            
+            flip::Class<ErrorBox> & data_model = DataModel::declare<ErrorBox>().inherit<Object>();
+            
+            Factory::add<ErrorBox>(std::move(object_class), data_model);
         }
         
-        ErrorBox::ErrorBox(std::string const& name, std::vector<tool::Atom> const& args)
+        std::unique_ptr<Object> ErrorBox::create(std::vector<tool::Atom> const& atoms)
+        {
+            return std::make_unique<ErrorBox>();
+        }
+        
+        ErrorBox::ErrorBox():
+        m_error()
         {
         }
         

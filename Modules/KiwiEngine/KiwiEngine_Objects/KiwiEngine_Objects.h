@@ -29,45 +29,7 @@
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Basic/KiwiEngine_ErrorBox.h>
 
 // ================================================================================ //
-//                                  DSP OBJECTS                                     //
-// ================================================================================ //
-
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_SigTilde.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_PlusTilde.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_TimesTilde.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_OscTilde.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_DelaySimpleTilde.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_AdcTilde.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_DacTilde.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Dsp/KiwiEngine_MeterTilde.h>
-
-// ================================================================================ //
-//                                  MATH OBJECTS                                    //
-// ================================================================================ //
-
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Math/KiwiEngine_Plus.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Math/KiwiEngine_Times.h>
-
-// ================================================================================ //
-//                                  MESSAGE OBJECTS                                 //
-// ================================================================================ //
-
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Message/KiwiEngine_Receive.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Message/KiwiEngine_Loadmess.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Message/KiwiEngine_Print.h>
-
-// ================================================================================ //
-//                                  TIME OBJECTS                                    //
-// ================================================================================ //
-
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Time/KiwiEngine_Pipe.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Time/KiwiEngine_Delay.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Time/KiwiEngine_Metro.h>
-
-// ================================================================================ //
 //                               CONTROLLER OBJECTS                                 //
 // ================================================================================ //
 
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Controller/KiwiEngine_Bang.h>
-#include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Controller/KiwiEngine_Toggle.h>
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Controller/KiwiEngine_Slider.h>

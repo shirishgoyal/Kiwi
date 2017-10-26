@@ -55,6 +55,10 @@ namespace kiwi
         //! @brief Called when the application starts.
         void initialise(juce::String const& commandLine) override;
         
+        //! @brief Initialises all statical object's data.
+        //! @details Feeds needed information to factories.
+        void initialiseObjects();
+        
         //! @brief Indicates that the user has tried to start up another instance of the app.
         void anotherInstanceStarted(juce::String const& command_line) override;
         

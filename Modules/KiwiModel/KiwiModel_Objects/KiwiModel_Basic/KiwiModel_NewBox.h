@@ -35,16 +35,19 @@ namespace kiwi
         {
         public:
             
-            //! @brief flip Default Constructor
+            //! @brief flip Default Constructor.
             NewBox(flip::Default& d) : model::Object(d) {}
             
-            //! @brief Constructor
-            NewBox(std::string const& name, std::vector<tool::Atom> const& args);
+            //! @brief Constructor.
+            NewBox();
             
             std::string getIODescription(bool is_inlet, size_t index) const override;
             
-            //! @internal flip static declare method
+            //! @brief Declaration method.
             static void declare();
+            
+            //! @brief The object's creation method.
+            static std::unique_ptr<Object> create(std::vector<tool::Atom> const& args);
         };
     }
 }

@@ -90,9 +90,6 @@ namespace kiwi
             
         private: // methods
             
-            //! @internal Adds the engine objects to the engine::Factory
-            void addObjectsToFactory();
-            
             //! @internal Processes the scheduler to check if new messages have been added.
             void processScheduler();
             

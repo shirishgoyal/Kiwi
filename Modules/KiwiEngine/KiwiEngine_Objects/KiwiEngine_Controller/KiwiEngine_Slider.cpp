@@ -29,41 +29,12 @@
 
 namespace kiwi { namespace engine {
     
-    class Slider::Task final : public tool::Scheduler<>::Task
-    {
-    public: // methods
-        
-        Task(double output_value, Slider & slider):
-        m_output_value(output_value),
-        m_slider(slider)
-        {
-        }
-        
-        ~Task()
-        {
-        }
-        
-        void execute()
-        {
-            m_slider.m_value = m_output_value;
-            m_slider.send(0, {m_slider.m_value});
-        }
-        
-    private: // members
-        
-        double      m_output_value;
-        Slider &    m_slider;
-    };
-    
     // ================================================================================ //
     //                                  OBJECT SLIDER                                   //
     // ================================================================================ //
     
-    Slider::Slider(model::Object const& object_model, Patcher& patcher, std::vector<tool::Atom> const& args):
+    Slider::Slider(model::Object const& object_model, Patcher& patcher):
     Object(object_model, patcher),
-    m_signal(object_model.getSignal<double>(model::Slider::Signal::ValueChanged)),
-    m_connection(m_signal.connect(std::bind(&Slider::valueChanged, this, std::placeholders::_1))),
-    m_tasks(100),
     m_value(0)
     {
     }
@@ -71,19 +42,19 @@ namespace kiwi { namespace engine {
     
     Slider::~Slider()
     {
-        while(m_tasks.load_size() > 0)
-        {
-            std::shared_ptr<Task> task;
-            m_tasks.pop(task);
-            getScheduler().unschedule(task);
-        }
+//        while(m_tasks.load_size() > 0)
+//        {
+//            std::shared_ptr<Task> task;
+//            m_tasks.pop(task);
+//            getScheduler().unschedule(task);
+//        }
     }
     
     void Slider::valueChanged(double new_value)
     {
-        std::shared_ptr<Task> task(new Task(new_value, *this));
-        m_tasks.push(task);
-        getScheduler().schedule(task);
+//        std::shared_ptr<Task> task(new Task(new_value, *this));
+//        m_tasks.push(task);
+//        getScheduler().schedule(task);
     }
     
     void Slider::receive(size_t index, std::vector<tool::Atom> const& args)
@@ -92,7 +63,7 @@ namespace kiwi { namespace engine {
         {
             if (args[0].isNumber())
             {
-                m_signal(std::max(0., std::min(args[0].getFloat(), 1.)));
+//                m_signal(std::max(0., std::min(args[0].getFloat(), 1.)));
             }
             else if (args[0].isString() && args[0].getString() == "bang")
             {

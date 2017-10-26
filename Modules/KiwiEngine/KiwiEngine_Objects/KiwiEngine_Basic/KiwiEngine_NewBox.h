@@ -34,7 +34,7 @@ namespace kiwi
         class NewBox : public engine::Object
         {
         public:
-            NewBox(model::Object const& model, Patcher& patcher, std::vector<tool::Atom> const& args);
+            NewBox(model::Object const& model, Patcher& patcher);
             
             void receive(size_t index, std::vector<tool::Atom> const& args) override;
         };

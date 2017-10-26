@@ -28,18 +28,35 @@ namespace kiwi { namespace model {
     //                                  OBJECT SLIDER                                   //
     // ================================================================================ //
     
-    Slider::Slider(std::string const& name, std::vector<tool::Atom> const& args):
-    Object()
+    void Slider::declare()
+    {
+        std::unique_ptr<ObjectClass> slider_class(new ObjectClass("slider",
+                                                                  &Slider::create));
+        
+        slider_class->setFlag(ObjectClass::Flag::ResizeWidth);
+        slider_class->setFlag(ObjectClass::Flag::ResizeHeight);
+        slider_class->setFlag(ObjectClass::Flag::DefinedSize);
+        
+        flip::Class<Slider> & slider_model = DataModel::declare<Slider>().inherit<Object>()
+        .member<flip::Bool, &Slider::m_horizontal>("horizontal");
+        
+        Factory::add<Slider>(std::move(slider_class), slider_model);
+    }
+    
+    std::unique_ptr<Object> create(std::vector<tool::Atom> const& args)
     {
         if (!args.empty())
         {
-            throw std::runtime_error("wrong arguments for object bang");
+            throw std::runtime_error("wrong arguments for object slider");
         }
         
-        setFlag(Flag::IFlag::DefinedSize);
-        setFlag(Flag::IFlag::ResizeWidth);
-        setFlag(Flag::IFlag::ResizeHeight);
-        addSignal<double>(Signal::ValueChanged, *this);
+        return std::make_unique<Slider>(false);
+    }
+    
+    Slider::Slider(bool horizontal):
+    Object(),
+    m_horizontal(false)
+    {
         setMinWidth(20.);
         setMinHeight(20.);
         setWidth(20);
@@ -49,14 +66,9 @@ namespace kiwi { namespace model {
     }
     
     Slider::Slider(flip::Default& d):
-    Object(d)
+    Object(d),
+    m_horizontal(false)
     {
-        addSignal<double>(Signal::ValueChanged, *this);
-    }
-    
-    void Slider::declare()
-    {
-        Factory::add<Slider>("slider");
     }
     
     std::string Slider::getIODescription(bool is_inlet, size_t index) const

@@ -35,15 +35,6 @@ namespace kiwi
             //! @brief Initializes the model.
             //! @details Declares all flip classes.
             static void init();
-            
-        private: // methods
-            
-            //! @brief Declare all kiwi objects.
-            static void declareObjects();
-            
-        public: // members
-            
-            static bool initialised;
         };
     }
 }

@@ -37,6 +37,8 @@
 
 #include <KiwiTool/KiwiTool_Atom.h>
 
+#include <KiwiModel/KiwiModel_ObjectClass.h>
+
 #include <mutex>
 #include <algorithm>
 #include <exception>
@@ -144,43 +146,6 @@ namespace kiwi
             PinType m_type;
         };
         
-        //! @brief Class that represents an object's property.
-        //! @details Adding, removing new flags is a data model change and needs migration.
-        class Flag : public flip::Object
-        {
-        public: // classes
-            
-            //! @brief The internal enum representation of the flag.
-            enum class IFlag
-            {
-                DefinedSize = 0,    // Initial object's Size defined by the model.
-                ResizeWidth,        // Object is resizable horizontally.
-                ResizeHeight        // Object is resizable vertically.
-            };
-            
-        public: // methods
-            
-            //! @brief Flag constructor.
-            Flag(Flag::IFlag flag);
-            
-            //! @brief Flip default constructor.
-            Flag(flip::Default& d);
-            
-            //! @brief Checks if flags are equals.
-            bool operator==(Flag const& other) const;
-            
-            //! @brief Checks if flags are differents.
-            bool operator!=(Flag const& other) const;
-            
-            //! @internal Flip declarator.
-            static void declare();
-            
-        private: // members
-            
-            flip::Enum<IFlag> m_flag;
-        };
-        
-        
         // ================================================================================ //
         //                                      OBJECT                                      //
         // ================================================================================ //
@@ -189,10 +154,6 @@ namespace kiwi
         //! @details objects can be instantiated in a Patcher.
         class Object : public flip::Object
         {
-        public: // classes
-            
-            using SignalKey = uint32_t;
-            
         public: // methods
  
             //! @brief Constructor.
@@ -203,6 +164,9 @@ namespace kiwi
             
             //! @brief Returns the name of the Object.
             std::string getName() const;
+            
+            //! @brief Returns the object's static definition.
+            ObjectClass const& getClass() const;
             
             //! @brief Returns the text of the Object.
             std::string getText() const;
@@ -277,30 +241,10 @@ namespace kiwi
             //! @brief Returns inlet or outlet description.
             virtual std::string getIODescription(bool is_inlet, size_t index) const;
             
-            //! @brief Returns the object's signal referenced by this key.
-            //! @details Throws an exception if no signal is referenced for key.
-            template <class... Args>
-            auto& getSignal(SignalKey key) const
-            {
-                flip::SignalBase& signal_base = *m_signals.at(key);
-                return dynamic_cast<flip::Signal<Args...>&>(signal_base);
-            }
-            
             //! @brief Checks if the object has this flag set.
-            bool hasFlag(Flag flag) const;
+            bool hasFlag(ObjectClass::Flag flag) const;
             
         protected:
-            
-            //! @brief Adds a signal having singal key.
-            template <class... Args>
-            void addSignal(SignalKey key, model::Object& object)
-            {
-                m_signals.emplace(key, std::make_unique<flip::Signal<Args...>>(key, object));
-            }
-            
-            //! @brief Sets one of the flag for the object.
-            //! @details It is a modification of the model and requires commit.
-            void setFlag(Flag flag);
             
             //! @brief Clear and replace all the object's inlets.
             void setInlets(flip::Array<Inlet> const& inlets);
@@ -336,22 +280,16 @@ namespace kiwi
             
         private: // members
             
-            std::map<SignalKey, std::unique_ptr<flip::SignalBase>> m_signals;
-            
-            flip::String            m_name;
             flip::String            m_text;
             flip::Array<Inlet>      m_inlets;
             flip::Array<Outlet>     m_outlets;
-            flip::Collection<Flag>  m_flags;
-            
-            flip::Float         m_position_x;
-            flip::Float         m_position_y;
-            flip::Float         m_width;
-            flip::Float         m_height;
-            flip::Float         m_min_width;
-            flip::Float         m_min_height;
-            flip::Float         m_ratio;
-                
+            flip::Float             m_position_x;
+            flip::Float             m_position_y;
+            flip::Float             m_width;
+            flip::Float             m_height;
+            flip::Float             m_min_width;
+            flip::Float             m_min_height;
+            flip::Float             m_ratio;
             
             friend class Factory;
         

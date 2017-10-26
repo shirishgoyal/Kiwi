@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <flip/detail/Default.h>
+#include <flip/Bool.h>
 
 #include <KiwiModel/KiwiModel_Object.h>
 #include <KiwiTool/KiwiTool_Atom.h>
@@ -37,21 +38,21 @@ namespace kiwi { namespace model {
     
     class Slider : public model::Object
     {
-    public: // enums
-        
-        enum Signal : SignalKey
-        {
-            ValueChanged
-        };
-        
     public: // methods
         
         Slider(flip::Default& d);
         
-        Slider(std::string const& name, std::vector<tool::Atom> const& args);
+        Slider(bool horizontal);
         
         std::string getIODescription(bool is_inlet, size_t index) const override;
         
         static void declare();
+        
+        static std::unique_ptr<Object> create(std::vector<tool::Atom> const& args);
+        
+    private: // members
+        
+        flip::Bool m_horizontal;
+        
     };
 }}

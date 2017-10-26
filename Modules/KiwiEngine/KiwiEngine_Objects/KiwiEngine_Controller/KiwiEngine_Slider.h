@@ -45,7 +45,7 @@ namespace kiwi { namespace engine {
         
     public: // methods
         
-        Slider(model::Object const& model, Patcher& patcher, std::vector<tool::Atom> const& args);
+        Slider(model::Object const& model, Patcher& patcher);
         
         ~Slider();
         
@@ -54,10 +54,7 @@ namespace kiwi { namespace engine {
         void receive(size_t index, std::vector<tool::Atom> const& args) override final;
         
     private: // members
-        
-        flip::Signal<double> &                          m_signal;
-        flip::SignalConnection                          m_connection;
-        tool::ConcurrentQueue<std::shared_ptr<Task>>    m_tasks;
+
         double                                          m_value;
     };
     
