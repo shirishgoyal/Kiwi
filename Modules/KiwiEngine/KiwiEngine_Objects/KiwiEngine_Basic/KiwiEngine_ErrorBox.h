@@ -34,11 +34,16 @@ namespace kiwi
         class ErrorBox : public AudioObject
         {
         public:
+            
             ErrorBox(model::Object const& model, Patcher& patcher);
             
             void receive(size_t index, std::vector<tool::Atom> const& args) override;
             
             void prepare(dsp::Processor::PrepareInfo const& infos) override final;
+            
+            static void declare();
+            
+            static std::unique_ptr<Object> create(model::Object const& object, Patcher& patcher);
         };
         
     }

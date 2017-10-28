@@ -23,19 +23,63 @@
 
 #include <functional>
 #include <set>
+#include <string>
 
 #include <flip/Class.h>
 #include <flip/Mold.h>
 
+#include <KiwiTool/KiwiTool_Parameter.h>
 #include <KiwiTool/KiwiTool_Atom.h>
 
 namespace kiwi { namespace model {
     
     class Object;
+    
     class Factory;
     
     // ================================================================================ //
-    //                                      OBJECTCLASS                                 //
+    //                                      PARAMETER CLASS                             //
+    // ================================================================================ //
+    
+    class ParameterClass
+    {
+    public: // classes
+        
+        enum class Flag
+        {
+            Saved
+        };
+        
+    public: // methods
+        
+        //! @brief Constructor.
+        ParameterClass(tool::Parameter::Type type);
+        
+        //! @brief Destructor.
+        ~ParameterClass();
+        
+        //! @brief Sets a flag for this parameter.
+        void setFlag(Flag flag);
+        
+        //! @brief Returns true if the flag is set.
+        bool hasFlag(Flag flag) const;
+        
+    private: // members
+        
+        tool::Parameter::Type   m_type;
+        std::set<Flag>          m_flags;
+        
+    private: // deleted methods
+        
+        ParameterClass() = delete;
+        ParameterClass(ParameterClass const& other) = delete;
+        ParameterClass(ParameterClass && other) = delete;
+        ParameterClass& operator=(ParameterClass const& other) = delete;
+        ParameterClass& operator=(ParameterClass && other) = delete;
+    };
+    
+    // ================================================================================ //
+    //                                      OBJECTC LASS                                //
     // ================================================================================ //
     
     //! @brief The static representation of an object.
@@ -90,6 +134,12 @@ namespace kiwi { namespace model {
         //! @brief Adds a creator name alias to the class.
         void addAlias(std::string const& alias);
         
+        //! @brief Adds a parameter to the class definition.
+        void addParameter(std::string name, std::unique_ptr<ParameterClass> param_class);
+        
+        //! @brief Gets the list of parameters static definition.
+        std::map<std::string, std::unique_ptr<ParameterClass>> const& getParameters() const;
+        
         //! @brief Adds the flag to object static definition.
         void setFlag(Flag const& flag);
         
@@ -125,13 +175,14 @@ namespace kiwi { namespace model {
         
     private: // members
         
-        std::string             m_name;
-        std::string             m_model_name;
-        std::set<std::string>   m_aliases;
-        ctor_t                  m_ctor;
-        std::set<Flag>          m_flags;
-        mold_maker_t            m_mold_maker;
-        mold_caster_t           m_mold_caster;
+        std::string                                             m_name;
+        std::string                                             m_model_name;
+        std::set<std::string>                                   m_aliases;
+        std::map<std::string, std::unique_ptr<ParameterClass>>  m_params;
+        ctor_t                                                  m_ctor;
+        std::set<Flag>                                          m_flags;
+        mold_maker_t                                            m_mold_maker;
+        mold_caster_t                                           m_mold_caster;
         
         friend class Factory;
         

@@ -22,16 +22,24 @@
 #include <functional>
 #include <algorithm>
 
-#include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Slider.h>
-
-#include <KiwiTool/KiwiTool_Scheduler.h>
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Controller/KiwiEngine_Slider.h>
+#include <KiwiEngine/KiwiEngine_Factory.h>
 
 namespace kiwi { namespace engine {
     
     // ================================================================================ //
     //                                  OBJECT SLIDER                                   //
     // ================================================================================ //
+    
+    void Slider::declare()
+    {
+        Factory::add<Slider>("slider", &Slider::create);
+    }
+    
+    std::unique_ptr<Object> Slider::create(model::Object const& model, Patcher& patcher)
+    {
+        return std::make_unique<Slider>(model, patcher);
+    }
     
     Slider::Slider(model::Object const& object_model, Patcher& patcher):
     Object(object_model, patcher),

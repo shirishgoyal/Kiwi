@@ -25,13 +25,39 @@
 namespace kiwi { namespace model {
     
     // ================================================================================ //
-    //                                      OBJECTCLASS                                 //
+    //                                      PARAMETER CLASS                             //
+    // ================================================================================ //
+    
+    ParameterClass::ParameterClass(tool::Parameter::Type type):
+    m_type(type),
+    m_flags()
+    {
+    }
+    
+    ParameterClass::~ParameterClass()
+    {
+    }
+    
+    void ParameterClass::setFlag(Flag flag)
+    {
+        m_flags.insert(flag);
+    }
+    
+    bool ParameterClass::hasFlag(Flag flag) const
+    {
+        return m_flags.find(flag) != m_flags.end();
+    }
+    
+    
+    // ================================================================================ //
+    //                                     OBJECT CLASS                                 //
     // ================================================================================ //
     
     ObjectClass::ObjectClass(std::string const& name, ctor_t ctor):
     m_name(name),
     m_model_name(),
     m_aliases(),
+    m_params(),
     m_ctor(ctor),
     m_flags(),
     m_mold_maker(),
@@ -71,6 +97,16 @@ namespace kiwi { namespace model {
     void ObjectClass::addAlias(std::string const& alias)
     {
         m_aliases.insert(alias);
+    }
+    
+    void ObjectClass::addParameter(std::string name, std::unique_ptr<ParameterClass> param_class)
+    {
+        m_params[name] = std::move(param_class);
+    }
+    
+    std::map<std::string, std::unique_ptr<ParameterClass>> const& ObjectClass::getParameters() const
+    {
+        return m_params;
     }
     
     void ObjectClass::setFlag(Flag const& flag)

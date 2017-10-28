@@ -19,6 +19,8 @@
  ==============================================================================
  */
 
+#include <KiwiEngine/KiwiEngine_Factory.h>
+
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Basic/KiwiEngine_NewBox.h>
 
 namespace kiwi
@@ -28,6 +30,16 @@ namespace kiwi
         // ================================================================================ //
         //                                       NEWBOX                                     //
         // ================================================================================ //
+        
+        void NewBox::declare()
+        {
+            Factory::add<NewBox>("newbox", &NewBox::create);
+        }
+        
+        std::unique_ptr<Object> NewBox::create(model::Object const& model, Patcher& patcher)
+        {
+            return std::make_unique<NewBox>(model, patcher);
+        }
         
         NewBox::NewBox(model::Object const& model, Patcher& patcher)
         : Object(model, patcher)

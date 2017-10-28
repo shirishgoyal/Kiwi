@@ -170,10 +170,49 @@ namespace kiwi
         m_height(20.),
         m_min_width(0.),
         m_min_height(0.),
-        m_ratio(0.)
+        m_ratio(0.),
+        m_params()
         {
             ;
         }
+        
+        void Object::writeParameter(std::string const& name, tool::Parameter const& paramter)
+        {
+        }
+        
+        std::unique_ptr<tool::Parameter> Object::readParameter(std::string const& name) const
+        {
+            return std::unique_ptr<tool::Parameter>(nullptr);
+        }
+        
+        bool Object::parameterChanged()
+        {
+            return false;
+        }
+        
+        tool::Parameter const& Object::getParameter(std::string const& name) const
+        {
+            auto & param_classes = getClass().getParameters();
+            auto param_it = param_classes.find(name);
+            
+            assert(param_it != param_classes.end());
+            
+            ParameterClass const& param_class = *(param_it->second);
+            
+            auto found_parameter = m_params.find(name);
+            
+            if (found_parameter != m_params.end())
+            {
+                if (param_class.hasFlag(ParameterClass::Flag::Saved)
+                    {
+                        
+                    }
+            }
+            
+            
+        }
+        
+        void setParameter(std::string const& name, tool::Parameter const& param);
         
         std::string Object::getName() const
         {

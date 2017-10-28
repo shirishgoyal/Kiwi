@@ -34,20 +34,13 @@ namespace kiwi
         
         std::unique_ptr<Object> Factory::create(Patcher& patcher, model::Object const& model)
         {
-            auto& creators = getCreators();
-            assert(creators.count(model.getName()) != 0 && "The object has not been registered.");
-            return std::unique_ptr<Object>(creators[model.getName()](model, patcher));
+            assert(m_creators.count(model.getName()) != 0 && "The object has not been registered.");
+            return m_creators[model.getName()](model, patcher);
         }
         
         bool Factory::has(std::string const& name)
         {
-            return static_cast<bool>(getCreators().count(name));
-        }
-        
-        auto Factory::getCreators() -> creator_map_t&
-        {
-            static creator_map_t static_creators;
-            return static_creators;
+            return static_cast<bool>(m_creators.count(name));
         }
         
         bool Factory::modelHasObject(std::string const& name)

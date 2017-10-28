@@ -33,10 +33,15 @@ namespace kiwi
         
         class NewBox : public engine::Object
         {
-        public:
+        public: // methods
+            
             NewBox(model::Object const& model, Patcher& patcher);
             
             void receive(size_t index, std::vector<tool::Atom> const& args) override;
+            
+            static void declare();
+            
+            static std::unique_ptr<Object> create(model::Object const& model, Patcher& patcher);
         };
     }
 }

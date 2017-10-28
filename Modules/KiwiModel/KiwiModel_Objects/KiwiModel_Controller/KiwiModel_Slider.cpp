@@ -20,6 +20,8 @@
  */
 
 #include <KiwiModel/KiwiModel_Factory.h>
+#include <KiwiModel/KiwiModel_ObjectClass.h>
+
 #include <KiwiModel/KiwiModel_Objects/KiwiModel_Controller/KiwiModel_Slider.h>
 
 namespace kiwi { namespace model {
@@ -32,13 +34,28 @@ namespace kiwi { namespace model {
     {
         std::unique_ptr<ObjectClass> slider_class(new ObjectClass("slider",
                                                                   &Slider::create));
+        // parameters
+        
+        std::unique_ptr<ParameterClass> param_value(new ParameterClass(tool::Parameter::Type::Float));
+        
+        slider_class->addParameter("value", std::move(param_value));
+        
+        std::unique_ptr<ParameterClass> param_orientation(new ParameterClass(tool::Parameter::Type::Int));
+        
+        param_orientation->setFlag(ParameterClass::Flag::Saved);
+        
+        slider_class->addParameter("value", std::move(param_orientation));
+        
+        // flags
         
         slider_class->setFlag(ObjectClass::Flag::ResizeWidth);
         slider_class->setFlag(ObjectClass::Flag::ResizeHeight);
         slider_class->setFlag(ObjectClass::Flag::DefinedSize);
         
+        // data model
+        
         flip::Class<Slider> & slider_model = DataModel::declare<Slider>().inherit<Object>()
-        .member<flip::Bool, &Slider::m_horizontal>("horizontal");
+                                             .member<flip::Bool, &Slider::m_horizontal>("orientation");
         
         Factory::add<Slider>(std::move(slider_class), slider_model);
     }

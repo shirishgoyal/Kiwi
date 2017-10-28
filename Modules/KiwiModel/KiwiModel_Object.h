@@ -36,6 +36,7 @@
 #include "flip/Signal.h"
 
 #include <KiwiTool/KiwiTool_Atom.h>
+#include <KiwiTool/KiwiTool_Parameter.h>
 
 #include <KiwiModel/KiwiModel_ObjectClass.h>
 
@@ -43,6 +44,7 @@
 #include <algorithm>
 #include <exception>
 #include <set>
+#include <map>
 
 namespace kiwi
 {
@@ -162,6 +164,23 @@ namespace kiwi
             //! @brief Destructor.
             virtual ~Object() = default;
             
+            //! @brief Writes the parameter into data model.
+            //! @details Objects that defines collaborative parameter shall override this function.
+            virtual void writeParameter(std::string const& name, tool::Parameter const& paramter);
+            
+            //! @brief Reads the model to load a parameter.
+            //! @details Objects that defines collaborative paramters shall override this function.
+            virtual std::unique_ptr<tool::Parameter> readParameter(std::string const& name) const;
+            
+            //! @brief Checks the data model to see if a parameter has changed.
+            virtual bool parameterChanged();
+            
+            //! @brief Retrieve one of the object's parameters.
+            tool::Parameter const& getParameter(std::string const& name) const;
+            
+            //! @brief Sets one of the object's parameter.
+            void setParameter(std::string const& name, tool::Parameter const& param);
+            
             //! @brief Returns the name of the Object.
             std::string getName() const;
             
@@ -280,16 +299,17 @@ namespace kiwi
             
         private: // members
             
-            flip::String            m_text;
-            flip::Array<Inlet>      m_inlets;
-            flip::Array<Outlet>     m_outlets;
-            flip::Float             m_position_x;
-            flip::Float             m_position_y;
-            flip::Float             m_width;
-            flip::Float             m_height;
-            flip::Float             m_min_width;
-            flip::Float             m_min_height;
-            flip::Float             m_ratio;
+            flip::String                                    m_text;
+            flip::Array<Inlet>                              m_inlets;
+            flip::Array<Outlet>                             m_outlets;
+            flip::Float                                     m_position_x;
+            flip::Float                                     m_position_y;
+            flip::Float                                     m_width;
+            flip::Float                                     m_height;
+            flip::Float                                     m_min_width;
+            flip::Float                                     m_min_height;
+            flip::Float                                     m_ratio;
+            mutable std::map<std::string, tool::Parameter>  m_params;
             
             friend class Factory;
         

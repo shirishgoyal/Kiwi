@@ -39,10 +39,6 @@ namespace kiwi { namespace engine {
     
     class Slider : public engine::Object
     {
-    private: // classes
-        
-        class Task;
-        
     public: // methods
         
         Slider(model::Object const& model, Patcher& patcher);
@@ -53,9 +49,13 @@ namespace kiwi { namespace engine {
         
         void receive(size_t index, std::vector<tool::Atom> const& args) override final;
         
+        static void declare();
+        
+        static std::unique_ptr<Object> create(model::Object const& model, Patcher& patcher);
+
     private: // members
 
-        double                                          m_value;
+        double  m_value;
     };
     
 }}

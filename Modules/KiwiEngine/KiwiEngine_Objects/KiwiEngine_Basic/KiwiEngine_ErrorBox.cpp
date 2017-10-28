@@ -19,6 +19,8 @@
  ==============================================================================
  */
 
+#include <KiwiEngine/KiwiEngine_Factory.h>
+
 #include <KiwiEngine/KiwiEngine_Objects/KiwiEngine_Basic/KiwiEngine_ErrorBox.h>
 
 namespace kiwi
@@ -28,6 +30,16 @@ namespace kiwi
         // ================================================================================ //
         //                                      ERRORBOX                                    //
         // ================================================================================ //
+        
+        void ErrorBox::declare()
+        {
+            Factory::add<ErrorBox>("errorbox", &ErrorBox::create);
+        }
+        
+        std::unique_ptr<Object> ErrorBox::create(model::Object const& object, Patcher& patcher)
+        {
+            return std::make_unique<ErrorBox>(object, patcher);
+        }
         
         ErrorBox::ErrorBox(model::Object const& model, Patcher& patcher)
         : AudioObject(model, patcher)
