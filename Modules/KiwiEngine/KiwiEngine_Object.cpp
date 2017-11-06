@@ -39,12 +39,10 @@ namespace kiwi
         m_outlets(model.getNumberOfOutlets()),
         m_stack_count(0ul)
         {
-            ;
         }
         
         Object::~Object() noexcept
         {
-            m_outlets.clear();
         }
         
         void Object::addOutputLink(size_t outlet_index, Object & receiver, size_t inlet_index)
@@ -55,6 +53,11 @@ namespace kiwi
         void Object::removeOutputLink(size_t outlet_index, Object & receiver, size_t inlet_index)
         {
             m_outlets[outlet_index].erase(Link(receiver, inlet_index));
+        }
+        
+        void Object::ParameterChanged(std::string const& name, tool::Parameter const& parameter)
+        {
+            // @todo
         }
         
         // ================================================================================ //

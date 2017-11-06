@@ -37,6 +37,7 @@
 
 #include <KiwiTool/KiwiTool_Atom.h>
 #include <KiwiTool/KiwiTool_Parameter.h>
+#include <KiwiTool/KiwiTool_Listeners.h>
 
 #include <KiwiModel/KiwiModel_ObjectClass.h>
 
@@ -156,6 +157,19 @@ namespace kiwi
         //! @details objects can be instantiated in a Patcher.
         class Object : public flip::Object
         {
+        public: // classes
+            
+            class Listener
+            {
+            public:
+                
+                // @brief Destructor
+                virtual ~Listener() = default;
+                
+                //! @brief Called when a parameter has changed;
+                virtual void ParameterChanged(std::string const& name, tool::Parameter const& param) =  0;
+            };
+            
         public: // methods
  
             //! @brief Constructor.
@@ -165,15 +179,23 @@ namespace kiwi
             virtual ~Object() = default;
             
             //! @brief Writes the parameter into data model.
-            //! @details Objects that defines collaborative parameter shall override this function.
+            //! @details If the parameter is saved this function will be called at every attempt to
+            //! modify the paremter. Never called for non saved parameters.
             virtual void writeParameter(std::string const& name, tool::Parameter const& paramter);
             
-            //! @brief Reads the model to load a parameter.
-            //! @details Objects that defines collaborative paramters shall override this function.
-            virtual std::unique_ptr<tool::Parameter> readParameter(std::string const& name) const;
+            //! @brief Reads the model to initialize a parameter.
+            //! @details Saved parameters may infos from the data model.
+            virtual void readParameter(std::string const& name, tool::Parameter & parameter) const;
             
             //! @brief Checks the data model to see if a parameter has changed.
-            virtual bool parameterChanged();
+            //! @details Only called for saved parameters. Default returns false.
+            virtual bool parameterChanged(std::string const& name) const;
+            
+            //! @brief Adds a listener of object's parameters.
+            void addListener(Listener& listener) const;
+            
+            //! @brief Removes listenere from list.
+            void removeListener(Listener& listener) const;
             
             //! @brief Retrieve one of the object's parameters.
             tool::Parameter const& getParameter(std::string const& name) const;
@@ -310,6 +332,7 @@ namespace kiwi
             flip::Float                                     m_min_height;
             flip::Float                                     m_ratio;
             mutable std::map<std::string, tool::Parameter>  m_params;
+            mutable tool::Listeners<Listener>               m_listeners;
             
             friend class Factory;
         

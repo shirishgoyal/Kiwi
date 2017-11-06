@@ -46,6 +46,12 @@ namespace kiwi { namespace model {
         
         std::string getIODescription(bool is_inlet, size_t index) const override;
         
+        void writeParameter(std::string const& name, tool::Parameter const& parameter) override final;
+        
+        void readParameter(std::string const& name, tool::Parameter & parameter) const override final;
+        
+        bool parameterChanged(std::string const& name) const override final;
+        
         static void declare();
         
         static std::unique_ptr<Object> create(std::vector<tool::Atom> const& args);

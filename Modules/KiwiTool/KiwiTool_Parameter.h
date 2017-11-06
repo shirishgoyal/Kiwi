@@ -27,6 +27,8 @@ namespace kiwi { namespace tool {
     
     //! @brief Parameter is a class designed to represent any type of data.
     //! @details It's implemented as a vector of Atom.
+    //! @todo Use virtual classes that implements check of atoms, copy and default initialization instead of using
+    //! switches. See in juce::variant.
     class Parameter
     {
     public: // classes
@@ -40,12 +42,18 @@ namespace kiwi { namespace tool {
         
     public: // methods
         
+        //! @brief Default Constructor.
+        //! @details Initialises data according to type.
+        Parameter(Type type);
+        
         //! @brief Constructor.
         //! @details Atoms must be well formated for the construction to succeed.
         Parameter(Type type, std::vector<Atom> const atoms);
         
         //! @brief Copy constructor.
         Parameter(Parameter const& other);
+        
+        //! @brief dea
         
         //! @brief Assignment operator.
         Parameter& operator=(Parameter const& other);
@@ -56,6 +64,9 @@ namespace kiwi { namespace tool {
         //! @brief Returns the type of the parameter.
         Type getType() const;
         
+        //! @brief Returns the underlying data of the parameter.
+        std::vector<Atom> const& getAtoms() const;
+        
     private: // members
         
         Type                m_type;
@@ -64,8 +75,6 @@ namespace kiwi { namespace tool {
     private: // deleted methods
         
         Parameter() = delete;
-        Parameter(Parameter && other) = delete;
-        Parameter& operator=(Parameter && other) = delete;
     };
     
 }}

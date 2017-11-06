@@ -44,7 +44,7 @@ namespace kiwi { namespace model {
         
         param_orientation->setFlag(ParameterClass::Flag::Saved);
         
-        slider_class->addParameter("value", std::move(param_orientation));
+        slider_class->addParameter("orientation", std::move(param_orientation));
         
         // flags
         
@@ -86,6 +86,48 @@ namespace kiwi { namespace model {
     Object(d),
     m_horizontal(false)
     {
+    }
+    
+    void Slider::writeParameter(std::string const& name, tool::Parameter const& parameter)
+    {
+        if (name == "orientation")
+        {
+            if (parameter.getAtoms()[0].getInt() == 0)
+            {
+                m_horizontal = false;
+            }
+            else if(parameter.getAtoms()[0].getInt() == 1)
+            {
+                m_horizontal = true;
+            }
+        }
+    }
+    
+    void Slider::readParameter(std::string const& name, tool::Parameter & parameter) const
+    {
+        if (name == "orientation")
+        {
+            if (m_horizontal)
+            {
+                parameter = tool::Parameter(tool::Parameter::Type::Int, {0});
+            }
+            else
+            {
+                parameter = tool::Parameter(tool::Parameter::Type::Int, {1});
+            }
+        }
+    }
+    
+    bool Slider::parameterChanged(std::string const& name) const
+    {
+        bool changed = false;
+        
+        if (name == "orientation" && m_horizontal.changed())
+        {
+            changed = true;
+        }
+            
+        return changed;
     }
     
     std::string Slider::getIODescription(bool is_inlet, size_t index) const

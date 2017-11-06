@@ -64,6 +64,9 @@ namespace kiwi { namespace model {
         //! @brief Returns true if the flag is set.
         bool hasFlag(Flag flag) const;
         
+        //! @brief Returns the parameter's declared type.
+        tool::Parameter::Type getType() const;
+        
     private: // members
         
         tool::Parameter::Type   m_type;

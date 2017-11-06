@@ -23,6 +23,27 @@
 
 namespace kiwi { namespace tool {
     
+    Parameter::Parameter(Type type):
+    m_type(type),
+    m_atoms()
+    {
+        switch (m_type)
+        {
+            case Type::Float:
+            {
+                float value = 0;
+                m_atoms.push_back(value);
+                break;
+            }
+            case Type::Int:
+            {
+                int value = 0;
+                m_atoms.push_back(value);
+                break;
+            }
+        }
+    }
+    
     Parameter::Parameter(Type type, std::vector<Atom> const atoms):
     m_type(type),
     m_atoms()
@@ -32,6 +53,7 @@ namespace kiwi { namespace tool {
             case Type::Float:
             {
                 assert(m_atoms.size() == 1 && m_atoms[0].isFloat() && "Parameter float bad initialization");
+                m_atoms = atoms;
                 break;
             }
             case Type::Int:
@@ -63,6 +85,11 @@ namespace kiwi { namespace tool {
     Parameter::Type Parameter::getType() const
     {
         return m_type;
+    }
+    
+    std::vector<Atom> const& Parameter::getAtoms() const
+    {
+        return m_atoms;
     }
     
 }}

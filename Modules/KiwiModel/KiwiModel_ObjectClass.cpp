@@ -48,6 +48,11 @@ namespace kiwi { namespace model {
         return m_flags.find(flag) != m_flags.end();
     }
     
+    tool::Parameter::Type ParameterClass::getType() const
+    {
+        return m_type;
+    }
+    
     
     // ================================================================================ //
     //                                     OBJECT CLASS                                 //

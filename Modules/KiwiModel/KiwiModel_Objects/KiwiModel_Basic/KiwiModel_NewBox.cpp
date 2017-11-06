@@ -45,6 +45,11 @@ namespace kiwi
             Factory::add<NewBox>(std::move(object_class), data_model);
         }
         
+        std::unique_ptr<Object> NewBox::create(std::vector<tool::Atom> const& args)
+        {
+            return std::make_unique<NewBox>();
+        }
+        
         NewBox::NewBox()
         {
             setWidth(80);

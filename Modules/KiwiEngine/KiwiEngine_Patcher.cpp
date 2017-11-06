@@ -36,12 +36,12 @@ namespace kiwi
         //                                      PATCHER                                     //
         // ================================================================================ //
         
-        Patcher::Patcher(Instance& instance) noexcept :
+        Patcher::Patcher(Instance& instance, model::Patcher & patcher_model) noexcept :
         m_instance(instance),
         m_objects(),
-        m_mutex(),
         m_so_links(1),
-        m_chain()
+        m_chain(),
+        m_patcher_model(patcher)
         {
             m_instance.getAudioControler().add(m_chain);
         }

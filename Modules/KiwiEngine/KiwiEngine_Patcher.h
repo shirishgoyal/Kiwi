@@ -31,6 +31,8 @@
 
 #include <KiwiDsp/KiwiDsp_Chain.h>
 
+#include <KiwiModel/KiwiModel_Patcher.h>
+
 namespace kiwi
 {    
     namespace engine
@@ -49,7 +51,7 @@ namespace kiwi
         public: // methods
             
             //! @brief Constructor.
-            Patcher(Instance& instance) noexcept;
+            Patcher(Instance& instance, model::Patcher & patcher_model) noexcept;
             
             //! @brief Destructor.
             ~Patcher();
@@ -148,9 +150,9 @@ namespace kiwi
             
             Instance&                                       m_instance;
             std::map<uint64_t, std::shared_ptr<Object>>     m_objects;
-            mutable std::mutex                              m_mutex;
             std::vector<SoLinks>                            m_so_links;
             dsp::Chain                                      m_chain;
+            model::Patcher &                                m_patcher_model;
             
         private: // deleted methods
             

@@ -29,6 +29,8 @@
 
 #include <KiwiDsp/KiwiDsp_Processor.h>
 
+#include <KiwiModel/KiwiModel_Object.h>
+
 namespace kiwi
 {
     namespace engine
@@ -38,7 +40,7 @@ namespace kiwi
         // ================================================================================ //
         
         //! @brief The Object reacts and interacts with other ones by sending and receiving messages via its inlets and outlets.
-        class Object
+        class Object : public model::Object::Listener
         {
         public: // methods
             
@@ -102,6 +104,11 @@ namespace kiwi
             //! @todo Improve the stack overflow system.
             //! @todo See if the method must be noexcept.
             void send(const size_t index, std::vector<tool::Atom> const& args);
+            
+        private: // methods
+            
+            //! @brief Called when a parameter has changed.
+            void ParameterChanged(std::string const& name, tool::Parameter const& parameter) override final;
             
         private: // members
             
